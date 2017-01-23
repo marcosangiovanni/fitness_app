@@ -57,6 +57,7 @@ doctrine:
         charset:  UTF8
         types:
             point: CrEOF\Spatial\DBAL\Types\Geometry\PointType
+            json: Sonata\Doctrine\Types\JsonType
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
@@ -77,7 +78,50 @@ doctrine:
                         dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translator/Entity"
                         alias: GedmoTranslator # (optional) it will default to the name set for the mapping
                         is_bundle: false
+                    SonataMediaBundle: ~
+                    
+sonata_media:
+  db_driver: doctrine_orm
+  providers:
+    image:
+      service:    sonata.media.provider.image
+      resizer:    sonata.media.resizer.square # sonata.media.resizer.simple
+      filesystem: sonata.media.filesystem.local
+      cdn:        sonata.media.cdn.server
+      generator:  sonata.media.generator.default
+      thumbnail:  sonata.media.thumbnail.format
+      allowed_extensions: ['jpg', 'png', 'jpeg']
+      allowed_mime_types: ['image/pjpeg', 'image/jpeg', 'image/png', 'image/x-png']
 
+  default_context: default
+  contexts:
+    default:  # the default context is mandatory
+      download:
+        strategy: sonata.media.security.superadmin_strategy
+        mode: http
+      providers:
+        - sonata.media.provider.dailymotion
+        - sonata.media.provider.youtube
+        - sonata.media.provider.image
+        - sonata.media.provider.file
+      formats:
+        small: { width: 100 , quality: 70}
+        big:   { width: 500 , quality: 70}
+  cdn:
+    server:
+      path:      /uploads/media
+  filesystem:
+    local:
+      directory:  "%kernel.root_dir%/../web/uploads/media"
+      create:     false
+
+#  admin_format:   { width: 200 , quality: 90, format: 'jpg'}
+
+#  force_disable_category: true # true, if you really want to disable the relation with category
+#  category_manager:       null  # null or "sonata.media.manager.category.default" if classification bundle exists
+
+
+            
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"

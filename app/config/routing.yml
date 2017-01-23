@@ -39,3 +39,12 @@ api_routes:
 fos_oauth_server_token:
   path:     /api/v1/oauth/v2/token
   defaults: { _controller: fos_oauth_server.controller.token:tokenAction }
+
+#Per gestione upload media
+gallery:
+    resource: '@SonataMediaBundle/Resources/config/routing/gallery.xml'
+    prefix: /media/gallery
+
+media:
+    resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
+    prefix: /media

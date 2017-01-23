@@ -32,6 +32,11 @@ class AppKernel extends Kernel
             new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
             new Sonata\AdminBundle\SonataAdminBundle(),
             
+			//Sonata extension for image upload
+			new Sonata\MediaBundle\SonataMediaBundle(),
+	        new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
+	        new Sonata\IntlBundle\SonataIntlBundle(),
+            
 			// Bundle for REST application
 			new FOS\RestBundle\FOSRestBundle(),
 			new JMS\SerializerBundle\JMSSerializerBundle(),
@@ -47,6 +52,9 @@ class AppKernel extends Kernel
 			
 			//Gestione dei form con dati spazioni per inserimento con gmaps
 			new Looptribe\FormSpatialBundle\LooptribeFormSpatialBundle(),
+			
+			//Gestione upload immagini
+			new Application\Sonata\MediaBundle\ApplicationSonataMediaBundle(),
 		    
         );
 

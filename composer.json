@@ -30,7 +30,9 @@
         "nelmio/cors-bundle": "^1.5",
         "stof/doctrine-extensions-bundle": "^1.2",
         "creof/doctrine2-spatial": "dev-master",
-        "looptribe/form-spatial": "dev-master"
+        "looptribe/form-spatial": "dev-master",
+        "sonata-project/classification-bundle": "2.*",
+        "sonata-project/media-bundle": "2.*"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
