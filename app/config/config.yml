@@ -125,7 +125,6 @@ sonata_media:
       allowed_extensions: ['jpg', 'png', 'jpeg']
       allowed_mime_types: ['image/pjpeg', 'image/jpeg', 'image/png', 'image/x-png']
 
-<<<<<<< HEAD
   default_context: default
   contexts:
     default:  # the default context is mandatory

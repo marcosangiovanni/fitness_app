@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3cb849abdbd72d4939b973e2a8840004",
+    "content-hash": "5507edea6432a8ecd9407e8463d3864f",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -604,16 +604,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "v2.5.7",
+            "version": "v2.5.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "3a351369582dade60c750e2cef540eb7b568e6b3"
+                "reference": "fc376f7a61498e18520cd6fa083752a4ca08072b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/3a351369582dade60c750e2cef540eb7b568e6b3",
-                "reference": "3a351369582dade60c750e2cef540eb7b568e6b3",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/fc376f7a61498e18520cd6fa083752a4ca08072b",
+                "reference": "fc376f7a61498e18520cd6fa083752a4ca08072b",
                 "shasum": ""
             },
             "require": {
@@ -671,20 +671,20 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-01-14T21:05:28+00:00"
+            "time": "2017-01-23T23:17:10+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "1.6.6",
+            "version": "1.6.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "0f0c4df366bd1d36d38a27e2f5ff128e118ac969"
+                "reference": "a01d99bc6c9a6c8a8ace0012690099dd957ce9b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/0f0c4df366bd1d36d38a27e2f5ff128e118ac969",
-                "reference": "0f0c4df366bd1d36d38a27e2f5ff128e118ac969",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/a01d99bc6c9a6c8a8ace0012690099dd957ce9b9",
+                "reference": "a01d99bc6c9a6c8a8ace0012690099dd957ce9b9",
                 "shasum": ""
             },
             "require": {
@@ -752,7 +752,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2017-01-07T21:47:22+00:00"
+            "time": "2017-01-16T12:01:26+00:00"
         },
         {
             "name": "doctrine/doctrine-cache-bundle",
@@ -1521,32 +1521,6 @@
             "time": "2016-12-21T13:46:54+00:00"
         },
         {
-            "name": "imagine/imagine",
-            "version": "v0.6.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/avalanche123/Imagine.git",
-                "reference": "149041d2a1b517107bfe270ca2b1a17aa341715d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/149041d2a1b517107bfe270ca2b1a17aa341715d",
-                "reference": "149041d2a1b517107bfe270ca2b1a17aa341715d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2"
-            },
-            "require-dev": {
-                "sami/sami": "dev-master"
-            },
-            "suggest": {
-                "ext-gd": "to use the GD implementation",
-                "ext-gmagick": "to use the Gmagick implementation",
-                "ext-imagick": "to use the Imagick implementation"
-			}
-		},
-		{
             "name": "guzzlehttp/guzzle",
             "version": "6.2.2",
             "source": {
@@ -1866,6 +1840,63 @@
                 "youtube"
             ],
             "time": "2017-01-08T14:13:58+00:00"
+        },
+        {
+            "name": "imagine/imagine",
+            "version": "v0.6.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/avalanche123/Imagine.git",
+                "reference": "149041d2a1b517107bfe270ca2b1a17aa341715d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/149041d2a1b517107bfe270ca2b1a17aa341715d",
+                "reference": "149041d2a1b517107bfe270ca2b1a17aa341715d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "sami/sami": "dev-master"
+            },
+            "suggest": {
+                "ext-gd": "to use the GD implementation",
+                "ext-gmagick": "to use the Gmagick implementation",
+                "ext-imagick": "to use the Imagick implementation"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "0.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Imagine": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bulat Shakirzyanov",
+                    "email": "mallluhuct@gmail.com",
+                    "homepage": "http://avalanche123.com"
+                }
+            ],
+            "description": "Image processing for PHP 5.3",
+            "homepage": "http://imagine.readthedocs.org/",
+            "keywords": [
+                "drawing",
+                "graphics",
+                "image manipulation",
+                "image processing"
+            ],
+            "time": "2015-09-19T16:54:05+00:00"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -2619,16 +2650,16 @@
         },
         {
             "name": "nelmio/cors-bundle",
-            "version": "1.5.0",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioCorsBundle.git",
-                "reference": "58c2ae30bc52f61492bc3639f04ab322cb1d98e9"
+                "reference": "cc9a26517b65769e6e3cea10099d4a40ce11ca29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioCorsBundle/zipball/58c2ae30bc52f61492bc3639f04ab322cb1d98e9",
-                "reference": "58c2ae30bc52f61492bc3639f04ab322cb1d98e9",
+                "url": "https://api.github.com/repos/nelmio/NelmioCorsBundle/zipball/cc9a26517b65769e6e3cea10099d4a40ce11ca29",
+                "reference": "cc9a26517b65769e6e3cea10099d4a40ce11ca29",
                 "shasum": ""
             },
             "require": {
@@ -2672,7 +2703,7 @@
                 "cors",
                 "crossdomain"
             ],
-            "time": "2016-12-30T18:10:59+00:00"
+            "time": "2017-01-22T21:34:09+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -5166,198 +5197,6 @@
         }
     ],
     "packages-dev": [
-        {
-            "name": "avanzu/admin-theme-bundle",
-            "version": "1.3.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/avanzu/AdminThemeBundle.git",
-                "reference": "24a1ac93ace744b5e8cffe6681009a4cc8f3a133"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/avanzu/AdminThemeBundle/zipball/24a1ac93ace744b5e8cffe6681009a4cc8f3a133",
-                "reference": "24a1ac93ace744b5e8cffe6681009a4cc8f3a133",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0",
-                "symfony/assetic-bundle": ">=2.3",
-                "symfony/event-dispatcher": ">=2.3",
-                "symfony/http-foundation": ">=2.3",
-                "symfony/http-kernel": ">=2.3",
-                "symfony/twig-bundle": ">=2.3"
-            },
-            "require-dev": {
-                "hamcrest/hamcrest-php": "dev-master",
-                "mockery/mockery": "0.9.*@dev"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Avanzu\\AdminThemeBundle\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marc Bach",
-                    "email": "mail@avanzu.de"
-                }
-            ],
-            "description": "Admin Theme based on the AdminLTE Template for easy integration into symfony",
-            "time": "2015-12-29T23:17:55+00:00"
-        },
-        {
-            "name": "kriswallsmith/assetic",
-            "version": "v1.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kriswallsmith/assetic.git",
-                "reference": "e911c437dbdf006a8f62c2f59b15b2d69a5e0aa1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/e911c437dbdf006a8f62c2f59b15b2d69a5e0aa1",
-                "reference": "e911c437dbdf006a8f62c2f59b15b2d69a5e0aa1",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.1",
-                "symfony/process": "~2.1|~3.0"
-            },
-            "conflict": {
-                "twig/twig": "<1.27"
-            },
-            "require-dev": {
-                "leafo/lessphp": "^0.3.7",
-                "leafo/scssphp": "~0.1",
-                "meenie/javascript-packer": "^1.1",
-                "mrclay/minify": "<2.3",
-                "natxet/cssmin": "3.0.4",
-                "patchwork/jsqueeze": "~1.0|~2.0",
-                "phpunit/phpunit": "~4.8 || ^5.6",
-                "psr/log": "~1.0",
-                "ptachoire/cssembed": "~1.0",
-                "symfony/phpunit-bridge": "~2.7|~3.0",
-                "twig/twig": "~1.23|~2.0",
-                "yfix/packager": "dev-master"
-            },
-            "suggest": {
-                "leafo/lessphp": "Assetic provides the integration with the lessphp LESS compiler",
-                "leafo/scssphp": "Assetic provides the integration with the scssphp SCSS compiler",
-                "leafo/scssphp-compass": "Assetic provides the integration with the SCSS compass plugin",
-                "patchwork/jsqueeze": "Assetic provides the integration with the JSqueeze JavaScript compressor",
-                "ptachoire/cssembed": "Assetic provides the integration with phpcssembed to embed data uris",
-                "twig/twig": "Assetic provides the integration with the Twig templating engine"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.4-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Assetic": "src/"
-                },
-                "files": [
-                    "src/functions.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kris Wallsmith",
-                    "email": "kris.wallsmith@gmail.com",
-                    "homepage": "http://kriswallsmith.net/"
-                }
-            ],
-            "description": "Asset Management for PHP",
-            "homepage": "https://github.com/kriswallsmith/assetic",
-            "keywords": [
-                "assets",
-                "compression",
-                "minification"
-            ],
-            "time": "2016-11-11T18:43:20+00:00"
-        },
-        {
-            "name": "symfony/assetic-bundle",
-            "version": "v2.8.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/assetic-bundle.git",
-                "reference": "0241b135ff64c6031048c6425cd833a8300da46b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/assetic-bundle/zipball/0241b135ff64c6031048c6425cd833a8300da46b",
-                "reference": "0241b135ff64c6031048c6425cd833a8300da46b",
-                "shasum": ""
-            },
-            "require": {
-                "kriswallsmith/assetic": "~1.4",
-                "php": ">=5.3.0",
-                "symfony/console": "~2.3|~3.0",
-                "symfony/dependency-injection": "~2.3|~3.0",
-                "symfony/framework-bundle": "~2.3|~3.0",
-                "symfony/yaml": "~2.3|~3.0"
-            },
-            "conflict": {
-                "kriswallsmith/spork": "<=0.2",
-                "twig/twig": "<1.27"
-            },
-            "require-dev": {
-                "kriswallsmith/spork": "~0.3",
-                "patchwork/jsqueeze": "~1.0",
-                "symfony/class-loader": "~2.3|~3.0",
-                "symfony/css-selector": "~2.3|~3.0",
-                "symfony/dom-crawler": "~2.3|~3.0",
-                "symfony/phpunit-bridge": "~2.7|~3.0",
-                "symfony/twig-bundle": "~2.3|~3.0"
-            },
-            "suggest": {
-                "kriswallsmith/spork": "to be able to dump assets in parallel",
-                "symfony/twig-bundle": "to use the Twig integration"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.8-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Bundle\\AsseticBundle\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kris Wallsmith",
-                    "email": "kris.wallsmith@gmail.com",
-                    "homepage": "http://kriswallsmith.net/"
-                }
-            ],
-            "description": "Integrates Assetic into Symfony2",
-            "homepage": "https://github.com/symfony/AsseticBundle",
-            "keywords": [
-                "assets",
-                "compression",
-                "minification"
-            ],
-            "time": "2016-11-22T11:42:57+00:00"
-        },
         {
             "name": "symfony/phpunit-bridge",
             "version": "v2.8.16",
