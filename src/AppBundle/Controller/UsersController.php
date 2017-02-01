@@ -8,10 +8,15 @@ use \DateTime;
 use \Exception;
 
 use JMS\Serializer\SerializationContext;
+use JMS\Serializer\DeserializationContext;
 use JMS\Serializer\SerializerBuilder;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+
+use AppBundle\Entity\User;
+use AppBundle\Form\UserType;
+
 
 class UsersController extends FOSRestController
 {
@@ -67,8 +72,7 @@ class UsersController extends FOSRestController
 
 		/* SERIALIZATION */
 		$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
-		$serializer = SerializerBuilder::create()->build();
-		$jsonContent = $serializer->serialize($users, 'json', $context);
+		$jsonContent = SerializerBuilder::create()->build()->serialize($users, 'json', $context);
 
 		/* JSON RESPONSE */
 		$jsonResponse = new Response($jsonContent);
@@ -122,24 +126,115 @@ class UsersController extends FOSRestController
 			throw new Exception('Something went wrong!');
     	}
 
-    } 
+    }
 
 	// "put_user"             
 	// [PUT] /users/{id}
 	// User update
     public function putUserAction($id){
-
+    		
     	//Find USER By Token
     	$logged_user = $this->get('security.context')->getToken()->getUser();
+
+		//Find request parameters
+		$request = $this->getRequest();
+
+		//Get entity		
+		$user = $this->getDoctrine()->getRepository('AppBundle:User')->find($id);
 		
-		if($logged_user->getId() != $id){
-			throw new Exception('You cant modify this user');
-		}
+		$serializer = SerializerBuilder::create()->build();
+		$context = DeserializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
+		$object = $serializer->deserialize($request->getContent(), User::class, 'json', $context);
 		
-		
-		
-		var_dump($logged_user->getId());
+		var_dump('54353453');
 		exit;
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		$form = $this->createForm(new UserType(), $user);
+		
+		//print_r(json_decode($request->getContent(),true));
+		
+	    $form->bind(json_decode($request->getContent(),true));
+		
+		if ($form->isValid()) {
+			
+			die('IN');
+			
+	        $em = $this->getDoctrine()->getManager();
+	        $em->persist($user);
+	        $em->flush();
+	    }
+		
+		die('fshdgfdshgsfj');
+		
+		$ret = $this->getDoctrine()->getRepository('AppBundle:User')->find($id);
+		
+		/* SERIALIZATION */
+		$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
+		$serializer = SerializerBuilder::create()->build();
+		$jsonContent = $serializer->serialize($ret, 'json', $context);
+
+		/* JSON RESPONSE */
+		$jsonResponse = new Response($jsonContent);
+		return $jsonResponse->setStatusCode(200);
+		
+		
+		
+		
+		
+		
+		var_dump($form->isValid());
+		
+		return ($form->getData());
+		
+		return $user;
+		
+		//Form creation to validate date
+	    $form = $this->createForm(new UserType(), $user);
+	    $form->bind($request);
+		
+		return ($form->getData());
+		exit;
+		
+	    if ($form->isValid()) {
+	        $em = $this->getDoctrine()->getManager();
+	        $em->persist($user);
+	        $em->flush();
+	    }
+
+		//var_dump($request->getContent());
+		//return $form;
+		return ($form->getData());
+		exit;
+		
+		return ($form->getData());
+		
+		
+		
+		return $form;
+	
+		$ret = $this->getDoctrine()->getRepository('AppBundle:User')->find($id);
+		
+		/* SERIALIZATION */
+		$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
+		$serializer = SerializerBuilder::create()->build();
+		$jsonContent = $serializer->serialize($ret, 'json', $context);
+
+		/* JSON RESPONSE */
+		$jsonResponse = new Response($jsonContent);
+		return $jsonResponse->setStatusCode(200);
     	
     }
 

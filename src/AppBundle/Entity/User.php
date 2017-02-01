@@ -166,8 +166,8 @@ class User extends BaseUser
         return $this;
     }
 	
-    public function setfacebookID($facebookID){
-        $this->facebookId = $facebookID;
+    public function setfacebookId($facebookId){
+        $this->facebookId = $facebookId;
         return $this;
     }
 	
@@ -214,8 +214,8 @@ class User extends BaseUser
         return $this->name;
     }
 
-    public function getfacebookId(){
-        return $this->facebookID;
+    public function getFacebookId(){
+        return $this->facebookId;
     }
 
     public function getFacebookAccessToken(){
