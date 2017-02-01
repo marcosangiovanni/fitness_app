@@ -1,7 +1,30 @@
+#App annotation
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
 
+#FB Login route
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix:   /fblogin
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /fbconnect
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+    prefix:   /fbconnect
+facebook_login:
+    pattern: /fblogin/check-facebook    
+
+app_oauth_social:
+    pattern: /api/v1/oauth/v2/token/{network}
+    defaults: { _controller: AppBundle:Token:getSocialToken, _format:json }
+    requirements:
+        network:  facebook|google|twitter
+        
+ 
+    
+#FOSUserBundle routing   
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 
@@ -21,6 +44,7 @@ fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: /profile
 
+#Admin Routing
 admin_area:
     resource: "@SonataAdminBundle/Resources/config/routing/sonata_admin.xml"
     prefix: /admin
@@ -30,12 +54,13 @@ _sonata_admin:
     type: sonata_admin
     prefix: /admin
 
+#Api routing
 api_routes:
     type: rest
     host: localhost
     resource: "@AppBundle/Resources/config/api_routes.yml"
 
-#Riscritto oauth per aggiunta prefisso /api
+#Rewritten for prefix /api
 fos_oauth_server_token:
   path:     /api/v1/oauth/v2/token
   defaults: { _controller: fos_oauth_server.controller.token:tokenAction }

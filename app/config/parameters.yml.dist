@@ -21,3 +21,6 @@ parameters:
     google.maps_api_key: AIzaSyCkkv5TSfWpElxl75d3OFoIuMMsc7OJudk
 
     admin_skin: skin-yellow
+
+    facebook_client_id: 209746166098190
+    facebook_client_secret: ddd9493e9830a8dd4d2aca02ffa0ca67

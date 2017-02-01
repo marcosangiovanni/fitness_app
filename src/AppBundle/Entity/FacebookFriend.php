@@ -3,6 +3,7 @@
 
 namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
@@ -14,7 +15,8 @@ class FacebookFriend
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     */
+	 * @Groups({"detail"})
+	 */
     private $id;
 
 	/**
@@ -24,12 +26,14 @@ class FacebookFriend
 
 	/**
      * @ORM\Column(type="string", length=100)
-     */
+	 * @Groups({"detail"})
+	 */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=100)
-     */
+	 * @Groups({"detail"})
+	 */
     private $facebook_uid;
 
 	/**

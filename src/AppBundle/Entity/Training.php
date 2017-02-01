@@ -6,10 +6,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Translatable\Translatable;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Accessor;
+use JMS\Serializer\Annotation\MaxDepth;
+use JMS\Serializer\Annotation\SerializedName;
+
 /**
  * @ORM\Table(name="training")
  * @ORM\Table(indexes={@ORM\Index(name="idx_training_position", columns={"position"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TrainingRepository")
  */
 class Training
 {
@@ -17,7 +22,8 @@ class Training
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     */
+	 * @Groups({"detail"})
+	 */
     private $id;
 
 	/**
@@ -33,47 +39,56 @@ class Training
     /**
      * @Gedmo\Translatable
      * @ORM\Column(length=256)
-     */
+	 * @Groups({"detail"})
+	 */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     */
+	 * @Groups({"detail"})
+	 */
     private $picture;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     */
+	 * @Groups({"detail"})
+	 */
     private $video;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     */
+	 * @Groups({"detail"})
+	 */
     private $start;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     */
+	 * @Groups({"detail"})
+	 */
     private $end;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     */
+	 * @Groups({"detail"})
+	 */
     private $cutoff;
 
     /**
      * @ORM\Column(type="boolean", nullable=false, options={"default" : true})
-     */
+	 */
     private $is_public;
 
     /**
      * @ORM\Column(type="float", nullable=false, options={"default" : 0})
-     */
+	 * @Groups({"detail"})
+	 */
     private $price;
 	
     /**
 	 * @ORM\Column(type="point")
-     */
+	 * @Groups({"detail"})
+	 * @Accessor(getter="getPositionApi",setter="setPositionApi")
+	 */
     private $position;
 
 	/**
@@ -91,19 +106,30 @@ class Training
 	/**
      * @ORM\ManyToOne(targetEntity="Sport", inversedBy="trainings")
      * @ORM\JoinColumn(name="sport_id", referencedColumnName="id")
+	 * @Groups({"detail"})
      */
     private $sport;
 	
 	/**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="trainings")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
+	 * @MaxDepth(2)
+	 * @Groups({"detail"})
+	 * @SerializedName("creator")
+	 */
     private $user;
 
 	/**
      * @ORM\OneToMany(targetEntity="Invite", mappedBy="training", cascade={"remove"})
      */	
     private $invited;
+		
+	/**
+     * @ORM\OneToMany(targetEntity="Subscribed", mappedBy="training", cascade={"remove"})
+	 * @MaxDepth(3)
+	 * @Groups({"detail"})
+     */	
+    private $subscribed;
 		
 	
 	/**********************
@@ -178,6 +204,15 @@ class Training
      */
     public function getPosition(){
         return $this->position;
+    }
+	
+    /**
+     * @return array
+	 * This metod is created to handle the serialization of datatype POINT 
+     */
+    public function getPositionApi(){
+        $position = $this->position;
+		return array('x' => $position->getX(), 'y' => $position->getY());
     }
 	
     /**
@@ -376,6 +411,7 @@ class Training
      */
     public function __construct(){
         $this->invited = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->subscribed = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -399,5 +435,29 @@ class Training
      */
     public function getInvited(){
         return $this->invited;
+    }
+
+
+    /**
+     * @param \AppBundle\Entity\Subscribed $subscribed
+     * @return Training
+     */
+    public function addSubscribed(\AppBundle\Entity\Subscribed $subscribed){
+        $this->subscribed[] = $subscribed;
+        return $this;
+    }
+
+    /**
+     * @param \AppBundle\Entity\Subscribed $subscribed
+     */
+    public function removeSubscribed(\AppBundle\Entity\Subscribed $subscribed){
+        $this->subscribed->removeElement($subscribed);
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSubscribed(){
+        return $this->subscribed;
     }
 }

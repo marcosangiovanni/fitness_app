@@ -8,8 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\MaxDepth;
+use JMS\Serializer\Annotation\SerializedName;
+
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @ORM\Table(name="fos_user")
  */
 class User extends BaseUser
@@ -18,42 +22,64 @@ class User extends BaseUser
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+	 * @Groups({"detail"})
      */
     protected $id;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="facebook_id", type="string", nullable=true)
+     */
+    private $facebookId;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="facebook_access_token", type="string", length=255, nullable=true)
+     */
+    private $facebookAccessToken;
+	
 	/**
      * @ORM\Column(type="string", length=100, nullable=true)
-     */
+	 * @Groups({"detail"})
+	 */
     private $name;
 
 	/**
      * @ORM\Column(type="string", length=100, nullable=true)
-     */
+	 * @Groups({"detail"})
+	 */
     private $surname;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
-     */
+	 * @Groups({"detail"})
+	 */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     */
+	 * @Groups({"detail"})
+	 */
     private $picture;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     */
+	 * @Groups({"detail"})
+	 */
     private $video;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
-     */
+	 * @Groups({"detail"})
+	 */
     private $city;
 
     /**
      * @ORM\Column(type="date", nullable=true)
-     */
+	 * @Groups({"detail"})
+	 */
     private $dob;
 	
 	/**
@@ -70,18 +96,21 @@ class User extends BaseUser
 
 	/**
      * @ORM\OneToMany(targetEntity="FacebookFriend", mappedBy="user", cascade={"remove"})
-     */	
+	 * @SerializedName("facebook_friends")
+	 * @Groups({"detail"})
+	 */
     private $friends;
 	
 	/**
      * @ORM\ManyToMany(targetEntity="Sport", inversedBy="users")
      * @ORM\JoinTable(name="ass_user_sport")
+	 * @Groups({"detail"})
      */
     private $sports;
 	
 	/**
      * @ORM\ManyToMany(targetEntity="User", mappedBy="myFriends")
-     */
+	 */
     private $friendsWithMe;
 
     /**
@@ -90,18 +119,32 @@ class User extends BaseUser
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="friend_user_id", referencedColumnName="id")}
      *      )
+	 * @Groups({"detail"})
+     * @MaxDepth(2)
+	 * @SerializedName("friends")
      */
     private $myFriends;
 
 	/**
      * @ORM\OneToMany(targetEntity="Invite", mappedBy="user", cascade={"remove"})
-     */	
+	 */
     private $invited;
+
+	/**
+     * Variable to store trainings to whom the user is subscribed
+     * @ORM\OneToMany(targetEntity="Subscribed", mappedBy="user", cascade={"remove"})
+	 * @SerializedName("associated_trainings")
+	 * @Groups({"detail"})
+	 */
+    private $subscribed;
 
 	/**
      * Variable to store trainings
 	 * @ORM\OneToMany(targetEntity="Training", mappedBy="user", cascade={"remove"})
-     */	
+	 * @SerializedName("created_trainings")
+	 * @Groups({"detail"})
+	 * @ORM\OrderBy({"start" = "DESC"})
+	 */
     private $trainings;
     
     public function __construct(){
@@ -110,6 +153,8 @@ class User extends BaseUser
 		$this->sports = new ArrayCollection();
         $this->friendsWithMe = new ArrayCollection();
         $this->myFriends = new ArrayCollection();
+        $this->invited = new ArrayCollection();
+        $this->subcribed = new ArrayCollection();
     }
 	
 
@@ -118,6 +163,16 @@ class User extends BaseUser
 	 **********************/
     public function setName($name){
         $this->name = $name;
+        return $this;
+    }
+	
+    public function setfacebookID($facebookID){
+        $this->facebookId = $facebookID;
+        return $this;
+    }
+	
+    public function setFacebookAccessToken($access_token){
+        $this->facebookAccessToken = $access_token;
         return $this;
     }
 	
@@ -159,6 +214,14 @@ class User extends BaseUser
         return $this->name;
     }
 
+    public function getfacebookId(){
+        return $this->facebookID;
+    }
+
+    public function getFacebookAccessToken(){
+        return $this->facebookAccessToken;
+    }
+	
     public function getSurname(){
         return $this->surname;
     }
@@ -379,7 +442,29 @@ class User extends BaseUser
         return $this->invited;
     }
 
+    /**
+     * @param \AppBundle\Entity\Subscribed $subscribed
+     * @return User
+     */
+    public function addSubscribed(\AppBundle\Entity\Subscribed $subscribed){
+        $this->subscribed[] = $subscribed;
+        return $this;
+    }
 
+    /**
+     * @param \AppBundle\Entity\Subscribed $subscribed
+     */
+    public function removeSubscribed(\AppBundle\Entity\Subscribed $subscribed){
+        $this->subscribed->removeElement($subscribed);
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSubscribed(){
+        return $this->subscribed;
+    }
+	
     /**
      * @param \AppBundle\Entity\Training $training
      * @return User

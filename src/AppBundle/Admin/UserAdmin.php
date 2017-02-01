@@ -10,19 +10,44 @@ use Sonata\AdminBundle\Form\FormMapper;
 
 class UserAdmin extends Admin
 {
-    protected function configureFormFields(FormMapper $formMapper)
-    {
+
+	//Methods to manage password update
+	public function updateUser(\AppBundle\Entity\User $u) {
+	    $um = $this->getConfigurationPool()->getContainer()->get('fos_user.user_manager');
+	    $um->updateUser($u, false);
+	}
+
+	public function prePersist($object){
+        parent::prePersist($object);
+		$this->updateUser($object);
+
+    }
+	
+    public function preUpdate($object){
+        parent::preUpdate($object);
+		$this->updateUser($object);
+
+    }
+	
+	//Form fields
+    protected function configureFormFields(FormMapper $formMapper){
         $formMapper	->add('name')
 					->add('surname')
 					->add('username')
 					->add('email')
 					->add('enabled')
-					->add('password','password')
-		;
+					->add('plainPassword', 'repeated', array(
+		                'type' => 'password',
+		                'options' => array('translation_domain' => 'FOSUserBundle'),
+		                'first_options' => array('label' => 'form.password'),
+		                'second_options' => array('label' => 'form.password_confirmation'),
+		                'invalid_message' => 'fos_user.password.mismatch',
+		                'required' => false,
+        ));
     }
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
-    {
+	//Form filters
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper){
         $datagridMapper	->add('name')
 						->add('surname')
 						->add('username')
@@ -37,8 +62,8 @@ class UserAdmin extends Admin
 		;
     }
 
-    protected function configureListFields(ListMapper $listMapper)
-    {
+	//Grid fields
+    protected function configureListFields(ListMapper $listMapper){
         $listMapper	->addIdentifier('id')
 					->addIdentifier('name')
 					->addIdentifier('surname')

@@ -5,6 +5,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Translatable\Translatable;
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Table(name="sport")
@@ -16,13 +17,15 @@ class Sport implements Translatable
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     */
+	 * @Groups({"detail"})
+	 */
     private $id;
 
     /**
      * @Gedmo\Translatable
      * @ORM\Column(length=256)
-     */
+	 * @Groups({"detail"})
+	 */
     private $title;
 
     /**
@@ -35,7 +38,8 @@ class Sport implements Translatable
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     */
+	 * @Groups({"detail"})
+	 */
     private $picture;
 
 	/**
@@ -172,4 +176,38 @@ class Sport implements Translatable
         return $this;
     }
 
+
+    /**
+     * Add training
+     *
+     * @param \AppBundle\Entity\Training $training
+     *
+     * @return Sport
+     */
+    public function addTraining(\AppBundle\Entity\Training $training)
+    {
+        $this->trainings[] = $training;
+
+        return $this;
+    }
+
+    /**
+     * Remove training
+     *
+     * @param \AppBundle\Entity\Training $training
+     */
+    public function removeTraining(\AppBundle\Entity\Training $training)
+    {
+        $this->trainings->removeElement($training);
+    }
+
+    /**
+     * Get trainings
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTrainings()
+    {
+        return $this->trainings;
+    }
 }

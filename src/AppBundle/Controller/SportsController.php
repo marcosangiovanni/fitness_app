@@ -41,17 +41,17 @@ class SportsController extends FOSRestController
 
 	// "post_sports"           
 	// [POST] /sports
-    public function postUsersAction()
+    public function postSportsAction()
     {} 
 
 	// "put_sports"             
 	// [PUT] /sports/{id}
-    public function putUserAction($slug)
+    public function putSportAction($slug)
     {}
 
 	// "delete_sports"          
 	// [DELETE] /sports/{id}
-    public function deleteUserAction($slug)
+    public function deleteSportAction($slug)
     {}
 
 }

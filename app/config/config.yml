@@ -11,7 +11,33 @@ twig:
         google_maps_api_key: '%google.maps_api_key%'
     form_themes:
       - 'SonataCoreBundle:Form:datepicker.html.twig'
-        
+
+# Facebook login Configuration
+hwi_oauth:
+    # name of the firewall in which this bundle is active, this setting MUST be set
+    firewall_names: [main]
+    connect:
+        account_connector: app.provider.oauth
+        confirmation: false
+    resource_owners:
+        facebook:
+            type:                facebook
+            client_id:           %facebook_client_id%
+            client_secret:       %facebook_client_secret%
+            scope:               "email, public_profile"
+            infos_url:           "https://graph.facebook.com/me?fields=id,name,email,picture.type(large)"
+            paths:
+                email: email
+            options:
+                display: page
+        google:
+            type:                google
+            client_id:           "Insert Google client ID here"
+            client_secret:       "Insert Google client secret here"
+            scope:              "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
+            paths:
+                email: email
+                         
 # app/config/config.yml
 stof_doctrine_extensions:
     default_locale: en_US
@@ -63,6 +89,12 @@ doctrine:
         auto_generate_proxy_classes: "%kernel.debug%"
         entity_managers:
             default:
+                dql:
+                  numeric_functions:
+                    st_distance:     CrEOF\Spatial\ORM\Query\AST\Functions\MySql\STDistance
+                    st_distance_sphere:     AppBundle\ORM\Query\AST\Functions\MySql\STDistanceSphere
+                    point:     CrEOF\Spatial\ORM\Query\AST\Functions\MySql\Point
+                    
                 naming_strategy: doctrine.orm.naming_strategy.underscore
                 auto_mapping: true
                 mappings:
@@ -93,6 +125,7 @@ sonata_media:
       allowed_extensions: ['jpg', 'png', 'jpeg']
       allowed_mime_types: ['image/pjpeg', 'image/jpeg', 'image/png', 'image/x-png']
 
+<<<<<<< HEAD
   default_context: default
   contexts:
     default:  # the default context is mandatory
@@ -121,7 +154,6 @@ sonata_media:
 #  category_manager:       null  # null or "sonata.media.manager.category.default" if classification bundle exists
 
 
-            
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
@@ -129,12 +161,6 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
-
-#fos_rest:
-#    routing_loader:
-#        default_format: json                            # All responses should be JSON formated
-#        include_format: false                           # We do not include format in request, so that all responses
-                                                        # will eventually be JSON formated
 
 fos_oauth_server:
     db_driver:           orm

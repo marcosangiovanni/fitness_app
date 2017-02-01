@@ -7,6 +7,8 @@ services:
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+
+#Admin classes
     admin.user:
         class: AppBundle\Admin\UserAdmin
         arguments: [~, AppBundle\Entity\User, ~]
@@ -30,7 +32,21 @@ services:
         arguments: [~, AppBundle\Entity\Sport, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Sport }
-                        
+
+#Api entrypoint                        
     api_authentication_entry_point:
          class: AppBundle\Entity\Auth\ApiAuthenticationEntryPoint
          arguments: [ api ]
+
+#Oauth user provider for FB LOGIN
+    app.provider.oauth:
+        class: AppBundle\Entity\Auth\OAuthUserProvider
+        arguments: [@fos_user.user_manager,{facebook: facebookId}]
+
+    app_oauth_server.storage:
+        class: AppBundle\Entity\Auth\AppOAuthStorage
+        arguments: ["@fos_oauth_server.client_manager", "@fos_oauth_server.access_token_manager", "@fos_oauth_server.refresh_token_manager", "@fos_oauth_server.auth_code_manager", "@?fos_oauth_server.user_provider", "@security.encoder_factory", "@doctrine.orm.entity_manager","@service_container"]
+
+    app_oauth_server.server:
+        class: AppBundle\Entity\Auth\AppOAuth2
+        arguments: ["@app_oauth_server.storage", "%fos_oauth_server.server.options%"]
