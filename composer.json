@@ -33,7 +33,9 @@
         "looptribe/form-spatial": "dev-master",
         "hwi/oauth-bundle": "^0.5.3",
         "guzzlehttp/guzzle": "^6.2",
-        "facebook/graph-sdk": "^5.4"
+        "facebook/graph-sdk": "^5.4",
+        "sonata-project/media-bundle": "2.3.0",
+        "sonata-project/intl-bundle": "^2.3"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",

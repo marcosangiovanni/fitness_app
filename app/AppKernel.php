@@ -38,6 +38,12 @@ class AppKernel extends Kernel
             new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
             new Sonata\AdminBundle\SonataAdminBundle(),
             
+            // Image save
+			new Sonata\MediaBundle\SonataMediaBundle(),
+	        new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
+	        new Sonata\IntlBundle\SonataIntlBundle(),
+	        new Application\Sonata\MediaBundle\ApplicationSonataMediaBundle(),
+            
 			// Bundle for REST application
 			new FOS\RestBundle\FOSRestBundle(),
 			new JMS\SerializerBundle\JMSSerializerBundle(),

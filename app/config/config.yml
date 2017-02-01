@@ -82,10 +82,8 @@ doctrine:
         password: "%database_password%"
         charset:  UTF8
         types:
-            point:      CrEOF\Spatial\DBAL\Types\Geometry\PointType
-            geometry:   CrEOF\Spatial\DBAL\Types\GeometryType
-            polygon:    CrEOF\Spatial\DBAL\Types\Geometry\PolygonType
-            linestring: CrEOF\Spatial\DBAL\Types\Geometry\LineStringType
+            point: CrEOF\Spatial\DBAL\Types\Geometry\PointType
+            json: Sonata\Doctrine\Types\JsonType
 
     orm:
 
@@ -113,7 +111,76 @@ doctrine:
                         dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translator/Entity"
                         alias: GedmoTranslator # (optional) it will default to the name set for the mapping
                         is_bundle: false
+                    SonataMediaBundle: ~
+                    ApplicationSonataMediaBundle: ~
 
+
+
+
+
+
+
+
+
+
+
+
+
+                    
+sonata_media:
+  db_driver: doctrine_orm
+  providers:
+    image:
+      service:    sonata.media.provider.image
+      resizer:    sonata.media.resizer.square # sonata.media.resizer.simple
+      filesystem: sonata.media.filesystem.local
+      cdn:        sonata.media.cdn.server
+      generator:  sonata.media.generator.default
+      thumbnail:  sonata.media.thumbnail.format
+      allowed_extensions: ['jpg', 'png', 'jpeg']
+      allowed_mime_types: ['image/pjpeg', 'image/jpeg', 'image/png', 'image/x-png']
+
+  default_context: default
+  contexts:
+    default:  # the default context is mandatory
+      download:
+        strategy: sonata.media.security.superadmin_strategy
+        mode: http
+      providers:
+        - sonata.media.provider.dailymotion
+        - sonata.media.provider.youtube
+        - sonata.media.provider.image
+        - sonata.media.provider.file
+      formats:
+        small: { width: 100 , quality: 70}
+        big:   { width: 500 , quality: 70}
+  cdn:
+    server:
+      path:      /uploads/media
+  filesystem:
+    local:
+      directory:  "%kernel.root_dir%/../web/uploads/media"
+      create:     false
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
 
 # Swiftmailer Configuration
 swiftmailer:
