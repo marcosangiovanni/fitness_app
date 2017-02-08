@@ -126,7 +126,8 @@ class User extends BaseUser
     private $friends;
 
 	/**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Sport", mappedBy="users")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Sport", inversedBy="user")
+     * @ORM\JoinTable(name="ass_user_sport")
 	 * @SerializedName("sports")
 	 * @MaxDepth(2)
 	 * @Groups({"detail"})
@@ -197,7 +198,13 @@ class User extends BaseUser
 	/**********************
 	 * SET METHODS        *
 	 **********************/
-
+	 
+	/* generic setter method*/
+	public function __set($property, $value){
+        $this->$property = $value;
+        return $this;
+    }
+	 
 	public function setPicture($picture){
         $this->picture = $picture;
         return $this;
@@ -223,6 +230,11 @@ class User extends BaseUser
 	 * GET METHODS        *
 	 **********************/
 	 
+	/* generic getter method*/
+	public function __get($property){
+        return $this->$property;
+    }
+	 
 	public function getPicture(){
         return $this->picture;
     }
@@ -238,7 +250,20 @@ class User extends BaseUser
     public function getDob(){
         return $this->dob;
     }
+	
+	
+	/************************
+	 * GENERIC RELATIONSHIP *
+	 ************************/
+	
+	public function add($property,$obj){
+		$this->$property->add($obj);
+        return $this;
+    }
 
+	public function remove($property,$obj){
+		$this->$property->removeElement($obj);
+    }
 
 	/*************************
 	 * FB FRIENDS MANAGEMENT *

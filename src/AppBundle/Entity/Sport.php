@@ -78,8 +78,7 @@ class Sport implements Translatable
     private $updated;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User\User", inversedBy="sports")
-     * @ORM\JoinTable(name="ass_user_sport")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User\User", mappedBy="sports")
 	 * @Type("ArrayCollection")
 	 */
     private $users;

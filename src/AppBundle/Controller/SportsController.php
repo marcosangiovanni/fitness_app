@@ -12,8 +12,6 @@ use JMS\Serializer\DeserializationContext;
 use JMS\Serializer\SerializerBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
-
-
 use AppBundle\Util\ObjectMerger;
 
 class SportsController extends FOSRestController
@@ -78,6 +76,7 @@ class SportsController extends FOSRestController
 		$em = $this->getDoctrine()->getManager();
 		$sport = ObjectMerger::mergeEntities($em, $sport, $obj);	
 
+		/* PERSISTENCE */
 		$em->persist($sport);
 	    $em->flush();
 		

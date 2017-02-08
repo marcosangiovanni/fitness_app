@@ -14,7 +14,7 @@ use JMS\Serializer\SerializationContext;
 use JMS\Serializer\DeserializationContext;
 use JMS\Serializer\SerializerBuilder;
 
-use AppBundle\Form\UserType;
+use AppBundle\Util\ObjectMerger;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -143,7 +143,7 @@ class UsersController extends FOSRestController
 	// User update
     public function putUserAction($id){
 
-		//Get the sport to update
+		//Get the user to update
 		$user = $this->getDoctrine()->getRepository('AppBundle:User\User')->find($id);
 		
 		//Request Object
@@ -152,95 +152,38 @@ class UsersController extends FOSRestController
 		//Serialization data (serializer and context)
 		$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
 		$deserialization_context = DeserializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
-		$serializer = SerializerBuilder::create()->build();
-
+		//Serializer and builder
+		$builder = SerializerBuilder::create();
+		$serializer = $builder->build();
+		
 		//Deserialized object with field conversion (see JMS Groups and SerializedName)
 		$obj = $serializer->deserialize($request->getContent(), 'AppBundle\Entity\User\User', 'json', $deserialization_context);
-		$objson = json_decode($serializer->serialize($obj, 'json'),true);
+		//Merging received data in entity
+		$em = $this->getDoctrine()->getManager();
 		
-		//Form creation for update
+		$pre = (json_decode($serializer->serialize($user, 'json'),true));
 		
-		$form = $this->createForm(UserType::class, $user);
-		$form->bind($objson);
+		$user = ObjectMerger::mergeEntities($em, $user, $obj);
 		
-		//\Doctrine\Common\Util\Debug::dump($form->getData());
+		$post = (json_decode($serializer->serialize($user, 'json'),true));
+		
+		//var_dump($pre['sports']);
+		//var_dump($post['sports']);
+		
+		
 		//exit;
 		
-		//Check FORM
-		if($form->isValid()){
-			$em = $this->getDoctrine()->getManager();
-			$em->persist($user);
-		    $em->flush();
-		}else{
-			
-			echo get_class($form);
-			echo $form->getErrors();
-			
-			die('INVALID');
-			
-		}
+		/* PERSISTENCE */
+		$em->persist($user);
+	    $em->flush();
 		
 		/* SERIALIZATION */
 		$jsonContent = $serializer->serialize($user, 'json', $context);
 		
 		/* JSON RESPONSE */
 		$jsonResponse = new Response($jsonContent);
-		return $jsonResponse->setStatusCode(200);
+		return $jsonResponse->setStatusCode(200);		
 		
-		
-		
-		
-
-
-
-
-    	//Find USER By Token
-    	$logged_user = $this->get('security.context')->getToken()->getUser();
-		
-		//Check is granted
-		$is_granted = $this->get('security.context')->isGranted('ROLE_USER');
-		
-		
-		$user = $this->getDoctrine()->getRepository('AppBundle:User\User')->find($id);
-		
-		$request = $this->getRequest();
-		//$inputStr = $request->request->all();
-		
-		$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
-		$serializer = SerializerBuilder::create()->build();
-		
-		$jsonData = $serializer->serialize($user, 'json', $context);
-		
-//		$obj = $serializer->deserialize($jsonData, 'AppBundle\Entity\User\User', 'json', DeserializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks());
-		$obj = $serializer->deserialize($jsonData, 'AppBundle\Entity\User\User', 'json');
-		
-		\Doctrine\Common\Util\Debug::dump($obj);
-		//var_dump($obj->getId());
-		exit;
-		
-
-		//$content = json_decode($jsonData,true);
-		$obj = $serializer->deserialize($jsonData, 'AppBundle:User\User', 'json');
-
-		die('r234323');
-		
-/*
-		$request = $this->getRequest();
-		$data = $request->request->all();
-    	$this->mapDataOnEntity($data, $user, array('detail'));
-*/
-		
-		die('4237384687326');
-		
-		if($logged_user->getId() != $id){
-			throw new Exception('You cant modify this user');
-		}
-		
-		
-		
-		var_dump($logged_user->getId());
-		exit;
-    	
     }
 
 	// "delete_user"          
