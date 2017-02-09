@@ -72,6 +72,7 @@ class SportsController extends FOSRestController
 		
 		//Deserialized object with field conversion (see JMS Groups and SerializedName)
 		$obj = $serializer->deserialize($request->getContent(), 'AppBundle\Entity\Sport', 'json', $deserialization_context);
+		
 		//Merging received data in entity
 		$em = $this->getDoctrine()->getManager();
 		$sport = ObjectMerger::mergeEntities($em, $sport, $obj);	
