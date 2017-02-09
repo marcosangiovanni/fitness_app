@@ -165,7 +165,9 @@ class Sport implements Translatable
      * @return Sport
      */
     public function addUser(\AppBundle\Entity\User\User $users){
-        $this->users[] = $users;
+    	if (!$this->users->contains($users)) {
+			$this->users->add($users);
+		}
         return $this;
     }
 

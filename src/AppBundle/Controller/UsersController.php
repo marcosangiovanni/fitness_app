@@ -158,21 +158,11 @@ class UsersController extends FOSRestController
 		
 		//Deserialized object with field conversion (see JMS Groups and SerializedName)
 		$obj = $serializer->deserialize($request->getContent(), 'AppBundle\Entity\User\User', 'json', $deserialization_context);
+		
 		//Merging received data in entity
 		$em = $this->getDoctrine()->getManager();
-		
-		$pre = (json_decode($serializer->serialize($user, 'json'),true));
-		
 		$user = ObjectMerger::mergeEntities($em, $user, $obj);
-		
-		$post = (json_decode($serializer->serialize($user, 'json'),true));
-		
-		//var_dump($pre['sports']);
-		//var_dump($post['sports']);
-		
-		
-		//exit;
-		
+
 		/* PERSISTENCE */
 		$em->persist($user);
 	    $em->flush();

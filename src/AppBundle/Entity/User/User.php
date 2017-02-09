@@ -118,15 +118,7 @@ class User extends BaseUser
 	 **********************************/
 
 	/**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\FacebookFriend", mappedBy="user", cascade={"remove"})
-	 * @SerializedName("facebook_friends")
-	 * @Groups({"detail"})
-	 * @Type("ArrayCollection")
-	 */
-    private $friends;
-
-	/**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Sport", inversedBy="user")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Sport", inversedBy="users")
      * @ORM\JoinTable(name="ass_user_sport")
 	 * @SerializedName("sports")
 	 * @MaxDepth(2)
@@ -136,9 +128,12 @@ class User extends BaseUser
     private $sports;
 	
 	/**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="myFriends")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\FacebookFriend", mappedBy="user", cascade={"remove"})
+	 * @SerializedName("facebook_friends")
+	 * @Groups({"detail"})
+	 * @Type("ArrayCollection")
 	 */
-    private $friendsWithMe;
+    private $friends;
 
     /**
      * @ORM\ManyToMany(targetEntity="User", inversedBy="friendsWithMe")
@@ -154,13 +149,9 @@ class User extends BaseUser
     private $myFriends;
 
 	/**
-     * Variable to store trainings to whom the user is subscribed
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Subscribed", mappedBy="user", cascade={"remove"})
-	 * @SerializedName("associated_trainings")
-	 * @Groups({"detail"})
-	 * @Type("ArrayCollection")
-     */
-    private $subscribed;
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="myFriends")
+	 */
+    private $friendsWithMe;
 
 	/**
      * Variable to store trainings
@@ -172,7 +163,14 @@ class User extends BaseUser
      */
     private $trainings;
 	
-	
+	/**
+     * Variable to store trainings to whom the user is subscribed
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Subscribed", mappedBy="user", cascade={"remove"})
+	 * @SerializedName("associated_trainings")
+	 * @Groups({"detail"})
+	 * @Type("ArrayCollection")
+     */
+    private $subscribed;
 	
     public function __construct(){
         parent::__construct();
@@ -310,6 +308,7 @@ class User extends BaseUser
      * @return User
      */
     public function addSport(\AppBundle\Entity\Sport $sports){
+    	$sports->addUser($this);
 		$this->sports[] = $sports;
         return $this;
     }
