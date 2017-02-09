@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Form;
+use AppBundle\Entity\User\User;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,16 +14,17 @@ class UserType extends AbstractType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options){
-        $builder	->add('picture')
+        $builder	->add('id')
+        			->add('picture')
         			->add('video')
         			->add('city')
-					->add('sports', CollectionType::class, array('entry_type' => SportType::class))
-		;
+					//->add('sports', CollectionType::class, 	array('entry_type' => SportType::class,	'by_reference' => false));
+					->add('sports', CollectionType::class, 	array('by_reference' => false));
     }
     
     public function configureOptions(OptionsResolver $resolver){
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\User\User',
+            'data_class' => User::class,
             'allow_extra_fields' => true,
             'csrf_protection'   => false,
         ));
