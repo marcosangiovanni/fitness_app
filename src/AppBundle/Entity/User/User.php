@@ -117,6 +117,16 @@ class User extends BaseUser
 	 * FIELDS TO DEFINE RELATIONSHIPS *
 	 **********************************/
 
+ 	/**
+     * Variable to store trainings to whom the user is subscribed
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Subscribed", mappedBy="user", cascade={"persist"})
+	 * @SerializedName("associated_trainings")
+	 * @Groups({"detail"})
+	 * @Type("ArrayCollection")
+	 * @MaxDepth(4)
+     */
+    private $subscribed;
+	
 	/**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Sport", inversedBy="users")
      * @ORM\JoinTable(name="ass_user_sport")
@@ -160,17 +170,9 @@ class User extends BaseUser
 	 * @Groups({"detail"})
 	 * @ORM\OrderBy({"start" = "DESC"})
 	 * @Type("ArrayCollection")
+	 * @MaxDepth(3)
      */
     private $trainings;
-	
-	/**
-     * Variable to store trainings to whom the user is subscribed
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Subscribed", mappedBy="user", cascade={"remove"})
-	 * @SerializedName("associated_trainings")
-	 * @Groups({"detail"})
-	 * @Type("ArrayCollection")
-     */
-    private $subscribed;
 	
     public function __construct(){
         parent::__construct();
@@ -179,7 +181,7 @@ class User extends BaseUser
         $this->friendsWithMe = new ArrayCollection();
         $this->myFriends = new ArrayCollection();
         $this->invited = new ArrayCollection();
-        $this->subcribed = new ArrayCollection();
+        $this->subscribed = new ArrayCollection();
     }
 
     /**
@@ -441,6 +443,7 @@ class User extends BaseUser
      * @return User
      */
     public function addSubscribed(\AppBundle\Entity\Subscribed $subscribed){
+    	$subscribed->setUser($this);
         $this->subscribed[] = $subscribed;
         return $this;
     }
