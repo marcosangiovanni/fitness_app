@@ -12,7 +12,25 @@ use AppBundle\Form\UserType;
 
 class UserType extends AbstractType
 {
-
+	
+		/* FORM SOLUTION TO IMPLEMENT IN CONTROLLER 
+		
+		//Serializa object and json_decode to transform obj in an array request_like
+		$request_like_array = json_decode($serializer->serialize($obj, 'json'),true);
+		
+		//Form creation for update
+		$form = $this->createForm(SportType::class, $sport);
+		$form->bind($request_like_array);
+		
+		//Check FORM performing validation data
+		if($form->isValid()){
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($sport);
+		    $em->flush();
+		}
+		
+		*/
+	
     public function buildForm(FormBuilderInterface $builder, array $options){
         $builder	->add('id')
         			->add('picture')
