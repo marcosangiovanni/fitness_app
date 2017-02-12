@@ -19,6 +19,8 @@ use AppBundle\Util\ObjectMerger;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
+use JMS\Serializer\Construction\DoctrineObjectConstructor;
+
 class UsersController extends FOSRestController
 {
 
@@ -145,7 +147,6 @@ class UsersController extends FOSRestController
 
 		//Get the user to update
 		$user = $this->getDoctrine()->getRepository('AppBundle:User\User')->find($id);
-		
 		//Request Object
 		$request = $this->getRequest();
 		
@@ -153,11 +154,75 @@ class UsersController extends FOSRestController
 		$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
 		$deserialization_context = DeserializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
 		//Serializer and builder
-		$builder = SerializerBuilder::create();
+		$builder = SerializerBuilder::create()->setObjectConstructor(new DoctrineObjectConstructor($this->container->get('doctrine'),$this->container->get('jms_serializer.object_constructor')));
 		$serializer = $builder->build();
-		
+
+		//$t = new \DateTime();
+		//var_dump($t->format('Y-m-d\TH:i:sO'));
+		//exit;
+
+		//\Doctrine\Common\Util\Debug::dump($user,3);
+
 		//Deserialized object with field conversion (see JMS Groups and SerializedName)
 		$obj = $serializer->deserialize($request->getContent(), 'AppBundle\Entity\User\User', 'json', $deserialization_context);
+
+		//\Doctrine\Common\Util\Debug::dump($obj,3);
+		//exit;
+		
+
+		//Merging received data in entity
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($obj);
+	    $em->flush();
+
+
+		/* SERIALIZATION */
+		$jsonContent = $serializer->serialize($user, 'json', $context);
+		
+		/* JSON RESPONSE */
+		$jsonResponse = new Response($jsonContent);
+		return $jsonResponse->setStatusCode(200);
+		
+		
+		
+		
+		
+		
+		//Deserialized object with field conversion (see JMS Groups and SerializedName)
+		
+		//var_dump($serializer->getClassCon());
+		//var_dump(get_class($serializer));
+		//var_dump('preALLLLLLA');		
+		$obj = $serializer->deserialize($request->getContent(), 'AppBundle\Entity\User\User', 'json', $deserialization_context);
+		
+		\Doctrine\Common\Util\Debug::dump($obj,3);
+		\Doctrine\Common\Util\Debug::dump($user,3);
+		exit;
+		
+		/* SERIALIZATION */
+		$jsonContent = $serializer->serialize($obj, 'json');
+		
+		/* JSON RESPONSE */
+		$jsonResponse = new Response($jsonContent);
+		return $jsonResponse->setStatusCode(200);
+		
+		
+		//\Doctrine\Common\Util\Debug::dump($obj,3);
+		
+		//Merging received data in entity
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($obj);
+	    $em->flush();
+		
+		/* SERIALIZATION */
+		$jsonContent = $serializer->serialize($user, 'json', $context);
+		
+		/* JSON RESPONSE */
+		$jsonResponse = new Response($jsonContent);
+		return $jsonResponse->setStatusCode(200);
+		
+		//exit;
+		
 		
 		//Merging received data in entity
 		$em = $this->getDoctrine()->getManager();

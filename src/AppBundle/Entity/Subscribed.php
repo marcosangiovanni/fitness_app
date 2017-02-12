@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Accessor;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\Type;
 
 /**
  * @ORM\Table(name="ass_user_training_subscribed")
@@ -19,6 +20,8 @@ class Subscribed
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+	 * @Groups({"detail"})
+	 * @Type("integer")
      */
     private $id;
 
@@ -35,6 +38,7 @@ class Subscribed
 	/**
      * @ORM\Column(type="float", nullable=true)))
 	 * @Groups({"detail"})
+	 * @Type("float")
 	 */ 
     private $feedback;
 
@@ -61,6 +65,7 @@ class Subscribed
      * @ORM\ManyToOne(targetEntity="Training", inversedBy="subscribed") 
 	 * @ORM\JoinColumn(name="training_id", referencedColumnName="id")
 	 * @Groups({"detail"})
+	 * @Type("AppBundle\Entity\Training")
 	 */ 
     private $training; 
 

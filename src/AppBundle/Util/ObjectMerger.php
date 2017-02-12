@@ -31,13 +31,36 @@ class ObjectMerger{
 					$collection = $em->getRepository($field_description['targetEntity'])->findById($ids);
 					
 					//Remove all relation
-					$mainEntity->__set($field_name,new ArrayCollection());
+					//
 					
-					//Add all relation received
-					foreach ($collection as $key => $elem) {
-						$mainEntity->add($field_name,$elem);
+					var_dump($field_name);
+					
+					if($field_name === 'subscribed'){
+						$collection = $em->getRepository($field_description['targetEntity'])->findBy(array('user_id' => $mainEntity->getId()));
+						
+						foreach ($collection as $key => $item) {
+								
+							$mainEntity->removeSubscribed($item);
+						}
+						
+						
+					}else{
+						$mainEntity->__set($field_name,new ArrayCollection());
 					}
 					
+					
+					
+					//Add all relation received
+					/*
+					foreach ($collection as $key => $elem) {
+						if($field_name === 'subscribed'){
+							$mainEntity->addSubscribed($elem);
+						}else{
+							$mainEntity->add($field_name,$elem);	
+						}
+						
+					}
+					*/
 				}
 			}
 		}

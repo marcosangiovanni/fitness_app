@@ -102,6 +102,7 @@ class User extends BaseUser
     /**
 	 * @Groups({"detail"})
 	 * @Type("DateTime<'Y-m-d'>")
+	 * @var \Date
 	 */
     protected $dateOfBirth;
 
@@ -119,10 +120,10 @@ class User extends BaseUser
 
  	/**
      * Variable to store trainings to whom the user is subscribed
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Subscribed", mappedBy="user", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Subscribed", mappedBy="user", cascade={"persist", "remove"})
 	 * @SerializedName("associated_trainings")
 	 * @Groups({"detail"})
-	 * @Type("ArrayCollection")
+	 * @Type("ArrayCollection<AppBundle\Entity\Subscribed>")
 	 * @MaxDepth(4)
      */
     private $subscribed;
@@ -133,15 +134,15 @@ class User extends BaseUser
 	 * @SerializedName("sports")
 	 * @MaxDepth(2)
 	 * @Groups({"detail"})
-	 * @Type("ArrayCollection")
+	 * @Type("ArrayCollection<AppBundle\Entity\Sport>")
 	 */
     private $sports;
 	
 	/**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\FacebookFriend", mappedBy="user", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\FacebookFriend", mappedBy="user", cascade={"all"}, orphanRemoval=true)
 	 * @SerializedName("facebook_friends")
 	 * @Groups({"detail"})
-	 * @Type("ArrayCollection")
+	 * @Type("ArrayCollection<AppBundle\Entity\FacebookFriend>")
 	 */
     private $friends;
 
@@ -154,7 +155,7 @@ class User extends BaseUser
 	 * @Groups({"detail"})
      * @MaxDepth(2)
 	 * @SerializedName("friends")
-	 * @Type("ArrayCollection")
+	 * @Type("ArrayCollection<AppBundle\Entity\User\User>")
      */
     private $myFriends;
 
@@ -169,7 +170,7 @@ class User extends BaseUser
 	 * @SerializedName("created_trainings")
 	 * @Groups({"detail"})
 	 * @ORM\OrderBy({"start" = "DESC"})
-	 * @Type("ArrayCollection")
+	 * @Type("ArrayCollection<AppBundle\Entity\Training>")
 	 * @MaxDepth(3)
      */
     private $trainings;
@@ -182,6 +183,7 @@ class User extends BaseUser
         $this->myFriends = new ArrayCollection();
         $this->invited = new ArrayCollection();
         $this->subscribed = new ArrayCollection();
+        $this->trainings = new ArrayCollection();
     }
 
     /**
@@ -257,11 +259,13 @@ class User extends BaseUser
 	 ************************/
 	
 	public function add($property,$obj){
+		die('3213312');
 		$this->$property->add($obj);
         return $this;
     }
 
 	public function remove($property,$obj){
+		die('321331200000000000000000');
 		$this->$property->removeElement($obj);
     }
 
@@ -275,8 +279,11 @@ class User extends BaseUser
      * @param \AppBundle\Entity\FacebookFriend $friends
      * @return User
      */
-    public function addFriend(\AppBundle\Entity\FacebookFriend $friends){
-        $this->friends[] = $friends;
+    public function addFriend(\AppBundle\Entity\FacebookFriend $friend){
+    	
+		die('assa');
+    	$friend->setUser($this);
+        $this->friends[] = $friend;
         return $this;
     }
 
@@ -285,8 +292,9 @@ class User extends BaseUser
      *
      * @param \AppBundle\Entity\FacebookFriend $friends
      */
-    public function removeFriend(\AppBundle\Entity\FacebookFriend $friends){
-        $this->friends->removeElement($friends);
+    public function removeFriend(\AppBundle\Entity\FacebookFriend $friend){
+    	$friend->setUser(null);
+        $this->friends->removeElement($friend);
     }
 
     /**
@@ -295,6 +303,16 @@ class User extends BaseUser
      * @return \Doctrine\Common\Collections\Collection 
      */
     public function getFriends(){
+        return $this->friends;
+    }
+
+    /**
+     * Get friends
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function setFriends(){
+    	die('dsjahdkakdksahhdsahdhkas');
         return $this->friends;
     }
 

@@ -13,6 +13,7 @@ use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\Accessor;
 use JMS\Serializer\Annotation\MaxDepth;
 use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\Type;
 
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -38,6 +39,7 @@ class Training
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
 	 * @Groups({"detail"})
+	 * @Type("integer")
 	 */
     private $id;
 
@@ -55,36 +57,42 @@ class Training
      * @Gedmo\Translatable
      * @ORM\Column(length=256)
 	 * @Groups({"detail"})
+	 * @Type("string")
 	 */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
 	 * @Groups({"detail"})
+	 * @Type("string")
 	 */
     private $picture;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
 	 * @Groups({"detail"})
+	 * @Type("string")
 	 */
     private $video;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
 	 * @Groups({"detail"})
+	 * @Type("DateTime<'Y-m-d\TH:i:sO'>")
 	 */
     private $start;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
 	 * @Groups({"detail"})
+	 * @Type("DateTime<'Y-m-d\TH:i:sO'>")
 	 */
     private $end;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
 	 * @Groups({"detail"})
+	 * @Type("DateTime<'Y-m-d\TH:i:sO'>")
 	 */
     private $cutoff;
 
@@ -96,13 +104,15 @@ class Training
     /**
      * @ORM\Column(type="float", nullable=false, options={"default" : 0})
 	 * @Groups({"detail"})
+	 * @Type("float")
 	 */
     private $price;
 	
     /**
 	 * @ORM\Column(type="point")
 	 * @Groups({"detail"})
-	 * @Accessor(getter="getPositionApi",setter="setPositionApi")
+	 * @Accessor(getter="getPositionApi", setter="setPositionApi")
+	 * @Type("array")
 	 */
     private $position;
 
@@ -122,6 +132,7 @@ class Training
      * @ORM\ManyToOne(targetEntity="Sport", inversedBy="trainings")
      * @ORM\JoinColumn(name="sport_id", referencedColumnName="id")
 	 * @Groups({"detail"})
+	 * @Type("AppBundle\Entity\Sport")
      */
     private $sport;
 	
@@ -131,6 +142,7 @@ class Training
 	 * @MaxDepth(2)
 	 * @Groups({"detail"})
 	 * @SerializedName("creator")
+	 * @Type("AppBundle\Entity\User\User")
 	 */
     private $user;
 
@@ -138,6 +150,7 @@ class Training
      * @ORM\OneToMany(targetEntity="Subscribed", mappedBy="training", cascade={"remove"})
 	 * @MaxDepth(3)
 	 * @Groups({"detail"})
+	 * @Type("AppBundle\Entity\Subscribed")
      */	
     private $subscribed;
 		
@@ -223,6 +236,11 @@ class Training
     public function getPositionApi(){
         $position = $this->position;
 		return array('x' => $position->getX(), 'y' => $position->getY());
+    }
+	
+    public function setPositionApi($ar_position){
+    	$this->setPosition(new Point($ar_position['x'],$ar_position['y']));
+		return $this;
     }
 	
     /**
