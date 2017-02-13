@@ -1,98 +1,65 @@
 <?php
 
+//Controller
 namespace AppBundle\Controller;
 use FOS\RestBundle\Controller\FOSRestController;
+
+//Http
 use Symfony\Component\HttpFoundation\Request;
-
-use AppBundle\Entity\Sport;
-use AppBundle\Form\SportType;
-
-use JMS\Serializer\SerializationContext;
-use JMS\Serializer\DeserializationContext;
-use JMS\Serializer\SerializerBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
-use AppBundle\Util\ObjectMerger;
+//Manager
+use AppBundle\Util\ErrorManager;
+use AppBundle\Util\SerializerManager;
+
+//Exception
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SportsController extends FOSRestController
 {
 
 	// [GET] /sports/{id}
-	public function getSportAction($id)
-    {
-    	//Find USER By Token
-    	$logged_user = $this->get('security.context')->getToken()->getUser();
-		
-		//Check is granted
-		$is_granted = $this->get('security.context')->isGranted('ROLE_USER');
-		
-		//Find sport data
-		$sport = $this->getDoctrine()->getRepository('AppBundle:Sport')->find($id);
-		if(!$sport){
-			throw $this->createNotFoundException('No sport found for id '.$id);
-		}else{
-			$view = $this->view($sport, 200);
-        	return $this->handleView($view);
+	public function getSportAction($id){
+		try{
+			//Find sport entity by ID
+			$sport = $this->getDoctrine()->getRepository('AppBundle:Sport')->find($id);
+			//If sport not found 404 exception
+			if(!$sport){
+				throw $this->createNotFoundException('No sport found for id : '.$id);
+			}else{
+				$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($sport));
+				$jsonResponse->setStatusCode(200);
+			}	
 		}
+		//404
+		catch(NotFoundHttpException $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(404);
+		}
+		//500
+		catch(\Exception $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
+		}
+		/* JSON RESPONSE */
+		return $jsonResponse;
     } 
     
 	// [GET] /sports
-	// Set search parameters
     public function getSportsAction(){
-        $sports = $this->getDoctrine()->getRepository('AppBundle:Sport')->findAll();
-		if(!$sports){
-			throw $this->createNotFoundException('No collection found');
-		}else{
-			$view = $this->view($sports, 200);
-        	return $this->handleView($view);
+    	try{
+			//Get sport list
+			$sports = $this->getDoctrine()->getRepository('AppBundle:Sport')->findAll();
+			$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($sports));
+			$jsonResponse->setStatusCode(200);
 		}
-    }
-
-	// "post_sports"           
-	// [POST] /sports
-    public function postSportsAction()
-    {} 
-
-	// "put_sports"             
-	// [PUT] /sports/{id}
-    public function putSportAction($id){
-    	
-		//Get the sport to update
-		$sport = $this->getDoctrine()->getRepository('AppBundle:Sport')->find($id);
-		
-		//Request Object
-		$request = $this->getRequest();
-		
-		//Serialization data (serializer and context)
-		$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
-		$deserialization_context = DeserializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
-		//Serializer and builder
-		$builder = SerializerBuilder::create();
-		$serializer = $builder->build();
-		
-		//Deserialized object with field conversion (see JMS Groups and SerializedName)
-		$obj = $serializer->deserialize($request->getContent(), 'AppBundle\Entity\Sport', 'json', $deserialization_context);
-		
-		//Merging received data in entity
-		$em = $this->getDoctrine()->getManager();
-		$sport = ObjectMerger::mergeEntities($em, $sport, $obj);	
-
-		/* PERSISTENCE */
-		$em->persist($sport);
-	    $em->flush();
-		
-		/* SERIALIZATION */
-		$jsonContent = $serializer->serialize($sport, 'json', $context);
-		
+		//500
+		catch(\Exception $e){
+			$jsonResponse = new Response(SerializerManager::getJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
+		}
 		/* JSON RESPONSE */
-		$jsonResponse = new Response($jsonContent);
-		return $jsonResponse->setStatusCode(200);
-		
+		return $jsonResponse;
     }
-
-	// "delete_sports"          
-	// [DELETE] /sports/{id}
-    public function deleteSportAction($id)
-    {}
 
 }

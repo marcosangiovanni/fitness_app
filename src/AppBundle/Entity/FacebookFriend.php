@@ -1,8 +1,11 @@
 <?php
 
 namespace AppBundle\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
+
 use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Type;
 
 /**
  * @ORM\Entity
@@ -15,23 +18,28 @@ class FacebookFriend
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
 	 * @Groups({"detail"})
+	 * @Type("integer")
 	 */
     private $id;
 
 	/**
      * @ORM\Column(type="integer", length=100)
+	 * @Groups({"detail"})
+	 * @Type("integer")
      */
     private $user_id;
 
 	/**
      * @ORM\Column(type="string", length=100)
 	 * @Groups({"detail"})
+	 * @Type("string")
 	 */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=100)
 	 * @Groups({"detail"})
+	 * @Type("string")
 	 */
     private $facebook_uid;
 
@@ -78,6 +86,31 @@ class FacebookFriend
         return $this->facebook_uid;
     }
 
+	/**
+     * Add users
+     *
+     * @param \AppBundle\Entity\User\User $users
+     * @return Sport
+     */
+    public function addUser(\AppBundle\Entity\User\User $users){
+    	die('43242423423');
+    	if (!$this->users->contains($users)) {
+			$this->users->add($users);
+		}
+        return $this;
+    }
+
+	/**
+     * Remove users
+     *
+     * @param \AppBundle\Entity\User\User $users
+     */
+    public function removeUser(\AppBundle\Entity\User\User $user){
+    	die('43242423423');
+    	$user->removeFriend($this);
+        $this->users->removeElement($user);
+    }
+	
     /**
      * Set user
      *
@@ -85,6 +118,7 @@ class FacebookFriend
      * @return FacebookFriend
      */
     public function setUser(\AppBundle\Entity\User\User $user = null){
+    	die('43242423423');
         $this->user = $user;
         return $this;
     }
