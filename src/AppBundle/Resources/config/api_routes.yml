@@ -1,29 +1,24 @@
 utils:
     type:     rest
     prefix:   /api/v1
-    host:     localhost
     resource: AppBundle\Controller\UtilController
 
 users:
     type:     rest
     prefix:   /api/v1
-    host:     localhost
     resource: AppBundle\Controller\UsersController
 
 sports:
     type:     rest
     prefix:   /api/v1
-    host:     localhost
     resource: AppBundle\Controller\SportsController
 
 trainings:
     type:     rest
     prefix:   /api/v1
-    host:     localhost
     resource: AppBundle\Controller\TrainingsController
 
 facebook_friends:
     type:     rest
-    host:     localhost
     parent:   users
     resource: AppBundle\Controller\FacebookFriendsController

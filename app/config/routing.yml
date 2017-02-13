@@ -64,7 +64,7 @@ _sonata_admin:
 #Api routing
 api_routes:
     type: rest
-    host: localhost
+    host: "{env}.fitnessapp.com"
     resource: "@AppBundle/Resources/config/api_routes.yml"
 
 #Rewritten for prefix /api
