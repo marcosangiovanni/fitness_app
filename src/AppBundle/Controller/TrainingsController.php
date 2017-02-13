@@ -24,16 +24,14 @@ class TrainingsController extends FOSRestController
 			throw $this->createNotFoundException('No training found for id '.$id);
 		}else{
 			
-			$context = SerializationContext::create()
-							->setGroups(array('detail'))
-							->enableMaxDepthChecks();
-			
+			/* SERIALIZATION */
+			$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
 			$serializer = SerializerBuilder::create()->build();
+			$jsonContent = $serializer->serialize(array('data' => $training), 'json', $context);
 			
-			$jsonContent = $serializer->serialize($training, 'json', $context);
-			
+			/* JSON RESPONSE */
 			$jsonResponse = new Response($jsonContent);
-    		return $jsonResponse->setStatusCode(200);
+			return $jsonResponse->setStatusCode(200);
 
 		}
 
@@ -51,9 +49,9 @@ class TrainingsController extends FOSRestController
 
 		/* POSITION */		
 		//The user starting position to search for trainings
-		$x = $request->get('x');
-		$y = $request->get('y');
-		$point = new Point($x,$y);
+		$lat = $request->get('lat');
+		$lng = $request->get('lng');
+		$point = new Point($lat,$lng);
 		//The max distance in meters of training
 		$max_distance = $request->get('distance');
 
@@ -86,7 +84,7 @@ class TrainingsController extends FOSRestController
 		/* SERIALIZATION */
 		$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
 		$serializer = SerializerBuilder::create()->build();
-		$jsonContent = $serializer->serialize($trainings, 'json', $context);
+		$jsonContent = $serializer->serialize(array('data' => $trainings), 'json', $context);
 		
 		/* JSON RESPONSE */
 		$jsonResponse = new Response($jsonContent);
