@@ -64,12 +64,8 @@ _sonata_admin:
 #Api routing
 api_routes:
     type: rest
-    host: "{subdomain}.fitnessapp.com"
+    host: "%api_host%"
     resource: "@AppBundle/Resources/config/api_routes.yml"
-    defaults:
-        subdomain: api
-    requirements:
-        subdomain: api|loc
         
 #Rewritten for prefix /api
 fos_oauth_server_token:
