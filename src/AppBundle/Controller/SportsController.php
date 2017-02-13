@@ -1,17 +1,18 @@
 <?php
 
+//Controller
 namespace AppBundle\Controller;
 use FOS\RestBundle\Controller\FOSRestController;
+
+//Http
 use Symfony\Component\HttpFoundation\Request;
-
-use AppBundle\Entity\Sport;
-use AppBundle\Form\SportType;
-
 use Symfony\Component\HttpFoundation\Response;
 
+//Manager
 use AppBundle\Util\ErrorManager;
 use AppBundle\Util\SerializerManager;
 
+//Exception
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SportsController extends FOSRestController
@@ -49,18 +50,8 @@ class SportsController extends FOSRestController
     	try{
 			//Get sport list
 			$sports = $this->getDoctrine()->getRepository('AppBundle:Sport')->findAll();
-			//If none sport found 404 exception
-			if(count($sports) === 0){
-				throw $this->createNotFoundException('No sport found');
-			}else{
-				$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($sports));
-				$jsonResponse->setStatusCode(200);
-			}
-		}
-		//404
-		catch(NotFoundHttpException $e){
-			$jsonResponse = new Response(SerializerManager::getJsonData(ErrorManager::createErrorArrayFromException($e)));
-			$jsonResponse->setStatusCode(404);
+			$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($sports));
+			$jsonResponse->setStatusCode(200);
 		}
 		//500
 		catch(\Exception $e){

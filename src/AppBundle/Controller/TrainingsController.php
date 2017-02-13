@@ -1,94 +1,111 @@
 <?php
 
+//Controller
 namespace AppBundle\Controller;
 use FOS\RestBundle\Controller\FOSRestController;
-use AppBundle\Entity\Sport;
+
+//Spatial
 use CrEOF\Spatial\PHP\Types\Geometry\Point;
 
-use JMS\Serializer\SerializationContext;
-use JMS\Serializer\SerializerBuilder;
-
+//Http
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
+//Manager
+use AppBundle\Util\ErrorManager;
+use AppBundle\Util\SerializerManager;
+
+//Exception
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 class TrainingsController extends FOSRestController
 {
-
+	
 	// [GET] /trainings/{id}
-	public function getTrainingAction($id)
-    {
-		//Find training data
-		$training = $this->getDoctrine()->getRepository('AppBundle:Training')->find($id);
-
-		if(!$training){
-			throw $this->createNotFoundException('No training found for id '.$id);
-		}else{
-			
-			/* SERIALIZATION */
-			$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
-			$serializer = SerializerBuilder::create()->build();
-			$jsonContent = $serializer->serialize(array('data' => $training), 'json', $context);
-			
-			/* JSON RESPONSE */
-			$jsonResponse = new Response($jsonContent);
-			return $jsonResponse->setStatusCode(200);
-
+	public function getTrainingAction($id){
+		try{
+			//Find training entity by ID
+			$training = $this->getDoctrine()->getRepository('AppBundle:Training')->find($id);
+			//If training not found 404 exception
+			if(!$training){
+				throw $this->createNotFoundException('No training found for id : '.$id);
+			}else{
+				$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($training));
+				$jsonResponse->setStatusCode(200);
+			}	
 		}
-
-    } 
+		//404
+		catch(NotFoundHttpException $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(404);
+		}
+		//500
+		catch(\Exception $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
+		}
+		/* JSON RESPONSE */
+		return $jsonResponse;
+    }
     
 	// [GET] /trainings
 	// Set search parameters
     public function getTrainingsAction(){
 
-		//Find USER By Token
-    	$logged_user = $this->get('security.context')->getToken()->getUser();
-		
-		//Find request parameters
-		$request = $this->getRequest();
+		try{
+			//Find USER By Token
+	    	$logged_user = $this->get('security.context')->getToken()->getUser();
 
-		/* POSITION */		
-		//The user starting position to search for trainings
-		$lat = $request->get('lat');
-		$lng = $request->get('lng');
-		$point = new Point($lat,$lng);
-		//The max distance in meters of training
-		$max_distance = $request->get('distance');
+			//Find request parameters
+			$request = $this->getRequest();
 
-		/* SPORT TYPE */
-		//The sports I intend to search within
-		$sports = $request->get('sports');
+			/* POSITION */		
+			//The user starting position to search for trainings
+			$lat = $request->get('lat');
+			$lng = $request->get('lng');
+			$point = new Point($lat,$lng);
 
-		/* TRAINING DATETIME */
-		//The date of training
-		//0 = today
-		//1 = tomorrow
-		//etc...
-		$date = $request->get('date');
-
-		/* QUERY CONSTRUCTOR */
-		//Instantiate the repositiory		
-		$repository = $this->getDoctrine()->getRepository('AppBundle:Training');
+			//The max distance in meters of training
+			$max_distance = $request->get('distance');
+	
+			/* SPORT TYPE */
+			//The sports I intend to search within
+			$sports = $request->get('sports');
+	
+			/* TRAINING DATETIME */
+			//The date of training
+			//0 = today
+			//1 = tomorrow
+			//etc...
+			$date = $request->get('date');
+	
+			/* QUERY CONSTRUCTOR */
+			//Instantiate the repositiory		
+			$repository = $this->getDoctrine()->getRepository('AppBundle:Training');
+			
+			/* ADDING PARAMETER */
+			$repository->findByNotClosedTrainings()
+						->findBySports($sports)
+						->findByDate($date)
+						->findByPublic($logged_user)
+						->findByPositionAndDistance($point,$max_distance)
+						->orderByPosition($point)
+			;
+			
+			$trainings = $repository->getQueryBuilder()->getQuery()->getResult();
+			
+			
+			$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($trainings));
+			$jsonResponse->setStatusCode(200);
 		
-		/* ADDING PARAMETER */
-		$repository->findByNotClosedTrainings()
-					->findBySports($sports)
-					->findByDate($date)
-					->findByPublic($logged_user)
-					->findByPositionAndDistance($point,$max_distance)
-					->orderByPosition($point)
-		;
+		}
+		//500
+		catch(\Exception $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
+		}
 		
-		$trainings = $repository->getQueryBuilder()->getQuery()->getResult();
-		
-		/* SERIALIZATION */
-		$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
-		$serializer = SerializerBuilder::create()->build();
-		$jsonContent = $serializer->serialize(array('data' => $trainings), 'json', $context);
-		
-		/* JSON RESPONSE */
-		$jsonResponse = new Response($jsonContent);
-		return $jsonResponse->setStatusCode(200);
+		return $jsonResponse;
 	
     }
 
