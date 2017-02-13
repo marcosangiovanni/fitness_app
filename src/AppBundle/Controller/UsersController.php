@@ -36,7 +36,7 @@ class UsersController extends FOSRestController
 			/* SERIALIZATION */
 			$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
 			$serializer = SerializerBuilder::create()->build();
-			$jsonContent = $serializer->serialize($user, 'json', $context);
+			$jsonContent = $serializer->serialize(array('data' => $user), 'json', $context);
 			
 			/* JSON RESPONSE */
 			$jsonResponse = new Response($jsonContent);
@@ -59,8 +59,8 @@ class UsersController extends FOSRestController
 
 		/* POSITION */		
 		//The user starting position to search for trainings
-		$x = $request->get('x');
-		$y = $request->get('y');
+		$lat = $request->get('lat');
+		$lng = $request->get('lng');
 		
 		/* QUERY CONSTRUCTOR */
 		//Instantiate the repositiory
@@ -74,8 +74,8 @@ class UsersController extends FOSRestController
 		}
 		
 		//If a starting point it's present the order is set by training position
-		if($x && $y){
-			$point = new Point($x,$y);
+		if($lat && $lng){
+			$point = new Point($lat,$lng);
 			$repository->orderByPosition($point);
 		}
 		
@@ -84,7 +84,7 @@ class UsersController extends FOSRestController
 		/* SERIALIZATION */
 		$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
 		$serializer = SerializerBuilder::create()->build();
-		$jsonContent = $serializer->serialize($users, 'json', $context);
+		$jsonContent = $serializer->serialize(array('data' => $users), 'json', $context);
 
 		/* JSON RESPONSE */
 		$jsonResponse = new Response($jsonContent);
@@ -113,20 +113,25 @@ class UsersController extends FOSRestController
 			$user->setEnabled(true);
 			
 			//Data passed in body
-			$user->setName($data['name']);
-			$user->setSurname($data['surname']);
+			$user->setFirstname($data['firstname']);
+			$user->setLastname($data['lastname']);
 			$user->setEmail($data['email']);
 			$user->setPhone($data['phone']);
-			$user->setDob(new DateTime($data['dob']));
-			$user->setUsername($data['user']);
+			$user->setDob(new DateTime($data['date_of_birth']));
+			$user->setUsername($data['username']);
 			$user->setPlainPassword($data['password']);
 			
 			//Save new user
 			$userManager->updateUser($user);
 			
-			//Return user
-			$view = $this->view($user, 200);
-        	return $this->handleView($view);
+			/* SERIALIZATION */
+			$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
+			$serializer = SerializerBuilder::create()->build();
+			$jsonContent = $serializer->serialize(array('data' => $user), 'json', $context);
+	
+			/* JSON RESPONSE */
+			$jsonResponse = new Response(array('data' => $jsonContent));
+			return $jsonResponse->setStatusCode(200);
 
     	}
     	//User and password already in use
@@ -154,21 +159,18 @@ class UsersController extends FOSRestController
 		$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
 		$deserialization_context = DeserializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
 		//Serializer and builder
-		$builder = SerializerBuilder::create()->setObjectConstructor(new DoctrineObjectConstructor($this->container->get('doctrine'),$this->container->get('jms_serializer.object_constructor')));
+		$builder = SerializerBuilder::create();
+		//Setting object constructor to use DoctrineObjectConstructor for deserialize
+		$builder->setObjectConstructor(
+															new DoctrineObjectConstructor(
+																			$this->container->get('doctrine'),
+																			$this->container->get('jms_serializer.object_constructor')
+															)
+		);
 		$serializer = $builder->build();
 
-		//$t = new \DateTime();
-		//var_dump($t->format('Y-m-d\TH:i:sO'));
-		//exit;
-
-		//\Doctrine\Common\Util\Debug::dump($user,3);
-
 		//Deserialized object with field conversion (see JMS Groups and SerializedName)
 		$obj = $serializer->deserialize($request->getContent(), 'AppBundle\Entity\User\User', 'json', $deserialization_context);
-
-		//\Doctrine\Common\Util\Debug::dump($obj,3);
-		//exit;
-		
 
 		//Merging received data in entity
 		$em = $this->getDoctrine()->getManager();
@@ -177,63 +179,7 @@ class UsersController extends FOSRestController
 
 
 		/* SERIALIZATION */
-		$jsonContent = $serializer->serialize($user, 'json', $context);
-		
-		/* JSON RESPONSE */
-		$jsonResponse = new Response($jsonContent);
-		return $jsonResponse->setStatusCode(200);
-		
-		
-		
-		
-		
-		
-		//Deserialized object with field conversion (see JMS Groups and SerializedName)
-		
-		//var_dump($serializer->getClassCon());
-		//var_dump(get_class($serializer));
-		//var_dump('preALLLLLLA');		
-		$obj = $serializer->deserialize($request->getContent(), 'AppBundle\Entity\User\User', 'json', $deserialization_context);
-		
-		\Doctrine\Common\Util\Debug::dump($obj,3);
-		\Doctrine\Common\Util\Debug::dump($user,3);
-		exit;
-		
-		/* SERIALIZATION */
-		$jsonContent = $serializer->serialize($obj, 'json');
-		
-		/* JSON RESPONSE */
-		$jsonResponse = new Response($jsonContent);
-		return $jsonResponse->setStatusCode(200);
-		
-		
-		//\Doctrine\Common\Util\Debug::dump($obj,3);
-		
-		//Merging received data in entity
-		$em = $this->getDoctrine()->getManager();
-		$em->persist($obj);
-	    $em->flush();
-		
-		/* SERIALIZATION */
-		$jsonContent = $serializer->serialize($user, 'json', $context);
-		
-		/* JSON RESPONSE */
-		$jsonResponse = new Response($jsonContent);
-		return $jsonResponse->setStatusCode(200);
-		
-		//exit;
-		
-		
-		//Merging received data in entity
-		$em = $this->getDoctrine()->getManager();
-		$user = ObjectMerger::mergeEntities($em, $user, $obj);
-
-		/* PERSISTENCE */
-		$em->persist($user);
-	    $em->flush();
-		
-		/* SERIALIZATION */
-		$jsonContent = $serializer->serialize($user, 'json', $context);
+		$jsonContent = $serializer->serialize(array('data' => $user), 'json', $context);
 		
 		/* JSON RESPONSE */
 		$jsonResponse = new Response($jsonContent);

@@ -13,7 +13,7 @@ services:
     jms_serializer.object_constructor:
         alias: jms_serializer.doctrine_object_constructor
         public: false
-        
+               
     gedmo.listener.sortable:
         class: Gedmo\Sortable\SortableListener
         tags:

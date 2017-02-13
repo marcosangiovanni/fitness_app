@@ -230,20 +230,6 @@ class Training
     }
 	
     /**
-     * @return array
-	 * This metod is created to handle the serialization of datatype POINT 
-     */
-    public function getPositionApi(){
-        $position = $this->position;
-		return array('x' => $position->getX(), 'y' => $position->getY());
-    }
-	
-    public function setPositionApi($ar_position){
-    	$this->setPosition(new Point($ar_position['x'],$ar_position['y']));
-		return $this;
-    }
-	
-    /**
      * @return integer
      */
     public function getUserId(){
@@ -483,11 +469,22 @@ class Training
         return $this->imageFile;
     }
 	
+
+    /*********************
+	 * LATLON MANAGEMENT *
+     *********************/
+    public function getPositionApi(){
+        $position = $this->position;
+		return array('lat' => $position->getY(), 'lng' => $position->getX());
+    }
 	
-	/* Lon lat management */
+    public function setPositionApi($ar_position){
+    	$this->setPosition(new Point($ar_position['lat'],$ar_position['lng']));
+		return $this;
+    }
 	
-	public function setLatLng($latlng)
-    {
+	
+	public function setLatLng($latlng){
         $this->setPosition(new Point($latlng['lat'], $latlng['lng']));
         return $this;
     }
@@ -496,9 +493,10 @@ class Training
      * @Assert\NotBlank()
      * @OhAssert\LatLng()
      */
-    public function getLatLng()
-    {
-        return array('lat'=>$this->getPosition()->getX(),'lng'=>$this->getPosition()->getY());
+    public function getLatLng(){
+    	if($this->getPosition()){
+	        return array('lat'=>$this->getPosition()->getY(),'lng'=>$this->getPosition()->getX());
+    	}
     }
 	
 }
