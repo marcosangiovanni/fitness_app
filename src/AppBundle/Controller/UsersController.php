@@ -1,94 +1,106 @@
 <?php
 
-namespace AppBundle\Controller;
 
-use AppBundle\User\User;
+//Controller
+namespace AppBundle\Controller;
 use FOS\RestBundle\Controller\FOSRestController;
 
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use \DateTime;
-use \Exception;
-use CrEOF\Spatial\PHP\Types\Geometry\Point;
-
-use JMS\Serializer\SerializationContext;
-use JMS\Serializer\DeserializationContext;
-use JMS\Serializer\SerializerBuilder;
-
-use AppBundle\Util\ObjectMerger;
-
-use Symfony\Component\HttpFoundation\Response;
+//Http
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-use JMS\Serializer\Construction\DoctrineObjectConstructor;
+//Manager
+use AppBundle\Util\ErrorManager;
+use AppBundle\Util\SerializerManager;
+
+//Exception
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use \Exception;
+
+//Date
+use \DateTime;
+
+//Spatial
+use CrEOF\Spatial\PHP\Types\Geometry\Point;
 
 class UsersController extends FOSRestController
 {
-
+	
 	// [GET] /users/{id}
 	public function getUserAction($id){
-		//Find user data
-		$user = $this->getDoctrine()->getRepository('AppBundle:User\User')->find($id);
-
-		if(!$user){
-			throw $this->createNotFoundException('No product found for id '.$id);
-		}else{
-			
-			/* SERIALIZATION */
-			$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
-			$serializer = SerializerBuilder::create()->build();
-			$jsonContent = $serializer->serialize(array('data' => $user), 'json', $context);
-			
-			/* JSON RESPONSE */
-			$jsonResponse = new Response($jsonContent);
-    		return $jsonResponse->setStatusCode(200);
-
+		try{
+			//Find user entity by ID
+			$user = $this->getDoctrine()->getRepository('AppBundle:User\User')->find($id);
+			//If user not found 404 exception
+			if(!$user){
+				throw $this->createNotFoundException('No user found for id : '.$id);
+			}else{
+				$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($user));
+				$jsonResponse->setStatusCode(200);
+			}	
 		}
-    } 
-    
+		//404
+		catch(NotFoundHttpException $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(404);
+		}
+		//500
+		catch(\Exception $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
+		}
+		/* JSON RESPONSE */
+		return $jsonResponse;
+    }
+	
 	// [GET] /users
 	// Set search parameters
     public function getUsersAction(){
-    	
-		//Find request parameters
-		$request = $this->getRequest();
+		try{
+			//Find request parameters
+			$request = $this->getRequest();
+			
+			//If we want only training creator
+			$is_trainer = $request->get('is_trainer');
+			//If we want only user with active training created
+			$is_active_trainer = $request->get('is_active_trainer');
+	
+			/* POSITION */		
+			//The user starting position to search for trainings
+			$lat = $request->get('lat');
+			$lng = $request->get('lng');
+			
+			/* QUERY CONSTRUCTOR */
+			//Instantiate the repositiory
+			$repository = $this->getDoctrine()->getRepository('AppBundle:User\User');
+			
+			/* ADDING PARAMETER */
+			if($is_trainer){
+				$repository->findByCreatedTrainings();
+			}elseif($is_active_trainer){
+				$repository->findByActiveTrainings();
+			}
+			
+			//If a starting point it's present the order is set by training position
+			if($lat && $lng){
+				$point = new Point($lat,$lng);
+				$repository->orderByPosition($point);
+			}
+			
+			$users = $repository->getQueryBuilder()->getQuery()->getResult();
+			
+			$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($users));
+			$jsonResponse->setStatusCode(200);
 		
-		//If we want only training creator
-		$is_trainer = $request->get('is_trainer');
-		//If we want only user with active training created
-		$is_active_trainer = $request->get('is_active_trainer');
-
-		/* POSITION */		
-		//The user starting position to search for trainings
-		$lat = $request->get('lat');
-		$lng = $request->get('lng');
-		
-		/* QUERY CONSTRUCTOR */
-		//Instantiate the repositiory
-		$repository = $this->getDoctrine()->getRepository('AppBundle:User\User');
-		
-		/* ADDING PARAMETER */
-		if($is_trainer){
-			$repository->findByCreatedTrainings();
-		}elseif($is_active_trainer){
-			$repository->findByActiveTrainings();
 		}
-		
-		//If a starting point it's present the order is set by training position
-		if($lat && $lng){
-			$point = new Point($lat,$lng);
-			$repository->orderByPosition($point);
+		//500
+		catch(\Exception $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
 		}
-		
-		$users = $repository->getQueryBuilder()->getQuery()->getResult();
 
-		/* SERIALIZATION */
-		$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
-		$serializer = SerializerBuilder::create()->build();
-		$jsonContent = $serializer->serialize(array('data' => $users), 'json', $context);
-
-		/* JSON RESPONSE */
-		$jsonResponse = new Response($jsonContent);
-		return $jsonResponse->setStatusCode(200);
+		return $jsonResponse;
 			
     }
 
@@ -124,66 +136,60 @@ class UsersController extends FOSRestController
 			//Save new user
 			$userManager->updateUser($user);
 			
-			/* SERIALIZATION */
-			$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
-			$serializer = SerializerBuilder::create()->build();
-			$jsonContent = $serializer->serialize(array('data' => $user), 'json', $context);
-	
-			/* JSON RESPONSE */
-			$jsonResponse = new Response(array('data' => $jsonContent));
-			return $jsonResponse->setStatusCode(200);
-
+			$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($user));
+			$jsonResponse->setStatusCode(200);
     	}
     	//User and password already in use
     	catch(UniqueConstraintViolationException $e){
-			throw new \Exception('user or email already in use');
+    		$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(409);
     	}
-		//This catch any other exception
-		catch(Exception $e){
-			throw new Exception('Something went wrong!');
-    	}
-
+		//500
+		catch(\Exception $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
+		}
+		
+		return $jsonResponse;
     } 
 
 	// "put_user"             
 	// [PUT] /users/{id}
 	// User update
     public function putUserAction($id){
-
-		//Get the user to update
-		$user = $this->getDoctrine()->getRepository('AppBundle:User\User')->find($id);
-		//Request Object
-		$request = $this->getRequest();
+		try{
+			//Get the user to update
+			$user = $this->getDoctrine()->getRepository('AppBundle:User\User')->find($id);
+			
+			if(!$user){
+				throw $this->createNotFoundException('No user found for id : '.$id);
+			}else{
+				//Get user entity and deserialize in user object
+				$user_entity = SerializerManager::getDoctrineObjectFromJsonDataWithContext($this->getRequest()->getContent(), 'AppBundle\Entity\User\User', $this->container);
+				
+				//Merging received data in entity
+				$em = $this->getDoctrine()->getManager();
+				$em->persist($user_entity);
+			    $em->flush();
 		
-		//Serialization data (serializer and context)
-		$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
-		$deserialization_context = DeserializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
-		//Serializer and builder
-		$builder = SerializerBuilder::create();
-		//Setting object constructor to use DoctrineObjectConstructor for deserialize
-		$builder->setObjectConstructor(
-															new DoctrineObjectConstructor(
-																			$this->container->get('doctrine'),
-																			$this->container->get('jms_serializer.object_constructor')
-															)
-		);
-		$serializer = $builder->build();
-
-		//Deserialized object with field conversion (see JMS Groups and SerializedName)
-		$obj = $serializer->deserialize($request->getContent(), 'AppBundle\Entity\User\User', 'json', $deserialization_context);
-
-		//Merging received data in entity
-		$em = $this->getDoctrine()->getManager();
-		$em->persist($obj);
-	    $em->flush();
-
-
-		/* SERIALIZATION */
-		$jsonContent = $serializer->serialize(array('data' => $user), 'json', $context);
+				/* SERIALIZATION */
+				$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($user));
+			}
+		
+		}
+		//User and password already in use
+    	catch(NotFoundHttpException $e){
+    		$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(409);
+    	}
+		//500
+		catch(\Exception $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
+		}
 		
 		/* JSON RESPONSE */
-		$jsonResponse = new Response($jsonContent);
-		return $jsonResponse->setStatusCode(200);		
+		return $jsonResponse;
 		
     }
 
