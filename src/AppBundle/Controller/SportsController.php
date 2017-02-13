@@ -7,12 +7,10 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Sport;
 use AppBundle\Form\SportType;
 
-use JMS\Serializer\SerializationContext;
-use JMS\Serializer\DeserializationContext;
-use JMS\Serializer\SerializerBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
 use AppBundle\Util\ErrorManager;
+use AppBundle\Util\SerializerManager;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -22,85 +20,55 @@ class SportsController extends FOSRestController
 	// [GET] /sports/{id}
 	public function getSportAction($id){
 		try{
-
 			//Find sport entity by ID
 			$sport = $this->getDoctrine()->getRepository('AppBundle:Sport')->find($id);
-
+			//If sport not found 404 exception
 			if(!$sport){
 				throw $this->createNotFoundException('No sport found for id : '.$id);
 			}else{
-				/* SERIALIZATION */
-				$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
-				$serializer = SerializerBuilder::create()->build();
-				$jsonContent = $serializer->serialize(array('data' => $sport), 'json', $context);
-				
-				/* JSON RESPONSE */
-				$jsonResponse = new Response($jsonContent);
-				return $jsonResponse->setStatusCode(200);
+				$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($sport));
+				$jsonResponse->setStatusCode(200);
 			}	
-
 		}
+		//404
 		catch(NotFoundHttpException $e){
-			/* SERIALIZATION */
-			$jsonContent = SerializerBuilder::create()->build()->serialize(ErrorManager::createErrorArrayFromException($e), 'json');
-				
-			/* JSON RESPONSE */
-			$jsonResponse = new Response($jsonContent);
-			return $jsonResponse->setStatusCode(404);
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(404);
 		}
+		//500
 		catch(\Exception $e){
-			/* SERIALIZATION */
-			$jsonContent = SerializerBuilder::create()->build()->serialize(ErrorManager::createErrorArrayFromException($e), 'json');
-				
-			/* JSON RESPONSE */
-			$jsonResponse = new Response($jsonContent);
-			return $jsonResponse->setStatusCode(500);
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
 		}
-		
-		
-		
+		/* JSON RESPONSE */
+		return $jsonResponse;
     } 
     
 	// [GET] /sports
     public function getSportsAction(){
     	try{
-    		
 			//Get sport list
 			$sports = $this->getDoctrine()->getRepository('AppBundle:Sport')->findAll();
-			
+			//If none sport found 404 exception
 			if(count($sports) === 0){
 				throw $this->createNotFoundException('No sport found');
 			}else{
-
-				/* SERIALIZATION */
-				$context = SerializationContext::create()->setGroups(array('detail'))->enableMaxDepthChecks();
-				$serializer = SerializerBuilder::create()->build();
-				$jsonContent = $serializer->serialize(array('data' => $sports), 'json', $context);
-				
-				/* JSON RESPONSE */
-				$jsonResponse = new Response($jsonContent);
-				return $jsonResponse->setStatusCode(200);
-			
+				$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($sports));
+				$jsonResponse->setStatusCode(200);
 			}
-
 		}
-		catch(\NotFoundHttpException $e){
-			/* SERIALIZATION */
-			$jsonContent = SerializerBuilder::create()->build()->serialize(ErrorManager::createErrorArrayFromException($e), 'json');
-				
-			/* JSON RESPONSE */
-			$jsonResponse = new Response($jsonContent);
-			return $jsonResponse->setStatusCode(404);
+		//404
+		catch(NotFoundHttpException $e){
+			$jsonResponse = new Response(SerializerManager::getJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(404);
 		}
+		//500
 		catch(\Exception $e){
-			/* SERIALIZATION */
-			$jsonContent = SerializerBuilder::create()->build()->serialize(ErrorManager::createErrorArrayFromException($e), 'json');
-				
-			/* JSON RESPONSE */
-			$jsonResponse = new Response($jsonContent);
-			return $jsonResponse->setStatusCode(404);
+			$jsonResponse = new Response(SerializerManager::getJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
 		}
-		
+		/* JSON RESPONSE */
+		return $jsonResponse;
     }
 
 }
