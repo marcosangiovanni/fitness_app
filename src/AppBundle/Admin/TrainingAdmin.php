@@ -21,17 +21,25 @@ class TrainingAdmin extends Admin
 	        $options['help'] = '<img width="500px" src="' . $path . '" />';
 	    }					
 
-        $formMapper	->add('title', 'text', array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
-					->add('user', null, array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
-					->add('sport', null, array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
-					->add('imageFile', 'file', array_merge($options,array('label' => 'Image file', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM))))
-					->add('video', 'url', array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
-					->add('start','sonata_type_datetime_picker', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL),'format' => Utility::DATE_FORMAT_DATETIME))
-					->add('end','sonata_type_datetime_picker', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL),'format' => Utility::DATE_FORMAT_DATETIME))
-  					->add('cutoff','sonata_type_datetime_picker', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL),'format' => Utility::DATE_FORMAT_DATETIME))
- 					->add('is_public')
- 					->add('price')
- 					->add('latlng','oh_google_maps',array('label' => 'Training position','map_width' => 500),array())
+        $formMapper	->with('General')
+	        			->add('title', 'text', array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+	 					->add('price')
+	 					->add('is_public')
+						->add('user', null, array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+						->add('sport', null, array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+						->end()
+					->with('Training date')
+						->add('start','sonata_type_datetime_picker', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL),'format' => Utility::DATE_FORMAT_DATETIME))
+						->add('end','sonata_type_datetime_picker', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL),'format' => Utility::DATE_FORMAT_DATETIME))
+	  					->add('cutoff','sonata_type_datetime_picker', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL),'format' => Utility::DATE_FORMAT_DATETIME))
+ 						->end()
+					->with('Position')	
+ 						->add('latlng','oh_google_maps',array('label' => 'Training position','map_width' => 500),array())
+						->end()
+					->with('Media')
+						->add('imageFile', 'file', array_merge($options,array('label' => 'Image file', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM))))
+						->add('video', 'url', array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+						->end()
 		;
     }
 	
