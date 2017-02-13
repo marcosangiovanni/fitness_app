@@ -475,7 +475,7 @@ class Training
      *********************/
     public function getPositionApi(){
         $position = $this->position;
-		return array('lat' => $position->getY(), 'lng' => $position->getX());
+		return array('lat' => $position->getX(), 'lng' => $position->getY());
     }
 	
     public function setPositionApi($ar_position){
@@ -495,7 +495,7 @@ class Training
      */
     public function getLatLng(){
     	if($this->getPosition()){
-	        return array('lat'=>$this->getPosition()->getY(),'lng'=>$this->getPosition()->getX());
+	        return array('lat'=>$this->getPosition()->getX(),'lng'=>$this->getPosition()->getY());
     	}
     }
 	
