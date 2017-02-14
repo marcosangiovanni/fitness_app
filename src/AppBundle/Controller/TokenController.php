@@ -43,9 +43,7 @@ class TokenController extends BaseTokenController
      */
     public function tokenAction(Request $request){
         try {
-        	$obj_token = $this->server->grantAccessToken($request);
-        	echo '{"data" : '.$obj_token->getContent().'}';
-			return;
+            return $this->server->grantAccessToken($request);
         }
         catch (OAuth2ServerException $e) {
         	$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
@@ -57,5 +55,9 @@ class TokenController extends BaseTokenController
         }
 		return $jsonResponse;
     }
-
+	
+	
+	
+	
+	
 }
