@@ -55,6 +55,10 @@ services:
          arguments: [ api ]
 
 #Oauth user provider for FB LOGIN
+    fos_oauth_server.controller.token:
+        class: AppBundle\Controller\TokenController
+        arguments: [@fos_oauth_server.server]
+
     app.provider.oauth:
         class: AppBundle\Entity\Auth\OAuthUserProvider
         arguments: [@fos_user.user_manager,{facebook: facebookUid}]

@@ -24,6 +24,10 @@ class SerializerManager{
 		return $builder->build()->deserialize($json, $entity_class, 'json', $deserialization_context);
 	}
 	
+	public function getObjectFromJsonData($json, $entity_class){
+		return SerializerBuilder::create()->build()->deserialize($json, $entity_class, 'json');
+	}
+	
 	public function getDoctrineObjectFromJsonDataWithContext($json, $entity_class,$container, array $groups = array('detail')){
 		$doctrine_constructor = new DoctrineObjectConstructor($container->get('doctrine'),$container->get('jms_serializer.object_constructor'));
 		return self::getObjectFromJsonDataWithContext($json, $entity_class, $groups, $doctrine_constructor);
