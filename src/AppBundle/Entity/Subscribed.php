@@ -55,21 +55,22 @@ class Subscribed
     private $updated;
 
 	/** 
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User\User", inversedBy="subscribed") 
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User\User", inversedBy="subscribed", cascade={"persist"})) 
 	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
 	 * @Groups({"detail"})
+	 * @Type("AppBundle\Entity\User\User")
 	 */ 
     private $user;
 
     /** 
-     * @ORM\ManyToOne(targetEntity="Training", inversedBy="subscribed") 
+     * @ORM\ManyToOne(targetEntity="Training", inversedBy="subscribed", cascade={"persist"})) 
 	 * @ORM\JoinColumn(name="training_id", referencedColumnName="id")
 	 * @Groups({"detail"})
 	 * @Type("AppBundle\Entity\Training")
 	 */ 
     private $training; 
 
-	public function __construct(User $user, Training $training, $feedback = null) { 
+	public function __construct(User $user = null, Training $training = null, $feedback = null) { 
         $this->user = $user; 
         $this->training = $training; 
         $this->feedback = $feedback; 
@@ -118,6 +119,15 @@ class Subscribed
      */
     public function setUserId($userId){
         $this->user_id = $userId;
+        return $this;
+    }
+
+	/**
+     * @param integer $userId
+     * @return Invite
+     */
+    public function setId($id){
+        $this->id = $id;
         return $this;
     }
 

@@ -22,7 +22,7 @@
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/user-bundle": "~1.3",
-        "sonata-project/admin-bundle": "2.3.*",
+        "sonata-project/admin-bundle": "2.*",
         "sonata-project/doctrine-orm-admin-bundle": "2.3.*",
         "friendsofsymfony/rest-bundle": "^2.1",
         "jms/serializer-bundle": "~0.13",

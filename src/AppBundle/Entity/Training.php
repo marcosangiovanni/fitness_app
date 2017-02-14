@@ -147,7 +147,7 @@ class Training
     private $user;
 
 	/**
-     * @ORM\OneToMany(targetEntity="Subscribed", mappedBy="training", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Subscribed", mappedBy="training", cascade={"persist", "remove"}, orphanRemoval=true)
 	 * @MaxDepth(3)
 	 * @Groups({"detail"})
 	 * @Type("AppBundle\Entity\Subscribed")
@@ -428,11 +428,28 @@ class Training
         $this->subscribed = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+	/*************************
+	 * SUBSCRIBED MANAGEMENT *
+	 *************************/
+	
+	/**
+     * @param \AppBundle\Entity\Subscribed $subscribed
+     * @return Training
+     */
+    public function setSubscribed(\AppBundle\Entity\Subscribed $subscribed){
+		foreach ($subscribed as $s) {
+            $this->addSubscribed($s);
+        }
+        return $this;
+    }
+
     /**
      * @param \AppBundle\Entity\Subscribed $subscribed
      * @return Training
      */
     public function addSubscribed(\AppBundle\Entity\Subscribed $subscribed){
+    	$subscribed->setTraining($this);
         $this->subscribed[] = $subscribed;
         return $this;
     }
@@ -441,7 +458,11 @@ class Training
      * @param \AppBundle\Entity\Subscribed $subscribed
      */
     public function removeSubscribed(\AppBundle\Entity\Subscribed $subscribed){
-        $this->subscribed->removeElement($subscribed);
+    	foreach ($this->subscribed as $k => $s) {
+            if ($s->getId() == $succursale->getId()) {
+                unset($this->succursales[$k]);
+            }
+        }
     }
 
     /**
@@ -451,6 +472,10 @@ class Training
         return $this->subscribed;
     }
 	
+	
+	/*************************
+	 * SUBSCRIBED MANAGEMENT *
+	 *************************/
 	/*
 	 *  Doctrine only upload file if any field is modified 
 	 */
@@ -468,7 +493,6 @@ class Training
     public function getImageFile(){
         return $this->imageFile;
     }
-	
 
     /*********************
 	 * LATLON MANAGEMENT *

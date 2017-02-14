@@ -10,6 +10,13 @@ use AppBundle\Util\Utility as Utility;
 
 class TrainingAdmin extends Admin
 {
+
+	public function preUpdate($object){
+        foreach ($object->getSubscribed() as $subscribed) {
+            $subscribed->setTraining($object);
+        }
+    }
+		
     protected function configureFormFields(FormMapper $formMapper){
 
 		$options = array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM));
@@ -23,9 +30,9 @@ class TrainingAdmin extends Admin
 
         $formMapper	->with('General')
 	        			->add('title', 'text', array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
-	 					->add('price')
+	 					->add('price', 'number', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL)))
 	 					->add('is_public')
-						->add('user', null, array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+						->add('user', null, array('label'=>'User creator','attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
 						->add('sport', null, array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
 						->end()
 					->with('Training date')
@@ -39,6 +46,20 @@ class TrainingAdmin extends Admin
 					->with('Media')
 						->add('imageFile', 'file', array_merge($options,array('label' => 'Image file', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM))))
 						->add('video', 'url', array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+						->end()
+					->with('Subscribed')
+						->add('subscribed', 'sonata_type_collection', array(
+			                'by_reference' => false,
+			                'type_options'       => array( 'delete' => true ),
+			                'by_reference' => true,
+			                'label' => 'Subscribed',
+			                'type_options' => array('delete' => true),
+			                'cascade_validation' => true,
+			                'btn_add' => 'Add new User',
+			            ), array(
+			                'edit' => 'inline',
+			                'inline' => 'table',
+			            ))
 						->end()
 		;
     }

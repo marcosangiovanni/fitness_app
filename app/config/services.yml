@@ -42,6 +42,13 @@ services:
             - AppBundle\Entity\Sport
             - 'PixSortableBehaviorBundle:SortableAdmin'
             
+    admin.subscribed:
+        class: AppBundle\Admin\SubscribedAdmin
+        arguments: [~, AppBundle\Entity\Subscribed, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Subscribed }
+            
+                        
 #Api entrypoint                        
     api_authentication_entry_point:
          class: AppBundle\Entity\Auth\ApiAuthenticationEntryPoint
