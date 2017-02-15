@@ -22,9 +22,9 @@ class SubscribedAdmin extends Admin
 		                'class' => 'AppBundle\Entity\Training',
 		                'property' => 'title'
 		            ))
-					->add('feedback','number', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL)))
-					->add('created','sonata_type_datetime_picker', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL),'format' => Utility::DATE_FORMAT_DATETIME))
-					->add('updated','sonata_type_datetime_picker', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL),'format' => Utility::DATE_FORMAT_DATETIME))
+					->add('feedback','number', array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_SMALL)))
+					->add('created','sonata_type_datetime_picker', array('label' => 'Subscription Created At', 'attr' => array('style' => Utility::FIELD_STYLE_SMALL),'format' => Utility::DATE_FORMAT_DATETIME))
+					->add('updated','sonata_type_datetime_picker', array('label' => 'Subscription Updated At', 'attr' => array('style' => Utility::FIELD_STYLE_SMALL),'format' => Utility::DATE_FORMAT_DATETIME))
 		;
     }
 	
