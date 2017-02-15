@@ -39,6 +39,7 @@ class TrainingAdmin extends Admin
 		        			->add('title', 'text', array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
 							->add('user', null, array('property' => 'fullname', 'label'=>'Trainer','attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
 							->add('sport', null, array('property' => 'title', 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+							->add('traininglevel', null, array('property' => 'title', 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
 		 					->add('price', 'number', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL)))
 		 					->add('is_public')
 						->end()

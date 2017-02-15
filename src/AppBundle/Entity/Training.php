@@ -53,6 +53,11 @@ class Training
      */
     private $sport_id;
 
+	/**
+     * @ORM\Column(type="integer", length=100, nullable = true, options={"default" : 1})
+     */
+    private $traininglevel_id;
+
     /**
      * @Gedmo\Translatable
      * @ORM\Column(length=256)
@@ -137,6 +142,14 @@ class Training
     private $sport;
 	
 	/**
+     * @ORM\ManyToOne(targetEntity="TrainingLevel", inversedBy="trainings")
+     * @ORM\JoinColumn(name="traininglevel_id", referencedColumnName="id")
+	 * @Groups({"detail"})
+	 * @Type("AppBundle\Entity\TrainingLevel")
+     */
+    private $traininglevel;
+	
+	/**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User\User", inversedBy="trainings")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
 	 * @MaxDepth(2)
@@ -154,6 +167,15 @@ class Training
      */	
     private $subscribed;
 		
+	
+	/***************
+	 * CONSTRUCTOR *
+	 ***************/
+    public function __construct(){
+        $this->invited = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->subscribed = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+	
 	
 	/**********************
 	 * GET METHODS        *
@@ -389,6 +411,22 @@ class Training
 	 ***************************/
 
     /**
+     * @param \AppBundle\Entity\TrainingLevel $traininglevel
+     * @return TrainingLevel
+     */
+    public function setTrainingLevel(\AppBundle\Entity\TrainingLevel $traininglevel = null){
+        $this->traininglevel = $traininglevel;
+        return $this;
+    }
+
+    /**
+     * @return \AppBundle\Entity\Sport 
+     */
+    public function getTrainingLevel(){
+        return $this->traininglevel;
+    }
+
+    /**
      * @param \AppBundle\Entity\Sport $sport
      * @return Training
      */
@@ -420,16 +458,7 @@ class Training
         return $this->user;
     }
 	
-	
-	
 
-    /**
-     * Constructor
-     */
-    public function __construct(){
-        $this->invited = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->subscribed = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
 
 	/*************************

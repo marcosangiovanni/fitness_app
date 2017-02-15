@@ -42,13 +42,11 @@ class TrainingLevel
     private $description;
 
 	/**
-     * @ORM\ManyToOne(targetEntity="Training", inversedBy="level")
-     * @ORM\JoinColumn(name="training_id", referencedColumnName="id")
-	 * @Groups({"detail"})
-	 * @Type("AppBundle\Entity\Training")
-     */
-//    private $training;
-
+     * Variable to store trainings
+	 * @ORM\OneToMany(targetEntity="Training", mappedBy="sport")
+     */	
+    private $traininglevel;
+    
 	/**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
