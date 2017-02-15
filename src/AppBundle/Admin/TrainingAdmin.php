@@ -37,6 +37,7 @@ class TrainingAdmin extends Admin
         			->tab('Info')
         				->with('Main info')
 		        			->add('title', 'text', array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+		        			->add('description', 'textarea', array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
 							->add('user', null, array('property' => 'fullname', 'label'=>'Trainer','attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
 							->add('sport', null, array('property' => 'title', 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
 							->add('traininglevel', null, array('property' => 'title', 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
