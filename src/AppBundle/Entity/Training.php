@@ -419,6 +419,9 @@ class Training
     public function getUser(){
         return $this->user;
     }
+	
+	
+	
 
     /**
      * Constructor

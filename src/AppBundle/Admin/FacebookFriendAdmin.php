@@ -11,16 +11,14 @@ class FacebookFriendAdmin extends Admin
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper	//->add('user_id')
-					->add('name')
-					->add('facebook_uid')
-					->add('user', 'entity', array(
-							//'multiple' 	=> 	true,
-            				'class' 	=> 	'AppBundle\Entity\User',
+        $formMapper	->add('user', 'entity', array(
+            				'class' 	=> 	'AppBundle\Entity\User\User',
             				'property' 	=> 	'email',
             				'attr' 		=> 	array('style' => 'width:200px')
         				)
 					)
+					->add('name',null,array('label' => 'Friend\'s Name'))
+					->add('facebook_uid',null,array('label' => 'Friend\'s Facebook Uid'))
 		;
     }
 

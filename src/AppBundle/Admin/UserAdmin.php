@@ -51,129 +51,85 @@ class UserAdmin extends BaseUserAdmin
 	    }
 
         $formMapper
-            ->with('General')
-                ->add('username')
-                ->add('email')
-                ->add('plainPassword', 'text', array(
-                    'required' => (!$this->getSubject() || is_null($this->getSubject()->getId()))
-                ))
-            ->end()
-            ->with('Groups')
-                ->add('groups', 'sonata_type_model', array(
-                    'required' => false,
-                    'expanded' => true,
-                    'multiple' => true
-                ))
-            ->end()
-            ->with('Profile')
-                ->add('firstname', null, array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
-                ->add('lastname', null, array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
-                ->add('gender', 'sonata_user_gender', array(
-                    'required' => true,
-                    'translation_domain' => $this->getTranslationDomain(),
-                    'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)
-                ))
-				->add('dateOfBirth','sonata_type_date_picker', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL),'format' => Utility::DATE_FORMAT_DATE))
-                ->add('phone', null, array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
-                
-				->add('imageFile', 'file', array_merge($options,array('label' => 'Image file', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM))))
-                
-                ->add('video', 'url', array('label' => 'Video', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
-            ->end()
-            ->with('Social')
-                ->add('facebookUid', null, array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
-                ->add('facebookName', null, array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
-            ->end()
-        ;
+            ->tab('Account')
+	            ->with('Credential')
+	                ->add('username')
+	                ->add('email')
+	                ->add('plainPassword', 'text', array(
+	                    'required' => (!$this->getSubject() || is_null($this->getSubject()->getId()))
+	                ))
+					->add('token', null, array('required' => false))
+					->add('enabled', null, array('required' => false))
+	            ->end();
+				
+				//If is super admin can change user groups
+				if ($this->getSubject() && $this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
+            		$formMapper->with('Groups')
+		                ->add('groups', 'sonata_type_model', array(
+		                    'required' => false,
+		                    'expanded' => true,
+		                    'multiple' => true
+		                ))
+	            	->end();
+        		}
 
-        if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
+			$formMapper->end();
+	            
             $formMapper
-                ->with('Management')
-                    ->add('enabled', null, array('required' => false))
-                ->end()
-            ;
-        }
+            	->tab('Profile')
+		            ->with('Profile')
+		                ->add('firstname', null, array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+		                ->add('lastname', null, array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+		                ->add('gender', 'sonata_user_gender', array(
+		                    'required' => true,
+		                    'translation_domain' => $this->getTranslationDomain(),
+		                    'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)
+		                ))
+						->add('dateOfBirth','sonata_type_date_picker', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL),'format' => Utility::DATE_FORMAT_DATE))
+		                ->add('phone', null, array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+		            ->end()
+	            ->end()
+				->tab('Media')
+		            ->with('Media')
+						->add('imageFile', 'file', array_merge($options,array('label' => 'Image file', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM))))
+		                ->add('video', 'url', array('label' => 'Video', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+		            ->end()
+	            ->end()
+				->tab('Social')
+		            ->with('Facebook')
+        	        	->add('facebookUid', null, array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+            		    ->add('facebookName', null, array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+					->end()
+            	->end()
+        ;
 
         $formMapper
-            ->with('Security')
-                ->add('token', null, array('required' => false))
-            ->end()
-        ;
-    }
-	
-	/*
-	//Methods to manage password update
-	public function updateUser(\AppBundle\Entity\User $u) {
-	    $um = $this->getConfigurationPool()->getContainer()->get('fos_user.user_manager');
-	    $um->updateUser($u, false);
-	}
-
-	public function prePersist($object){
-        parent::prePersist($object);
-		$this->updateUser($object);
-
-    }
-	
-    public function preUpdate($object){
-        parent::preUpdate($object);
-		$this->updateUser($object);
-
-    }
-	
-	//Form fields
-    protected function configureFormFields(FormMapper $formMapper){
-        $formMapper	->add('name')
-					->add('surname')
-					->add('username')
-					->add('email')
-					->add('enabled')
-					->add('plainPassword', 'repeated', array(
-		                'type' => 'password',
-		                'options' => array('translation_domain' => 'FOSUserBundle'),
-		                'first_options' => array('label' => 'form.password'),
-		                'second_options' => array('label' => 'form.password_confirmation'),
-		                'invalid_message' => 'fos_user.password.mismatch',
-		                'required' => false,
-        ));
-    }
-
-	//Form filters
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper){
-        $datagridMapper	->add('name')
-						->add('surname')
-						->add('username')
-						->add('email')
-						->add('enabled', null, 	array('label' => 'Enabled'),'sonata_type_translatable_choice', array(
-											                													'translation_domain' => "SonataAdminBundle",
-																								                'choices' => array(
-																								                    1 => 'label_type_yes',
-																								                    2 => 'label_type_no'
-																								                ))
-			            )
+        	->tab('Relations')
+            ->with('Sport')
+				->add('sports', 'sonata_type_model', array('property' => 'title', 'label' => 'User sports', 'multiple' => true, 'by_reference' => false, 'btn_add' => false)) 
+				->end()
+            ->with('Training')
+				->add('trainings', 'sonata_type_model', array('property' => 'title', 'label' => 'Created trainings', 'multiple' => true, 'by_reference' => false, 'btn_add' => false),array( 'readonly' => true))
+				->add('subscribed', 'sonata_type_collection', array(
+	                'by_reference' 			=> false,
+	                'label'					=> 'Subscribed trainings',
+	                'type_options' 			=> array('delete' => true),
+	                'cascade_validation' 	=> true,
+	                'btn_add' 				=> 'Add new User',
+	            ), array(
+	                'edit' 		=> 'inline',
+	                'inline' 	=> 'table',
+	                'readonly' 	=> true
+	            ))
+				->end()
+				
+				
+				
 		;
+
     }
 
-	//Grid fields
-    protected function configureListFields(ListMapper $listMapper){
-        $listMapper	->addIdentifier('id')
-					->addIdentifier('name')
-					->addIdentifier('surname')
-					->addIdentifier('username')
-					->addIdentifier('email')
-					->add('enabled')
-					->add('_action', 'actions', array(
-			            'actions' => array(
-			                'edit' => array(),
-			                'delete' => array(),
-			            )
-		        	))
-		;
-    }
-    
-	*/
-	
-	
-	
+
 }
 
 ?>

@@ -96,20 +96,10 @@ class Sport implements Translatable
         $this->users = new ArrayCollection();
     }
 
-	/* Recupero il nome dal modello */
-	public function __toString(){
-        return (string)$this->title;
-    }
-	
 	/**********************
 	 * GET METHODS        *
 	 **********************/
 	 
-	/* generic getter method*/
-	public function __get($property){
-        return $this->$property;
-    }
-	
 	public function getId(){
         return $this->id;
     }

@@ -166,7 +166,7 @@ class User extends BaseUser
 
 	/**
      * Variable to store trainings
-	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Training", mappedBy="user", cascade={"remove"})
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Training", mappedBy="user", cascade={"persist", "remove"})
 	 * @SerializedName("created_trainings")
 	 * @Groups({"detail"})
 	 * @ORM\OrderBy({"start" = "DESC"})
@@ -254,21 +254,6 @@ class User extends BaseUser
     }
 	
 	
-	/************************
-	 * GENERIC RELATIONSHIP *
-	 ************************/
-	
-	public function add($property,$obj){
-		die('3213312');
-		$this->$property->add($obj);
-        return $this;
-    }
-
-	public function remove($property,$obj){
-		die('321331200000000000000000');
-		$this->$property->removeElement($obj);
-    }
-
 	/*************************
 	 * FB FRIENDS MANAGEMENT *
 	 *************************/
@@ -280,8 +265,6 @@ class User extends BaseUser
      * @return User
      */
     public function addFriend(\AppBundle\Entity\FacebookFriend $friend){
-    	
-		die('assa');
     	$friend->setUser($this);
         $this->friends[] = $friend;
         return $this;
@@ -312,7 +295,6 @@ class User extends BaseUser
      * @return \Doctrine\Common\Collections\Collection 
      */
     public function setFriends(){
-    	die('dsjahdkakdksahhdsahdhkas');
         return $this->friends;
     }
 
@@ -327,9 +309,9 @@ class User extends BaseUser
      * @param \AppBundle\Entity\Sport $sports
      * @return User
      */
-    public function addSport(\AppBundle\Entity\Sport $sports){
-    	$sports->addUser($this);
-		$this->sports[] = $sports;
+    public function addSport(\AppBundle\Entity\Sport $sport){
+    	$sport->addUser($this);
+		$this->sports[] = $sport;
         return $this;
     }
 
@@ -485,6 +467,7 @@ class User extends BaseUser
      * @return User
      */
     public function addTraining(\AppBundle\Entity\Training $training){
+    	$training->setUser($this);
         $this->trainings[] = $training;
         return $this;
     }
