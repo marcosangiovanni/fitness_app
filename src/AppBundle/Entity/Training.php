@@ -113,6 +113,11 @@ class Training
     private $is_public;
 
     /**
+     * @ORM\Column(type="boolean", nullable=false, options={"default" : false})
+	 */
+    private $is_cardio;
+
+    /**
      * @ORM\Column(type="float", nullable=false, options={"default" : 0})
 	 * @Groups({"detail"})
 	 * @Type("float")
@@ -220,6 +225,13 @@ class Training
      */
     public function getIsPublic(){
         return $this->is_public;
+    }
+
+    /**
+     * @return boolean 
+     */
+    public function getIsCardio(){
+        return $this->is_cardio;
     }
 
     /**
@@ -342,6 +354,15 @@ class Training
      */
     public function setIsPublic($isPublic){
         $this->is_public = $isPublic;
+        return $this;
+    }
+
+    /**
+     * @param boolean $isPublic
+     * @return Training
+     */
+    public function setIsCardio($isCardio){
+        $this->is_cardio = $isCardio;
         return $this;
     }
 
