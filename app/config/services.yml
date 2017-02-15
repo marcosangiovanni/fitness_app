@@ -21,6 +21,12 @@ services:
         calls:
             - [ setAnnotationReader, [ "@annotation_reader" ] ]
             
+    admin.training_level:
+        class: AppBundle\Admin\TrainingLevelAdmin
+        arguments: [~, AppBundle\Entity\TrainingLevel, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: TrainingLevel }
+
     admin.facebook_friend:
         class: AppBundle\Admin\FacebookFriendAdmin
         arguments: [~, AppBundle\Entity\FacebookFriend, ~]
