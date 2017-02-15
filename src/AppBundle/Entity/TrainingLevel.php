@@ -43,9 +43,9 @@ class TrainingLevel
 
 	/**
      * Variable to store trainings
-	 * @ORM\OneToMany(targetEntity="Training", mappedBy="sport")
+	 * @ORM\OneToMany(targetEntity="Training", mappedBy="traininglevel")
      */	
-    private $traininglevel;
+    private $trainings;
     
 	/**
      * @Gedmo\Timestampable(on="create")
