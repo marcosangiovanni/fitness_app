@@ -20,40 +20,43 @@ services:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
             - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
             
-    admin.training_level:
-        class: AppBundle\Admin\TrainingLevelAdmin
-        arguments: [~, AppBundle\Entity\TrainingLevel, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: TrainingLevel }
-
-    admin.facebook_friend:
-        class: AppBundle\Admin\FacebookFriendAdmin
-        arguments: [~, AppBundle\Entity\FacebookFriend, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: FacebookFriend }
-
     admin.training:
         class: AppBundle\Admin\TrainingAdmin
         arguments: [~, AppBundle\Entity\Training, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Training }
-                        
-    admin.sport:
-        class: AppBundle\Admin\SportAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: Sport }
-        arguments:
-            - ~
-            - AppBundle\Entity\Sport
-            - 'PixSortableBehaviorBundle:SortableAdmin'
-            
+            - { group: Training,  name: sonata.admin, manager_type: orm, label: Training }
+
     admin.subscribed:
         class: AppBundle\Admin\SubscribedAdmin
         arguments: [~, AppBundle\Entity\Subscribed, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Subscribed }
+            - { group: Training, name: sonata.admin, manager_type: orm, label: Subscribed }
             
+                        
+    admin.sport:
+        class: AppBundle\Admin\SportAdmin
+        tags:
+            - { group: Look Up, name: sonata.admin, manager_type: orm, label: Sport }
+        arguments:
+            - ~
+            - AppBundle\Entity\Sport
+            - 'PixSortableBehaviorBundle:SortableAdmin'
+
+    admin.training_level:
+        class: AppBundle\Admin\TrainingLevelAdmin
+        arguments: [~, AppBundle\Entity\TrainingLevel, ~]
+        tags:
+            - { group: Look Up, name: sonata.admin, manager_type: orm, label: TrainingLevel }
+
+            
+    admin.facebook_friend:
+        class: AppBundle\Admin\FacebookFriendAdmin
+        arguments: [~, AppBundle\Entity\FacebookFriend, ~]
+        tags:
+            - { group: Facebook, name: sonata.admin, manager_type: orm, label: FacebookFriend }
+
                         
 #Api entrypoint                        
     api_authentication_entry_point:
