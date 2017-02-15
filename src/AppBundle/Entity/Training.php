@@ -67,6 +67,12 @@ class Training
     private $title;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+	 * @Type("text")
+	 */
+    private $description;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
 	 * @Groups({"detail"})
 	 * @Type("string")
@@ -264,6 +270,13 @@ class Training
     public function getSportId(){
         return $this->sport_id;
     }
+	
+	/**
+     * @return string 
+     */
+    public function getDescription(){
+        return $this->description;
+    }
 
 	/**********************
 	 * SET METHODS        *
@@ -365,6 +378,14 @@ class Training
      */
     public function setSportId($sportId){
         $this->sport_id = $sportId;
+        return $this;
+    }
+	
+	/**
+     * @return string 
+     */
+    public function setDescription($description){
+        $this->description = $description;
         return $this;
     }
 
