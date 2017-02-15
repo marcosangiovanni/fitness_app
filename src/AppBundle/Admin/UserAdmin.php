@@ -101,6 +101,15 @@ class UserAdmin extends BaseUserAdmin
             		    ->add('facebookName', null, array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
 					->end()
             	->end()
+				->tab('Fiscal Infos')
+		            ->with('Data for Invoice')
+        	        	->add('fiscal_city', 'text', array('label' => 'City', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+        	        	->add('fiscal_address', null, array('label' => 'Address', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+        	        	->add('fiscal_cap', null, array('label' => 'Cap', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+        	        	->add('fiscal_house_number', null, array('label' => 'Number', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+        	        	->add('fiscal_code', null, array('label' => 'Fiscal code', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+					->end()
+            	->end()
         ;
 
         $formMapper

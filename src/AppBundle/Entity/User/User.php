@@ -64,6 +64,45 @@ class User extends BaseUser
     private $city;
 
 
+	/**********************
+	 * FIELDS FOR INVOICE *
+	 **********************/
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+	 * @Groups({"detail"})
+	 * @Type("string")
+	 */
+    private $fiscal_city;
+
+    /**
+     * @ORM\Column(type="string", length=1255, nullable=true)
+	 * @Groups({"detail"})
+	 * @Type("string")
+	 */
+    private $fiscal_address;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+	 * @Groups({"detail"})
+	 * @Type("string")
+	 */
+    private $fiscal_cap;
+
+    /**
+     * @ORM\Column(type="string", length=1255, nullable=true)
+	 * @Groups({"detail"})
+	 * @Type("string")
+	 */
+    private $fiscal_house_number;
+
+    /**
+     * @ORM\Column(type="string", length=30, nullable=true)
+	 * @Groups({"detail"})
+	 * @Type("string")
+	 */
+    private $fiscal_code;
+
 	/***********************************************
 	 * FIELDS INHERITED FROM SonataUserBundle      *
 	 * ADDED IN THIS PLACE TO DEFINE SERIALIZATION *
@@ -201,12 +240,6 @@ class User extends BaseUser
 	 * SET METHODS        *
 	 **********************/
 	 
-	/* generic setter method*/
-	public function __set($property, $value){
-        $this->$property = $value;
-        return $this;
-    }
-	 
 	public function setPicture($picture){
         $this->picture = $picture;
         return $this;
@@ -227,15 +260,34 @@ class User extends BaseUser
         return $this;
     }
 
+    public function setFiscalCity($fiscal_city){
+        $this->fiscal_city = $fiscal_city;
+        return $this;
+    }
+
+    public function setFiscalAddress($fiscal_address){
+        $this->fiscal_address = $fiscal_address;
+        return $this;
+    }
+
+    public function setFiscalCap($fiscal_cap){
+        $this->fiscal_cap = $fiscal_cap;
+        return $this;
+    }
+
+    public function setFiscalHouseNumber($fiscal_house_number){
+        $this->fiscal_house_number = $fiscal_house_number;
+        return $this;
+    }
+
+    public function setFiscalCode($fiscal_code){
+        $this->fiscal_code = $fiscal_code;
+        return $this;
+    }
     
 	/**********************
 	 * GET METHODS        *
 	 **********************/
-	 
-	/* generic getter method*/
-	public function __get($property){
-        return $this->$property;
-    }
 	 
 	public function getPicture(){
         return $this->picture;
@@ -251,6 +303,26 @@ class User extends BaseUser
 
     public function getDob(){
         return $this->dob;
+    }
+	
+	public function getFiscalCity(){
+        return $this->fiscal_city;
+    }
+
+    public function getFiscalAddress(){
+        return $this->fiscal_address;
+    }
+
+    public function getFiscalCap(){
+        return $this->fiscal_cap;
+    }
+
+    public function getFiscalHouseNumber(){
+        return $this->fiscal_house_number;
+    }
+
+    public function getFiscalCode(){
+        return $this->fiscal_code;
     }
 	
 	
