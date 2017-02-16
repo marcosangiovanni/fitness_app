@@ -30,7 +30,9 @@ class TrainingRepository extends EntityRepository
 
 	//Only sports associated with user
     public function findBySports($sport_ids){
-        $this->query_builder->andWhere('t.sport_id IN (:sports)')->setParameter('sports', $sport_ids);
+    	if($sport_ids){
+	        $this->query_builder->andWhere('t.sport_id IN (:sports)')->setParameter('sports', $sport_ids);
+    	}
 		return $this;
     }
 
@@ -58,20 +60,24 @@ class TrainingRepository extends EntityRepository
 		return $this;
     }
 
-    public function findByPositionAndDistance(Point $point,$max_distance){
-        $this->query_builder->andWhere("st_distance_sphere(t.position,point(:x_position,:y_position)) < :max_distance")
-        			->setParameter('x_position', $point->getX())
-					->setParameter('y_position', $point->getY())
-					->setParameter('max_distance', $max_distance)
-		;
+    public function findByPositionAndDistance($lat, $lng, $max_distance){
+    	if($lat && $lng && $max_distance){
+	        $this->query_builder->andWhere("st_distance_sphere(t.position,point(:x_position,:y_position)) < :max_distance")
+	        			->setParameter('x_position', $lat)
+						->setParameter('y_position', $lng)
+						->setParameter('max_distance', $max_distance)
+			;
+    	}
 		return $this;
     }
 
-    public function orderByPosition(Point $point){
-        $this->query_builder->orderBy("st_distance_sphere(t.position,point(:x_position,:y_position))")
-        			->setParameter('x_position', $point->getX())
-					->setParameter('y_position', $point->getY())
-		;
+    public function orderByPosition($lat, $lng){
+    	if($lat && $lng && $max_distance){
+	        $this->query_builder->orderBy("st_distance_sphere(t.position,point(:x_position,:y_position))")
+	        			->setParameter('x_position', $lat)
+						->setParameter('y_position', $lng)
+			;
+		}
 		return $this;
     }
 

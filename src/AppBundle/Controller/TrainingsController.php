@@ -63,7 +63,6 @@ class TrainingsController extends FOSRestController
 			//The user starting position to search for trainings
 			$lat = $request->get('lat');
 			$lng = $request->get('lng');
-			$point = new Point($lat,$lng);
 
 			//The max distance in meters of training
 			$max_distance = $request->get('distance');
@@ -88,7 +87,7 @@ class TrainingsController extends FOSRestController
 						->findBySports($sports)
 						->findByDate($date)
 						->findByPublic($logged_user)
-						->findByPositionAndDistance($point,$max_distance)
+						->findByPositionAndDistance($lat,$lng,$max_distance)
 						->orderByPosition($point)
 			;
 			
