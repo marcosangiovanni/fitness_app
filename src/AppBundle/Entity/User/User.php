@@ -153,7 +153,7 @@ class User extends BaseUser
 
     /**
 	 * @var \Date
-	 * @ORM\Column(type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
+	 * @ORM\Column(type="datetime", nullable=true)
 	 */
     protected $last_facebook_refresh;
 
@@ -593,12 +593,16 @@ class User extends BaseUser
 	/**
      * @return boolean
      */
-    public function hasToBeFacebookFriendsListRefreshed(\AppBundle\Entity\Config $config){
+    public function hasToBeFacebookFriendsListRefreshed($config){
     	$last_refresh_date = $this->getLastFacebookRefresh();
-		$now = new \DateTime();
-		$next_refresh_date = $last_refresh_date->add(new \DateInterval('P'.$config->getValue().'D'));
-		//Return true if next refresh date is elapsed
-        return $now > $next_refresh_date;
+		if($last_refresh_date){
+			$now = new \DateTime();
+			$next_refresh_date = $last_refresh_date->add(new \DateInterval('P'.$config->getValue().'D'));
+			//Return true if next refresh date is elapsed
+	        return $now > $next_refresh_date;
+		}
+		//Se non è settata last_refresh_date allora aggiorniamo i dati di facebook
+		return true;
     }
 
 	public function setLastFacebookRefresh($last_facebook_refresh){
@@ -609,8 +613,6 @@ class User extends BaseUser
 	public function getLastFacebookRefresh(){
         return $this->last_facebook_refresh;
     }
-	
-
 	
 
 }

@@ -157,6 +157,7 @@ class UsersController extends FOSRestController
 	// [PUT] /users/{id}
 	// User update
     public function putUserAction($id){
+		
 		try{
 			//Get the user to update
 			$user = $this->getDoctrine()->getRepository('AppBundle:User\User')->find($id);

@@ -174,7 +174,7 @@ class Training
      * @ORM\OneToMany(targetEntity="Subscribed", mappedBy="training", cascade={"persist", "remove"}, orphanRemoval=true)
 	 * @MaxDepth(3)
 	 * @Groups({"detail"})
-	 * @Type("AppBundle\Entity\Subscribed")
+	 * @Type("ArrayCollection")
      */	
     private $subscribed;
 		
