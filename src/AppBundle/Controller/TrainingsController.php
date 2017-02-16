@@ -77,7 +77,12 @@ class TrainingsController extends FOSRestController
 			//1 = tomorrow
 			//etc...
 			$date = $request->get('date');
-	
+
+			/* LIMIT/OFFSET */		
+			//The user starting position to search for trainings
+			$limit = $request->get('limit');
+			$offset = $request->get('offset');
+
 			/* QUERY CONSTRUCTOR */
 			//Instantiate the repositiory		
 			$repository = $this->getDoctrine()->getRepository('AppBundle:Training');
@@ -88,7 +93,8 @@ class TrainingsController extends FOSRestController
 						->findByDate($date)
 						->findByPublic($logged_user)
 						->findByPositionAndDistance($lat,$lng,$max_distance)
-						->orderByPosition($point)
+						->orderByPosition($lat,$lng)
+						->setLimitOffset($limit,$offset)
 			;
 			
 			$trainings = $repository->getQueryBuilder()->getQuery()->getResult();

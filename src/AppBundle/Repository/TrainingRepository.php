@@ -21,6 +21,13 @@ class TrainingRepository extends EntityRepository
     	return $this->query_builder;
     }
 	
+	//Set pagination
+    public function setLimitOffset($limit,$offset){
+    	if($limit >= 0 && $offset >= 0){
+	    	$this->query_builder->setFirstResult($offset)->setMaxResults($limit);
+    	}
+    }
+	
 	//Only training with cutoff date > now
     public function findByNotClosedTrainings(){
     	$now = new DateTime();
@@ -72,7 +79,7 @@ class TrainingRepository extends EntityRepository
     }
 
     public function orderByPosition($lat, $lng){
-    	if($lat && $lng && $max_distance){
+    	if($lat && $lng){
 	        $this->query_builder->orderBy("st_distance_sphere(t.position,point(:x_position,:y_position))")
 	        			->setParameter('x_position', $lat)
 						->setParameter('y_position', $lng)
