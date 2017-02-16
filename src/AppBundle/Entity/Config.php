@@ -5,7 +5,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\VirtualProperty;
 use JMS\Serializer\Annotation\Type;
+use JMS\Serializer\Annotation\SerializedName;
 
 /**
  * @ORM\Table(name="config")
@@ -33,7 +35,6 @@ class Config
 
     /**
      * @ORM\Column(length=1256)
-	 * @Groups({"detail"})
 	 * @Type("string")
      */
     private $value;
@@ -65,6 +66,18 @@ class Config
 
     public function getValue(){
         return $this->value;
+    }
+	
+    public function getValueForExport(\AppBundle\Entity\User\User $user){
+    	switch ($this->getCode()) {
+		    case 'facebook_refresh':
+				return $user->hasToBeFacebookFriendsListRefreshed($this);
+		        break;
+			default:
+		        return $this->getValue();
+		        break;
+		}
+        return ;
     }
 	
 	/**********************

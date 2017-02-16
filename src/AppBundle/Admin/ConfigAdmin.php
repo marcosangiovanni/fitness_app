@@ -26,8 +26,8 @@ class ConfigAdmin extends Admin
 
     protected function configureListFields(ListMapper $listMapper){
         $listMapper	->add('id')
-					->add('value')
 					->add('code')
+					->add('value')
 					->add('_action', 'actions', array(
 			            'actions' => array(
 			                'edit' => array(),

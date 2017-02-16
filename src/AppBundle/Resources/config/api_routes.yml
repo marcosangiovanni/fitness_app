@@ -18,7 +18,13 @@ trainings:
     prefix:   /api/v1
     resource: AppBundle\Controller\TrainingsController
 
+configs:
+    type:     rest
+    prefix:   /api/v1
+    resource: AppBundle\Controller\ConfigsController
+    
 facebook_friends:
     type:     rest
     parent:   users
     resource: AppBundle\Controller\FacebookFriendsController
+

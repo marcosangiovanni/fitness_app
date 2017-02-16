@@ -151,8 +151,13 @@ class User extends BaseUser
 	 */
 	protected $facebookUid;
 
+    /**
+	 * @var \Date
+	 * @ORM\Column(type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
+	 */
+    protected $last_facebook_refresh;
 
-
+    
 	/**********************************
 	 * FIELDS TO DEFINE RELATIONSHIPS *
 	 **********************************/
@@ -580,6 +585,32 @@ class User extends BaseUser
     public function getImageFile(){
         return $this->imageFile;
     }
+	
+	/*********************
+	 * CONFIG MANAGEMENT *
+	 ********************/
+	
+	/**
+     * @return boolean
+     */
+    public function hasToBeFacebookFriendsListRefreshed(\AppBundle\Entity\Config $config){
+    	$last_refresh_date = $this->getLastFacebookRefresh();
+		$now = new \DateTime();
+		$next_refresh_date = $last_refresh_date->add(new \DateInterval($config->getValue()));
+		//Return true if next refresh date is elapsed
+        return $now > $next_refresh_date;
+    }
+
+	public function setLastFacebookRefresh($last_facebook_refresh){
+        $this->last_facebook_refresh = $last_facebook_refresh;
+        return $this;
+    }
+    
+	public function getLastFacebookRefresh(){
+        return $this->last_facebook_refresh;
+    }
+	
+
 	
 
 }
