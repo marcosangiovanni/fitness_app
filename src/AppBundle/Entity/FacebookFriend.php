@@ -93,7 +93,6 @@ class FacebookFriend
      * @return Sport
      */
     public function addUser(\AppBundle\Entity\User\User $users){
-    	die('43242423423');
     	if (!$this->users->contains($users)) {
 			$this->users->add($users);
 		}
@@ -106,7 +105,6 @@ class FacebookFriend
      * @param \AppBundle\Entity\User\User $users
      */
     public function removeUser(\AppBundle\Entity\User\User $user){
-    	die('43242423423');
     	$user->removeFriend($this);
         $this->users->removeElement($user);
     }
@@ -118,7 +116,6 @@ class FacebookFriend
      * @return FacebookFriend
      */
     public function setUser(\AppBundle\Entity\User\User $user = null){
-    	die('43242423423');
         $this->user = $user;
         return $this;
     }

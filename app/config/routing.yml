@@ -16,12 +16,6 @@ hwi_oauth_connect:
 facebook_login:
     pattern: /fblogin/check-facebook    
 
-app_oauth_social:
-    pattern: /api/v1/oauth/v2/token/{network}
-    defaults: { _controller: AppBundle:Token:getSocialToken, _format:json }
-    requirements:
-        network:  facebook|google|twitter
-        
 #Sonata user bundle routing
 sonata_user:
     resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
@@ -71,3 +65,9 @@ api_routes:
 fos_oauth_server_token:
   path:     /api/v1/oauth/v2/token
   defaults: { _controller: fos_oauth_server.controller.token:tokenAction }
+
+app_oauth_social:
+    pattern: /api/v1/oauth/v2/token/{network}
+    defaults: { _controller: AppBundle:SocialToken:getSocialToken, _format:json }
+    requirements:
+        network:  facebook|google|twitter
