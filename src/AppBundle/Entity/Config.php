@@ -39,6 +39,12 @@ class Config
      */
     private $value;
 
+    /**
+     * @ORM\Column(type="text")
+	 * @Type("string")
+     */
+    private $description;
+
 	/**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
@@ -67,19 +73,11 @@ class Config
     public function getValue(){
         return $this->value;
     }
-	
-    public function getValueForExport(\AppBundle\Entity\User\User $user){
-    	switch ($this->getCode()) {
-		    case 'facebook_refresh':
-				return $user->hasToBeFacebookFriendsListRefreshed($this);
-		        break;
-			default:
-		        return $this->getValue();
-		        break;
-		}
-        return ;
-    }
-	
+
+    public function getDescription(){
+        return $this->description;
+    }	
+
 	/**********************
 	 * SET METHODS        *
 	 **********************/
@@ -91,6 +89,11 @@ class Config
 
     public function setValue($value){
         $this->value = $value;
+		return $this;
+    }	
+
+    public function setDescription($description){
+        $this->description = $description;
 		return $this;
     }	
 
@@ -129,5 +132,21 @@ class Config
         $this->updated = $updated;
         return $this;
     }
+
+	/*********************
+	 * EXPORT MANAGEMENT *
+	 *********************/
+	
+	public function getValueForExport(\AppBundle\Entity\User\User $user){
+    	switch ($this->getCode()) {
+		    case 'facebook_refresh':
+				return $user->hasToBeFacebookFriendsListRefreshed($this);
+		        break;
+			default:
+		        return $this->getValue();
+		        break;
+		}
+    }
+	
 
 }

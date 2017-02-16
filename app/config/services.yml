@@ -50,11 +50,12 @@ services:
         tags:
             - { group: Service, name: sonata.admin, manager_type: orm, label: TrainingLevel }
 
+
     admin.config:
         class: AppBundle\Admin\ConfigAdmin
         arguments: [~, AppBundle\Entity\Config, ~]
         tags:
-            - { group: Service, name: sonata.admin, manager_type: orm, label: Config }
+            - { group: Config, name: sonata.admin, manager_type: orm, label: Config }
 
             
     admin.facebook_friend:

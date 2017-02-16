@@ -13,8 +13,9 @@ use Sonata\AdminBundle\Route\RouteCollection;
 class ConfigAdmin extends Admin
 {
     protected function configureFormFields(FormMapper $formMapper){
-        $formMapper	->add('code', 'text', array('label' => 'Config variable code', 'required' => true, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
-					->add('value', 'text', array('label' => 'Config variable value', 'required' => true, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+        $formMapper	->add('code', 'text', array('label' => 'Code', 'required' => true, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+					->add('value', 'text', array('label' => 'Value', 'required' => true, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+					->add('description', 'textarea', array('label' => 'Description', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
 		;
     }
 	

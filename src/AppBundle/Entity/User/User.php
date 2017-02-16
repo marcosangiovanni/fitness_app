@@ -596,7 +596,7 @@ class User extends BaseUser
     public function hasToBeFacebookFriendsListRefreshed(\AppBundle\Entity\Config $config){
     	$last_refresh_date = $this->getLastFacebookRefresh();
 		$now = new \DateTime();
-		$next_refresh_date = $last_refresh_date->add(new \DateInterval($config->getValue()));
+		$next_refresh_date = $last_refresh_date->add(new \DateInterval('P'.$config->getValue().'D'));
 		//Return true if next refresh date is elapsed
         return $now > $next_refresh_date;
     }
