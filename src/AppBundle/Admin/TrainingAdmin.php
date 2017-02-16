@@ -62,7 +62,7 @@ class TrainingAdmin extends Admin
 					->tab('Media')
 						->with('Media')
 							->add('imageFile', 'file', array_merge($options,array('label' => 'Image file', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM))))
-							->add('video', 'url', array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+							->add('video', 'url', array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
 						->end()
 					->end()
 					->tab('Subscribed')
