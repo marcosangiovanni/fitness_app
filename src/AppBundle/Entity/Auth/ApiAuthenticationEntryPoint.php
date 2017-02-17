@@ -7,6 +7,10 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
+//Manager
+use AppBundle\Util\ErrorManager;
+use AppBundle\Util\SerializerManager;
+
 class ApiAuthenticationEntryPoint implements AuthenticationEntryPointInterface {
 
     private $realmName;
@@ -16,12 +20,9 @@ class ApiAuthenticationEntryPoint implements AuthenticationEntryPointInterface {
     }
 
     public function start(Request $request, AuthenticationException $authException = null) {
-        $content = array('data' => $authException->getMessageData(), 'error' => 444);
-        $response = new Response();
-        $response->headers->set('WWW-Authenticate', sprintf('Basic realm="%s"', $this->realmName));
-        $response->headers->set('Content-Type', 'application/json');
-        $response->setContent(json_encode($content))
-                ->setStatusCode(444);
-        return $response;
-    }    
+		$jsonResponse = new Response(SerializerManager::getJsonData(ErrorManager::createErrorArrayFromException($authException)));
+		$jsonResponse->setStatusCode(401);
+		return $jsonResponse;
+    }
+	
 }
