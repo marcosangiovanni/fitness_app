@@ -17,6 +17,7 @@ class FacebookFriendAdmin extends Admin
             				'attr' 		=> 	array('style' => 'width:200px')
         				)
 					)
+					->add('picture')
 					->add('name',null,array('label' => 'Friend\'s Name'))
 					->add('facebook_uid',null,array('label' => 'Friend\'s Facebook Uid'))
 		;
@@ -33,6 +34,7 @@ class FacebookFriendAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper	->addIdentifier('id')
+					->add('picture', 'string', array('template' => 'admin/image_format_list.html.twig'))
 					->add('user', 'entity', array(
 							'label' => 'User',
             				'route' => array(
