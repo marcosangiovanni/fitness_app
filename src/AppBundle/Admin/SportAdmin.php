@@ -54,7 +54,7 @@ class SportAdmin extends Admin
     	
         $listMapper	->add('id')
 					->add('title')
-					->add('picture', 'string', array('template' => 'admin/image_format_list.html.twig'))
+					->add('picture', 'string', array('template' => 'admin/image_format_list_vich.html.twig'))
 					->add('_action', 'actions', array(
 			            'actions' => array(
 			            	'move' => array('template' => 'PixSortableBehaviorBundle:Default:_sort.html.twig'),

@@ -114,23 +114,39 @@ class UserAdmin extends BaseUserAdmin
 
         $formMapper
         	->tab('Relations')
-            ->with('Sport')
-				->add('sports', 'sonata_type_model', array('property' => 'title', 'label' => 'User sports', 'multiple' => true, 'by_reference' => false, 'btn_add' => false)) 
+	            ->with('Sport')
+					->add('sports', 'sonata_type_model', array('property' => 'title', 'label' => 'User sports', 'multiple' => true, 'by_reference' => false, 'btn_add' => false)) 
 				->end()
-            ->with('Training')
-				->add('trainings', 'sonata_type_model', array('property' => 'title', 'label' => 'Created trainings', 'multiple' => true, 'by_reference' => false, 'btn_add' => false),array( 'readonly' => true))
-				->add('subscribed', 'sonata_type_collection', array(
-	                'by_reference' 			=> false,
-	                'label'					=> 'Subscribed trainings',
-	                'type_options' 			=> array('delete' => true),
-	                'cascade_validation' 	=> true,
-	                'btn_add' 				=> 'Add new User',
-	            ), array(
-	                'edit' 		=> 'inline',
-	                'inline' 	=> 'table',
-	                'readonly' 	=> true
-	            ))
+	            ->with('Created Trainings')
+					->add('trainings', 'sonata_type_model', array('property' => 'title', 'label' => 'Created trainings', 'multiple' => true, 'by_reference' => false, 'btn_add' => false),array( 'readonly' => true))
 				->end()
+	            ->with('Subscribed Trainings')
+					->add('subscribed', 'sonata_type_collection', array(
+		                'by_reference' 			=> false,
+		                'label'					=> 'Subscribed trainings',
+		                'type_options' 			=> array('delete' => true),
+		                'cascade_validation' 	=> true,
+		                'btn_add' 				=> 'Add new User',
+		            ), array(
+		                'edit' 		=> 'inline',
+		                'inline' 	=> 'table',
+		                'readonly' 	=> true
+		            ))
+				->end()
+	            ->with('Facebook Friends')
+					->add('friends', 'sonata_type_collection', array(
+		                'by_reference' 			=> false,
+		                'label'					=> 'Facebook friends',
+		                'type_options' 			=> array('delete' => true),
+		                'cascade_validation' 	=> true,
+		                'btn_add' 				=> 'Add new facebook Friend',
+		            ), array(
+		                'edit' 		=> 'inline',
+		                'inline' 	=> 'table',
+		                'readonly' 	=> true
+		            ))
+				->end()
+			->end()
 				
 				
 				
