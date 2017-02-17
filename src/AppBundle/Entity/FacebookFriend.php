@@ -24,7 +24,6 @@ class FacebookFriend
 
 	/**
      * @ORM\Column(type="integer", length=100)
-	 * @Groups({"detail"})
 	 * @Type("integer")
      */
     private $user_id;
@@ -35,6 +34,13 @@ class FacebookFriend
 	 * @Type("string")
 	 */
     private $name;
+
+	/**
+     * @ORM\Column(type="string", length=1256)
+	 * @Groups({"detail"})
+	 * @Type("string")
+	 */
+    private $picture;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -71,6 +77,15 @@ class FacebookFriend
     public function setName($name){
         $this->name = $name;
         return $this;
+    }
+
+    public function setPicture($picture){
+        $this->picture = $picture;
+        return $this;
+    }
+
+    public function getPicture(){
+        return $this->picture;
     }
 
     public function getName(){
