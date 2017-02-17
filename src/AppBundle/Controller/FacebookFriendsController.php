@@ -3,43 +3,77 @@
 namespace AppBundle\Controller;
 use FOS\RestBundle\Controller\FOSRestController;
 
+//Http
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+//Manager
+use AppBundle\Util\ErrorManager;
+use AppBundle\Util\SerializerManager;
+
+//Exception
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 class FacebookFriendsController extends FOSRestController
 {
-	// ROUTE	:	"get_user_comments"   
-	// CALL		:	[GET] /users/{user_id}/facebook_friends
     public function getFacebook_friendsAction($user_id){
-		$facebook_friends = $this->getDoctrine()->getRepository('AppBundle:FacebookFriend')->findBy(array('user_id' => $user_id));
-		$ar_facebook_friends = array();
-		foreach ($facebook_friends as $facebook_friend) {
-			$ar_facebook_friends[] = $facebook_friend;
+		try{
+			//Get $fb_friends list
+			$fb_friends = $this->getDoctrine()->getRepository('AppBundle:FacebookFriend')->findAll();
+			$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($fb_friends));
+			$jsonResponse->setStatusCode(200);
 		}
-		$view = $this->view($ar_facebook_friends, 200);
-        return $this->handleView($view);
+		//500
+		catch(\Exception $e){
+			$jsonResponse = new Response(SerializerManager::getJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
+		}
+		/* JSON RESPONSE */
+		return $jsonResponse;
     } 
 
-	// ROUTE	:	"get_user_comment"    
-	// CALL 	:	[GET] /users/{user_id}/facebook_friend/{facebook_friend_id}
-    public function getFacebook_friendAction($user_id, $facebook_friend_id){
-		$facebook_friend = $this->getDoctrine()->getRepository('AppBundle:FacebookFriend')->find($facebook_friend_id);
-		if(!$facebook_friend){
-			throw $this->createNotFoundException('No facebook friend found  for id '.$facebook_friend_id.' and user_id '.$user_id);
-		}else{
-			$view = $this->view($facebook_friend, 200);
-        	return $this->handleView($view);
+	public function putFacebook_friendsAction($user_id){
+		
+		try{
+			//Get the user to update
+			$user = $this->getDoctrine()->getRepository('AppBundle:User\User')->find($user_id);
+			
+			if(!$user){
+				throw $this->createNotFoundException('No user found for id : '.$user_id);
+			}else{
+				//Remove all friends from association
+				$user->getFriends()->clear();
+				//get all friends from api call in request content
+				$fb_friends_objects = SerializerManager::getObjectFromJsonData($this->getRequest()->getContent(), 'ArrayCollection<AppBundle\Entity\FacebookFriend>');
+				
+				foreach ($fb_friends_objects as $fb_friends) {
+					$user->addFriend($fb_friends);
+				}
+				
+				//Merging received data in entity
+				$em = $this->getDoctrine()->getManager();
+				$em->persist($user);
+			    $em->flush();
+		
+				/* SERIALIZATION */
+				$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($user));
+			}
+		
 		}
-    } 
-
-    /*
-    public function deleteCommentAction($user_id, $comment_id)
-    {} // "delete_user_comment" [DELETE] /users/{user_id}/comments/{comment_id}
-
-    public function newCommentsAction($user_id)
-    {} // "new_user_comments"   [GET] /users/{user_id}/comments/new
-
-    public function editCommentAction($user_id, $comment_id)
-    {} // "edit_user_comment"   [GET] /users/{user_id}/comments/{comment_id}/edit
-
-    public function removeCommentAction($user_id, $comment_id)
-    {} // "remove_user_comment" [GET] /users/{user_id}/comments/{comment_id}/remove
-	*/
+		//User and password already in use
+    	catch(NotFoundHttpException $e){
+    		$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(409);
+    	}
+		//500
+		catch(\Exception $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
+		}
+		
+		/* JSON RESPONSE */
+		return $jsonResponse;
+		
+	}
+		
 }

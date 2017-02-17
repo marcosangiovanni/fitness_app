@@ -11,6 +11,7 @@ use JMS\Serializer\Annotation\Type;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\MaxDepth;
 use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\ReadOnly;
 
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -173,7 +174,7 @@ class User extends BaseUser
     private $subscribed;
 	
 	/**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Sport", inversedBy="users")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Sport", inversedBy="users", cascade={"persist", "remove"})
      * @ORM\JoinTable(name="ass_user_sport")
 	 * @SerializedName("sports")
 	 * @MaxDepth(2)
@@ -183,10 +184,11 @@ class User extends BaseUser
     private $sports;
 	
 	/**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\FacebookFriend", mappedBy="user", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\FacebookFriend", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
 	 * @SerializedName("facebook_friends")
 	 * @Groups({"detail"})
 	 * @Type("ArrayCollection<AppBundle\Entity\FacebookFriend>")
+	 * @ReadOnly
 	 */
     private $friends;
 
@@ -356,7 +358,7 @@ class User extends BaseUser
     	$friend->setUser(null);
         $this->friends->removeElement($friend);
     }
-
+	
     /**
      * Get friends
      *
@@ -371,9 +373,12 @@ class User extends BaseUser
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function setFriends(){
-        return $this->friends;
+    public function setFriends($friends){
+        $this->friends[] = $friends;
+		return $this;
     }
+
+
 
 
 	/********************
@@ -386,6 +391,7 @@ class User extends BaseUser
      * @param \AppBundle\Entity\Sport $sports
      * @return User
      */
+     
     public function addSport(\AppBundle\Entity\Sport $sport){
     	$sport->addUser($this);
 		$this->sports[] = $sport;
@@ -407,6 +413,16 @@ class User extends BaseUser
      * @return \Doctrine\Common\Collections\Collection 
      */
     public function getSports(){
+        return $this->sports;
+    }
+
+    /**
+     * Get user
+     *
+     * @return  \AppBundle\Entity\user\User $user
+     */
+    public function setSports($sports){
+    	$this->sports[] = $sports;
         return $this->sports;
     }
 
