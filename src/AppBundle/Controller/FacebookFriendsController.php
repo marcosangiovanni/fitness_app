@@ -63,7 +63,7 @@ class FacebookFriendsController extends FOSRestController
 		//User and password already in use
     	catch(NotFoundHttpException $e){
     		$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
-			$jsonResponse->setStatusCode(409);
+			$jsonResponse->setStatusCode(404);
     	}
 		//500
 		catch(\Exception $e){
