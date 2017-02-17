@@ -170,6 +170,7 @@ class User extends BaseUser
 	 * @Groups({"detail"})
 	 * @Type("ArrayCollection<AppBundle\Entity\Subscribed>")
 	 * @MaxDepth(4)
+	 * @ReadOnly
      */
     private $subscribed;
 	
@@ -180,6 +181,7 @@ class User extends BaseUser
 	 * @MaxDepth(2)
 	 * @Groups({"detail"})
 	 * @Type("ArrayCollection<AppBundle\Entity\Sport>")
+	 * @ReadOnly
 	 */
     private $sports;
 	
@@ -202,6 +204,7 @@ class User extends BaseUser
      * @MaxDepth(2)
 	 * @SerializedName("friends")
 	 * @Type("ArrayCollection<AppBundle\Entity\User\User>")
+	 * @ReadOnly
      */
     private $myFriends;
 
@@ -218,6 +221,7 @@ class User extends BaseUser
 	 * @ORM\OrderBy({"start" = "DESC"})
 	 * @Type("ArrayCollection<AppBundle\Entity\Training>")
 	 * @MaxDepth(3)
+	 * @ReadOnly
      */
     private $trainings;
 	
@@ -237,11 +241,9 @@ class User extends BaseUser
      *
      * @return int $id
      */
-    public function getId()
-    {
+    public function getId(){
         return $this->id;
     }
-
 
 	/**********************
 	 * SET METHODS        *
