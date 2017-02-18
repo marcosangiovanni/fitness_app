@@ -198,5 +198,96 @@ class UsersController extends FOSRestController
 	// [DELETE] /users/{id}
     public function deleteUserAction($id)
     {}
+	
+	
+	 /*******************
+	 * SPORT MANAGEMENT *
+	 *******************/
+	
+	// "get_user_sports"    
+	// [GET] /users/{slug}/sports
+	public function getUserSportsAction($user_id){
+		try{
+			//Get the user to update
+			$user = $this->getDoctrine()->getRepository('AppBundle:User\User')->find($user_id);
+			
+			if(!$user){
+				throw $this->createNotFoundException('No user found for id : '.$user_id);
+			}else{
+				//Get user entity and deserialize in user object
+				$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($user->getSports()));
+				$jsonResponse->setStatusCode(200);
+			}
+		
+		}
+		//User and password already in use
+    	catch(NotFoundHttpException $e){
+    		$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(409);
+    	}
+		//500
+		catch(\Exception $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
+		}
+		
+		/* JSON RESPONSE */
+		return $jsonResponse;
+    }
+	
+
+	public function putUserSportsAction($user_id){
+		
+		try{
+			//Get the user to update
+			$user = $this->getDoctrine()->getRepository('AppBundle:User\User')->find($user_id);
+			
+			if(!$user){
+				throw $this->createNotFoundException('No user found for id : '.$user_id);
+			}else{
+				//Remove all friends from association
+				$user->getSports()->clear();
+				//get all relation object from api call in request content
+				$relation_objects = SerializerManager::getObjectFromJsonDataWithContext($this->getRequest()->getContent(), 'ArrayCollection<AppBundle\Entity\Sport>');
+
+				//TODO : UP -> correct serializer to update without quering collection Sport 
+				$ar = array();
+				foreach ($relation_objects as $object) {
+					$ar[] = $object->getId();
+				}
+				$sports = $this->getDoctrine()->getRepository('AppBundle:Sport')->findById($ar);
+
+				//Adding sport to user				
+				foreach ($sports as $sport) {
+					$user->addSport($sport);
+				}
+				
+				//Merging received data in entity
+				$em = $this->getDoctrine()->getManager();
+				$em->persist($user);
+			    $em->flush();
+		
+				/* SERIALIZATION */
+				$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($user));
+			}
+		
+		}
+		//User and password already in use
+    	catch(NotFoundHttpException $e){
+    		$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(404);
+    	}
+		//500
+		catch(\Exception $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
+		}
+		
+		/* JSON RESPONSE */
+		return $jsonResponse;
+		
+	}	
+	
+	
 
 }

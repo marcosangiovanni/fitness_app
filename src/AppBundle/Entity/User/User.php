@@ -395,7 +395,7 @@ class User extends BaseUser
      */
      
     public function addSport(\AppBundle\Entity\Sport $sport){
-    	$sport->addUser($this);
+    	//$sport->getUsers()->add($this);
 		$this->sports[] = $sport;
         return $this;
     }

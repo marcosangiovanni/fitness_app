@@ -154,9 +154,9 @@ class Sport implements Translatable
      * @param \AppBundle\Entity\User\User $users
      * @return Sport
      */
-    public function addUser(\AppBundle\Entity\User\User $users){
-    	if (!$this->users->contains($users)) {
-			$this->users->add($users);
+    public function addUser(\AppBundle\Entity\User\User $user){
+    	if (!$this->users->contains($user)) {
+			$this->users->add($user);
 		}
         return $this;
     }
@@ -166,8 +166,9 @@ class Sport implements Translatable
      *
      * @param \AppBundle\Entity\User\User $users
      */
-    public function removeUser(\AppBundle\Entity\User\User $users){
-        $this->users->removeElement($users);
+    public function removeUser(\AppBundle\Entity\User\User $user){
+    	$user->removeFriend($this);
+        $this->users->removeElement($user);
     }
 
     /**
