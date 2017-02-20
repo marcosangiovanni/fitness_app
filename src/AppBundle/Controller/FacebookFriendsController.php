@@ -19,7 +19,7 @@ class FacebookFriendsController extends FOSRestController
     public function getFacebook_friendsAction($user_id){
 		try{
 			//Get $fb_friends list
-			$fb_friends = $this->getDoctrine()->getRepository('AppBundle:FacebookFriend')->findAll();
+			$fb_friends = $this->getDoctrine()->getRepository('AppBundle:FacebookFriend')->findBy(array('user_id' => $user_id));
 			$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($fb_friends));
 			$jsonResponse->setStatusCode(200);
 		}
