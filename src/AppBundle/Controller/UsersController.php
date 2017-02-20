@@ -27,6 +27,11 @@ use CrEOF\Spatial\PHP\Types\Geometry\Point;
 class UsersController extends FOSRestController
 {
 	
+	
+	/*******************
+	* USERS MANAGEMENT *
+	*******************/
+	
 	// [GET] /users/{id}
 	public function getUserAction($id){
 		try{
@@ -198,11 +203,12 @@ class UsersController extends FOSRestController
 	// [DELETE] /users/{id}
     public function deleteUserAction($id)
     {}
+
 	
 	
-	 /*******************
-	 * SPORT MANAGEMENT *
-	 *******************/
+	/*******************
+	* SPORT MANAGEMENT *
+	*******************/
 	
 	// "get_user_sports"    
 	// [GET] /users/{slug}/sports
@@ -234,7 +240,6 @@ class UsersController extends FOSRestController
 		/* JSON RESPONSE */
 		return $jsonResponse;
     }
-	
 
 	public function putUserSportsAction($user_id){
 		
@@ -287,7 +292,6 @@ class UsersController extends FOSRestController
 		return $jsonResponse;
 		
 	}	
-	
 	
 
 }
