@@ -114,6 +114,7 @@ class Training
 
     /**
      * @ORM\Column(type="boolean", nullable=false, options={"default" : false})
+	 * @Groups({"detail"})
 	 */
     private $is_cardio;
 
