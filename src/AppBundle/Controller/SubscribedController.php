@@ -13,6 +13,7 @@ use AppBundle\Util\SerializerManager;
 
 //Exception
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 //Entities
 use AppBundle\Entity\Subscribed;
