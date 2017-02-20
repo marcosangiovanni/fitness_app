@@ -28,6 +28,12 @@ class Sport implements Translatable
 	private $position;
 
 	/**
+     * @Vich\UploadableField(mapping="training_image", fileNameProperty="placeholder")
+     * @var File
+     */
+    private $placeholderFile;
+	
+	/**
      * @Vich\UploadableField(mapping="training_image", fileNameProperty="picture")
      * @var File
      */
@@ -64,6 +70,13 @@ class Sport implements Translatable
 	 * @Type("string")
      */
     private $picture;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+	 * @Groups({"detail"})
+	 * @Type("string")
+     */
+    private $placeholder;
 
 	/**
      * @Gedmo\Timestampable(on="create")
@@ -108,6 +121,10 @@ class Sport implements Translatable
         return $this->picture;
     }
 
+    public function getPlaceholder(){
+        return $this->placeholder;
+    }
+
     public function getTitle(){
         return $this->title;
     }
@@ -132,6 +149,11 @@ class Sport implements Translatable
 	 
 	public function setPicture($picture){
         $this->picture = $picture;
+		return $this;
+    }
+
+	public function setPlaceholder($placeholder){
+        $this->placeholder = $placeholder;
 		return $this;
     }
 
@@ -272,6 +294,21 @@ class Sport implements Translatable
      */
     public function getImageFile(){
         return $this->imageFile;
+    }
+	
+	public function setPlaceholderFile(File $placeholder = null){
+        $this->placeholderFile = $placeholder;
+        if ($placeholder) {
+            $this->updated = new \DateTimeImmutable();
+        }
+        return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getPlaceholderFile(){
+        return $this->placeholderFile;
     }
 	
 }

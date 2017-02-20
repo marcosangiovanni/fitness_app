@@ -32,17 +32,33 @@ class SportAdmin extends Admin
 
     protected function configureFormFields(FormMapper $formMapper){
 		//Setting 
-		$options = array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM));
+		$options_img = array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM));
 	    if (($subject = $this->getSubject()) && $subject->getPicture()) {
 			$container = $this->getConfigurationPool()->getContainer();
 			$helper = $container->get('vich_uploader.templating.helper.uploader_helper');
 			$path = $helper->asset($subject, 'imageFile');
-	        $options['help'] = '<img width="100px" src="' . $path . '" />';
+	        $options_img['help'] = '<img width="100px" src="' . $path . '" />';
+	    }					
+		$options_plc = array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM));
+	    if (($subject = $this->getSubject()) && $subject->getPlaceholder()) {
+			$container = $this->getConfigurationPool()->getContainer();
+			$helper = $container->get('vich_uploader.templating.helper.uploader_helper');
+			$path = $helper->asset($subject, 'placeholderFile');
+	        $options_plc['help'] = '<img width="400px" src="' . $path . '" />';
 	    }					
 
-        $formMapper	->add('title', 'text', array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
-					->add('picture', null, $options)
-					->add('imageFile', 'file', array('label' => 'Image file', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+        $formMapper	
+        	->with('Title')
+        		->add('title', 'text', array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+			->end()
+			->with('Picture')
+				->add('picture', null, $options_img)
+				->add('imageFile', 'file', array('label' => 'Image file', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+			->end()
+			->with('Training placeholder')
+				->add('placeholder', null, $options_plc)
+				->add('placeholderFile', 'file', array('label' => 'Placeholder file', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+			->end()
 		;
     }
 	
