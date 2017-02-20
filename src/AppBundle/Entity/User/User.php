@@ -165,7 +165,7 @@ class User extends BaseUser
 
  	/**
      * Variable to store trainings to whom the user is subscribed
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Subscribed", mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Subscribed", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
 	 * @SerializedName("associated_trainings")
 	 * @Groups({"detail"})
 	 * @Type("ArrayCollection<AppBundle\Entity\Subscribed>")

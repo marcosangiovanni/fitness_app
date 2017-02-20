@@ -28,3 +28,8 @@ facebook_friends:
     parent:   users
     resource: AppBundle\Controller\FacebookFriendsController
 
+subscribed:
+    type:     rest
+    parent:   users
+    resource: AppBundle\Controller\SubscribedController
+
