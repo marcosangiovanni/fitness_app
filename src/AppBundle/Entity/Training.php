@@ -101,13 +101,6 @@ class Training
     private $end;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
-	 * @Groups({"detail"})
-	 * @Type("DateTime<'Y-m-d\TH:i:sO'>")
-	 */
-    private $cutoff;
-
-    /**
      * @ORM\Column(type="boolean", nullable=false, options={"default" : true})
 	 */
     private $is_public;
@@ -219,13 +212,6 @@ class Training
      */
     public function getEnd(){
         return $this->end;
-    }
-
-    /**
-     * @return \DateTime 
-     */
-    public function getCutoff(){
-        return $this->cutoff;
     }
 
     /**
@@ -351,15 +337,6 @@ class Training
      */
     public function setEnd($end){
         $this->end = $end;
-        return $this;
-    }
-
-    /**
-     * @param \DateTime $cutoff
-     * @return Training
-     */
-    public function setCutoff($cutoff){
-        $this->cutoff = $cutoff;
         return $this;
     }
 

@@ -57,7 +57,6 @@ class TrainingAdmin extends Admin
 						->with('Training date')
 							->add('start','sonata_type_datetime_picker', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL),'format' => Utility::DATE_FORMAT_DATETIME))
 							->add('end','sonata_type_datetime_picker', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL),'format' => Utility::DATE_FORMAT_DATETIME))
-		  					->add('cutoff','sonata_type_datetime_picker', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL),'format' => Utility::DATE_FORMAT_DATETIME))
  						->end()
 					->end()
 					->tab('Media')
@@ -89,10 +88,9 @@ class TrainingAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper){
         $datagridMapper	->add('title')
 						->add('user',null)
-						//->add('sport',null,array('associated_property' => 'title'))
+						->add('sport',null,array('associated_property' => 'title'))
 						->add('start', 'doctrine_orm_date_range', array('field_type'=>'sonata_type_date_range_picker'), null, array('format' => Utility::DATE_FORMAT_DATE))
 						->add('end', 'doctrine_orm_date_range', array('field_type'=>'sonata_type_date_range_picker'), null, array('format' => Utility::DATE_FORMAT_DATE))
-	  					->add('cutoff', 'doctrine_orm_date_range', array('field_type'=>'sonata_type_date_range_picker'), null, array('format' => Utility::DATE_FORMAT_DATE))
 	 					->add('price')
 		;
     }
@@ -104,7 +102,6 @@ class TrainingAdmin extends Admin
 					->addIdentifier('sport',null,array('associated_property' => 'title'))
 					->addIdentifier('start')
 					->addIdentifier('end')
-					->addIdentifier('cutoff')
 					->addIdentifier('price')
 					->addIdentifier('_action', 'actions', array(
 			            'actions' => array(

@@ -4,6 +4,7 @@ namespace AppBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use \DateTime;
+use \DateInterval;
 use CrEOF\Spatial\PHP\Types\Geometry\Point;
 use AppBundle\Entity\User\User;
 
@@ -28,10 +29,10 @@ class TrainingRepository extends EntityRepository
     	}
     }
 	
-	//Only training with cutoff date > now
+	//Only training with start date > now
     public function findByNotClosedTrainings(){
     	$now = new DateTime();
-        $this->query_builder->andWhere('t.cutoff > :current_datetime')->setParameter('current_datetime', $now->format('Y-m-d H:i:s'));
+        $this->query_builder->andWhere('t.start > :current_datetime')->setParameter('current_datetime', $now->format('Y-m-d H:i:s'));
 		return $this;
     }
 
@@ -46,7 +47,11 @@ class TrainingRepository extends EntityRepository
 	//Only if date is selected
     public function findByDate($date){
     	if($date){
-	        $this->query_builder->andWhere('DATE_DIFF(t.start,CURRENT_DATE()) IN (:date)')->setParameter('date', $date);
+    		$date_start = new DateTime($date);
+    		$date_end = new DateTime($date);
+    		$date_end->add(new DateInterval('P1D'));
+	        $this->query_builder->andWhere('t.start > :date_start')->setParameter('date_start', $date_start);
+	        $this->query_builder->andWhere('t.start < :date_end')->setParameter('date_end', $date_end);
     	}
 		return $this;
     }

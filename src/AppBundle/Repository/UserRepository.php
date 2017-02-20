@@ -30,7 +30,7 @@ class UserRepository extends EntityRepository
 	//Only user that created a training
     public function findByActiveTrainings(){
     	$now = new DateTime();
-        $this->query_builder->innerJoin('u.trainings', 't', 'WITH', 't.cutoff > :current_datetime')->setParameter('current_datetime', $now->format('Y-m-d H:i:s'));;
+        $this->query_builder->innerJoin('u.trainings', 't', 'WITH', 't.start > :current_datetime')->setParameter('current_datetime', $now->format('Y-m-d H:i:s'));;
 		return $this;
     }
 	
