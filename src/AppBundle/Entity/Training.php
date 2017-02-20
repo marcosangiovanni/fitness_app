@@ -133,6 +133,13 @@ class Training
 	 */
     private $position;
 
+    /**
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 * @Groups({"detail"})
+	 * @Type("string")
+	 */
+    private $address;
+
 	/**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
@@ -278,6 +285,13 @@ class Training
     }
 
     /**
+     * @return string
+     */
+    public function getAddress(){
+        return $this->address;
+    }
+
+    /**
      * @return integer
      */
     public function getSportId(){
@@ -391,6 +405,15 @@ class Training
      */
     public function setUserId($userId){
         $this->user_id = $userId;
+        return $this;
+    }
+
+    /**
+     * @param string $address
+     * @return string
+     */
+    public function setAddress($address){
+        $this->address = $address;
         return $this;
     }
 

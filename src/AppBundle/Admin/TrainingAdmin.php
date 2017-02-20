@@ -31,6 +31,7 @@ class TrainingAdmin extends Admin
         $formMapper	
 					->tab('Location')
 						->with('Position')	
+	 						->add('address', 'text', array('attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
 	 						->add('latlng','oh_google_maps',array('label' => 'Training position','map_width' => 500),array())
 						->end()
 					->end()
