@@ -78,6 +78,9 @@ class TrainingsController extends FOSRestController
 			//etc...
 			$date = $request->get('date');
 
+			/* TRAINING MAXPRICE */
+			$max_price = $request->get('max_price');
+			
 			/* LIMIT/OFFSET */		
 			//The user starting position to search for trainings
 			$limit = $request->get('limit');
@@ -91,6 +94,7 @@ class TrainingsController extends FOSRestController
 			$repository->findByNotClosedTrainings()
 						->findBySports($sports)
 						->findByDate($date)
+						->findByMaxPrice($max_price)
 						->findByPublic($logged_user)
 						->findByPositionAndDistance($lat,$lng,$max_distance)
 						->orderByPosition($lat,$lng)

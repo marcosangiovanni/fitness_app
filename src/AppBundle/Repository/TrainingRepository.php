@@ -29,6 +29,14 @@ class TrainingRepository extends EntityRepository
     	}
     }
 	
+	//Only training with price = $price -> set 0 for free training
+    public function findByMaxPrice($max_price){
+    	if($max_price !== NULL && $max_price >= 0){
+	        $this->query_builder->andWhere('t.price <= :max_price')->setParameter('max_price', $max_price);
+    	}
+		return $this;
+    }
+
 	//Only training with start date > now
     public function findByNotClosedTrainings(){
     	$now = new DateTime();

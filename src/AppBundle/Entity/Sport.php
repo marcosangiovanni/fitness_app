@@ -121,6 +121,10 @@ class Sport implements Translatable
 	 **********************/
 	 
 	/* generic setter method*/
+	public function __toString(){
+        return $this->title;
+    }
+	 
 	public function __set($property, $value){
         $this->$property = $value;
         return $this;

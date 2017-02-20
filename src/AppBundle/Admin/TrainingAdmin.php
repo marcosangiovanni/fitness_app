@@ -88,7 +88,7 @@ class TrainingAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper){
         $datagridMapper	->add('title')
 						->add('user',null)
-						->add('sport',null,array('associated_property' => 'title'))
+						->add('sport', null, array('label' => 'Sports'), null, array('expanded' => false, 'multiple' => true))
 						->add('start', 'doctrine_orm_date_range', array('field_type'=>'sonata_type_date_range_picker'), null, array('format' => Utility::DATE_FORMAT_DATE))
 						->add('end', 'doctrine_orm_date_range', array('field_type'=>'sonata_type_date_range_picker'), null, array('format' => Utility::DATE_FORMAT_DATE))
 	 					->add('price')
