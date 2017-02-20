@@ -113,10 +113,15 @@ class UserAdmin extends BaseUserAdmin
         ;
 
         $formMapper
-        	->tab('Relations')
-	            ->with('Sport')
+        	->tab('Sport')
+	            ->with('Sport selected')
 					->add('sports', 'sonata_type_model', array('property' => 'title', 'label' => 'User sports', 'multiple' => true, 'by_reference' => false, 'btn_add' => false)) 
 				->end()
+	            ->with('Sport Trained')
+					->add('sports_trained', 'sonata_type_model', array('property' => 'title', 'label' => 'Trainer sports', 'multiple' => true, 'by_reference' => false, 'btn_add' => false)) 
+				->end()
+			->end()
+			->tab('Trainings')
 	            ->with('Created Trainings')
 					->add('trainings', 'sonata_type_model', array('property' => 'title', 'label' => 'Created trainings', 'multiple' => true, 'by_reference' => false, 'btn_add' => false),array( 'readonly' => true))
 				->end()
@@ -133,6 +138,8 @@ class UserAdmin extends BaseUserAdmin
 		                'readonly' 	=> true
 		            ))
 				->end()
+			->end()
+			->tab('Facebook')
 	            ->with('Facebook Friends')
 					->add('friends', 'sonata_type_collection', array(
 		                'by_reference' 			=> false,
