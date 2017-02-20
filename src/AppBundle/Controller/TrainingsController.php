@@ -158,14 +158,53 @@ class TrainingsController extends FOSRestController
 		
 	}
 
-	// "put_trainings"             
-	// [PUT] /trainings/{id}
-    public function putTrainingAction($id)
-    {}
-
 	// "delete_trainings"          
 	// [DELETE] /trainings/{id}
     public function deleteTrainingAction($id)
+    {
+    	try{
+    		
+			$training = $this->getDoctrine()->getRepository('AppBundle:Training')->find($id);
+			
+			//If training not found 404 exception
+			if(!$training){
+				throw $this->createNotFoundException('No training found for id : '.$id);
+			}else{
+				$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($training));
+				$jsonResponse->setStatusCode(200);
+			}	
+
+			//Disable training (soft delete)
+			$training->setEnabled(false);
+			
+			//Merging objects			
+			$em = $this->getDoctrine()->getManager();
+					$em->persist($training);
+				    $em->flush();
+			
+			/* SERIALIZATION */
+			$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($training));
+		
+		}
+		//404
+    	catch(NotFoundHttpException $e){
+    		$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(404);
+    	}
+		//500
+		catch(\Exception $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
+		}
+		
+		/* JSON RESPONSE */
+		return $jsonResponse;
+		
+    }
+
+	// "put_trainings"             
+	// [PUT] /trainings/{id}
+    public function putTrainingAction($id)
     {}
 
 }
