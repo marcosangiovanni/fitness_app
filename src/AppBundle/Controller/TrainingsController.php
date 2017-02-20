@@ -18,6 +18,9 @@ use AppBundle\Util\SerializerManager;
 //Exception
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+//Entities
+use AppBundle\Entity\Training;
+
 class TrainingsController extends FOSRestController
 {
 	
@@ -120,8 +123,36 @@ class TrainingsController extends FOSRestController
 
 	// "post_trainings"           
 	// [POST] /trainings
-    public function postTrainingsAction()
-    {} 
+    public function postTrainingsAction(){
+    	try{
+
+			//get all relation object from api call in request content
+			$obj_training = SerializerManager::getObjectFromJsonDataWithContext($this->getRequest()->getContent(), 'AppBundle\Entity\Training');
+			
+			//Merging objects			
+			$em = $this->getDoctrine()->getManager();
+					$em->merge($obj_training);
+				    $em->flush();
+			
+			/* SERIALIZATION */
+			$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($obj_training));
+		
+		}
+		//User and password already in use
+    	catch(NotFoundHttpException $e){
+    		$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(404);
+    	}
+		//500
+		catch(\Exception $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
+		}
+		
+		/* JSON RESPONSE */
+		return $jsonResponse;
+		
+	}
 
 	// "put_trainings"             
 	// [PUT] /trainings/{id}

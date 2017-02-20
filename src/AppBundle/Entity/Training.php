@@ -102,12 +102,15 @@ class Training
 
     /**
      * @ORM\Column(type="boolean", nullable=false, options={"default" : true})
+	 * @Groups({"detail"})
+	 * @Type("boolean")
 	 */
     private $is_public;
 
     /**
      * @ORM\Column(type="boolean", nullable=false, options={"default" : false})
 	 * @Groups({"detail"})
+	 * @Type("boolean")
 	 */
     private $is_cardio;
 
