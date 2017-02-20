@@ -193,7 +193,6 @@ class Sport implements Translatable
      * @param \AppBundle\Entity\User\User $users
      */
     public function removeUser(\AppBundle\Entity\User\User $user){
-    	$user->removeFriend($this);
         $this->users->removeElement($user);
     }
 

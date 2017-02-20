@@ -186,6 +186,17 @@ class User extends BaseUser
     private $sports;
 	
 	/**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Sport", inversedBy="users", cascade={"persist", "remove"})
+     * @ORM\JoinTable(name="ass_user_sport_trained")
+	 * @SerializedName("sports_trained")
+	 * @MaxDepth(2)
+	 * @Groups({"detail"})
+	 * @Type("ArrayCollection<AppBundle\Entity\Sport>")
+	 * @ReadOnly
+	 */
+    private $sports_trained;
+	
+	/**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\FacebookFriend", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
 	 * @SerializedName("facebook_friends")
 	 * @Groups({"detail"})
@@ -229,6 +240,7 @@ class User extends BaseUser
         parent::__construct();
 		$this->friends = new ArrayCollection();
 		$this->sports = new ArrayCollection();
+		$this->sports_trained = new ArrayCollection();
         $this->friendsWithMe = new ArrayCollection();
         $this->myFriends = new ArrayCollection();
         $this->invited = new ArrayCollection();
@@ -393,9 +405,7 @@ class User extends BaseUser
      * @param \AppBundle\Entity\Sport $sports
      * @return User
      */
-     
     public function addSport(\AppBundle\Entity\Sport $sport){
-    	//$sport->getUsers()->add($this);
 		$this->sports[] = $sport;
         return $this;
     }
@@ -425,7 +435,48 @@ class User extends BaseUser
      */
     public function setSports($sports){
     	$this->sports[] = $sports;
-        return $this->sports;
+        return $this;
+    }
+
+
+
+    /**
+     * Add sports_trained
+     *
+     * @param \AppBundle\Entity\SportTrained $sports_trained
+     * @return User
+     */
+    public function addSportTrained(\AppBundle\Entity\Sport $sports_trained){
+		$this->sports_trained[] = $sports_trained;
+        return $this;
+    }
+
+    /**
+     * Remove sports
+     *
+     * @param \AppBundle\Entity\Sport $sports
+     */
+    public function removeSportTrained(\AppBundle\Entity\Sport $sports_trained){
+        $this->sports_trained->removeElement($sports_trained);
+    }
+
+    /**
+     * Get sports
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSportsTrained(){
+        return $this->sports_trained;
+    }
+
+    /**
+     * Get user
+     *
+     * @return  \AppBundle\Entity\user\User $user
+     */
+    public function setSportsTrained($sports_trained){
+    	$this->sports_trained = $sports_trained;
+        return $this;
     }
 
 
