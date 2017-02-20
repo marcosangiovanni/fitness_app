@@ -294,4 +294,51 @@ class UsersController extends FOSRestController
 	}	
 	
 
+	/**********************
+	* FEEDBACK MANAGEMENT *
+	**********************/
+	
+	public function putUserTrainingFeedbackAction($user_id,$training_id){
+		
+		try{
+			//Get the user to update
+			$user = $this->getDoctrine()->getRepository('AppBundle:User\User')->find($user_id);
+			$training = $this->getDoctrine()->getRepository('AppBundle:Training')->find($training_id);
+			
+			if(!$user){
+				throw $this->createNotFoundException('No user found for id : '.$user_id);
+			}else{
+				//get all relation object from api call in request content
+				$subscribed = SerializerManager::getObjectFromJsonDataWithContext($this->getRequest()->getContent(), 'AppBundle\Entity\Subscribed');
+
+				$subscription = $this->getDoctrine()->getRepository('AppBundle:Subscribed')->findOneBy(array('user_id' => $user_id, 'training_id' => $training_id));
+				$subscription->setFeedback($subscribed->getFeedback());
+
+				$em = $this->getDoctrine()->getManager();
+				$em->persist($subscription);
+			    $em->flush();
+		
+				/* SERIALIZATION */
+				$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($subscription));
+
+			}
+		
+		}
+		//User and password already in use
+    	catch(NotFoundHttpException $e){
+    		$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(404);
+    	}
+		//500
+		catch(\Exception $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
+		}
+		
+		/* JSON RESPONSE */
+		return $jsonResponse;
+		
+	}	
+	
+
 }
