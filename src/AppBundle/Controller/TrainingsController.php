@@ -97,6 +97,7 @@ class TrainingsController extends FOSRestController
 			$repository->findByNotClosedTrainings()
 						->findBySports($sports)
 						->findByDate($date)
+						->findByEnabled(true)
 						->findByMaxPrice($max_price)
 						->findByPublic($logged_user)
 						->findByPositionAndDistance($lat,$lng,$max_distance)
@@ -128,6 +129,9 @@ class TrainingsController extends FOSRestController
 
 			//get all relation object from api call in request content
 			$obj_training = SerializerManager::getObjectFromJsonDataWithContext($this->getRequest()->getContent(), 'AppBundle\Entity\Training');
+			
+			//New Trainings are enabled by default
+			$obj_training->setEnabled(true);
 			
 			//Merging objects			
 			$em = $this->getDoctrine()->getManager();

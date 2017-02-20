@@ -44,6 +44,12 @@ class TrainingRepository extends EntityRepository
 		return $this;
     }
 
+	//Only training with start date > now
+    public function findByEnabled($is_enabled){
+        $this->query_builder->andWhere('t.enabled = :is_enabled')->setParameter('is_enabled', $is_enabled);
+		return $this;
+    }
+
 	//Only sports associated with user
     public function findBySports($sport_ids){
     	if($sport_ids){

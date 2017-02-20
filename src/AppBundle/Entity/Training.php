@@ -14,6 +14,7 @@ use JMS\Serializer\Annotation\Accessor;
 use JMS\Serializer\Annotation\MaxDepth;
 use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Type;
+use JMS\Serializer\Annotation\ReadOnly;
 
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -113,6 +114,14 @@ class Training
 	 * @Type("boolean")
 	 */
     private $is_cardio;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false, options={"default" : true})
+	 * @Groups({"detail"})
+	 * @Type("boolean")
+	 * @ReadOnly
+	 */
+    protected $enabled;
 
     /**
      * @ORM\Column(type="float", nullable=false, options={"default" : 0})
@@ -229,6 +238,13 @@ class Training
      */
     public function getIsCardio(){
         return $this->is_cardio;
+    }
+
+    /**
+     * @return boolean 
+     */
+    public function getEnabled(){
+        return $this->enabled;
     }
 
     /**
@@ -358,6 +374,15 @@ class Training
      */
     public function setIsCardio($isCardio){
         $this->is_cardio = $isCardio;
+        return $this;
+    }
+
+    /**
+     * @param boolean $isPublic
+     * @return Training
+     */
+    public function setEnabled($enabled){
+        $this->enabled = $enabled;
         return $this;
     }
 

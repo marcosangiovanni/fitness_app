@@ -43,6 +43,7 @@ class TrainingAdmin extends Admin
 							->add('sport', null, array('property' => 'title', 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
 		 					->add('price', 'number', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL)))
 		 					->add('is_public')
+		 					->add('enabled')
 						->end()
 					->end()
         			->tab('Difficulty')
@@ -88,6 +89,13 @@ class TrainingAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper){
         $datagridMapper	->add('title')
 						->add('user',null)
+						->add('enabled', null, 	array('label' => 'Enabled'),'sonata_type_translatable_choice', array(
+											                													'translation_domain' => "SonataAdminBundle",
+																								                'choices' => array(
+																								                    1 => 'label_type_yes',
+																								                    2 => 'label_type_no'
+																								                ))
+			            )
 						->add('sport', null, array('label' => 'Sports'), null, array('expanded' => false, 'multiple' => true))
 						->add('start', 'doctrine_orm_date_range', array('field_type'=>'sonata_type_date_range_picker'), null, array('format' => Utility::DATE_FORMAT_DATE))
 						->add('end', 'doctrine_orm_date_range', array('field_type'=>'sonata_type_date_range_picker'), null, array('format' => Utility::DATE_FORMAT_DATE))
@@ -98,6 +106,7 @@ class TrainingAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper){
         $listMapper	->addIdentifier('id')
 					->addIdentifier('title')
+					->add('enabled', null, array('editable' => true))
 					->addIdentifier('user',null,array('associated_property' => 'fullname'))
 					->addIdentifier('sport',null,array('associated_property' => 'title'))
 					->addIdentifier('start')
