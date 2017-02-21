@@ -23,6 +23,7 @@ class SubscribedListener
 		$query_builder	->select('t.user_id,count(t.id) as vote_number,AVG(s.feedback) as vote_average')
 						->innerJoin('t.subscribed', 's')
 						->andWhere('t.user_id = :user_id')
+						->andWhere('s.feedback IS NOT NULL')
 						->groupBy('t.user_id')
 						->setParameter('user_id', $creator->getId())
 		;
