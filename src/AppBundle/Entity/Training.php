@@ -15,6 +15,7 @@ use JMS\Serializer\Annotation\MaxDepth;
 use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Type;
 use JMS\Serializer\Annotation\ReadOnly;
+use JMS\Serializer\Annotation\VirtualProperty;
 
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -75,8 +76,6 @@ class Training
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-	 * @Groups({"detail"})
-	 * @Type("string")
 	 */
     private $picture;
 
@@ -200,7 +199,31 @@ class Training
         $this->subscribed = new \Doctrine\Common\Collections\ArrayCollection();
     }
 	
+	/*******************
+	 * VICH METHODS    *
+	 ******************/
+	 
+	private $vichService;
+
+	public function setVichService($vichService) {
+		$this->vichService = $vichService;
+		return $this;
+	}
 	
+	public function getVichService() {
+		return $this->vichService;
+	}
+	
+    /**
+	 * @Groups({"detail"})
+	 * @Type("string")
+	 * @VirtualProperty
+     * @SerializedName("picture")
+     */
+    public function getImageUrl(){
+    	return $this->getVichService()->asset($this, 'imageFile');
+    }
+	 
 	/**********************
 	 * GET METHODS        *
 	 **********************/
