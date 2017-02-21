@@ -63,12 +63,6 @@ services:
         arguments: [~, AppBundle\Entity\FacebookFriend, ~]
         tags:
             - { group: Facebook, name: sonata.admin, manager_type: orm, label: FacebookFriend }
-
-
-    after_training_save:
-        class: AppBundle\EventListener\TrainingManager
-        tags:
-            - { name: doctrine.event_listener, event: postPersist }
                         
 #Api entrypoint                        
     api_authentication_entry_point:

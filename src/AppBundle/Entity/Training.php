@@ -24,7 +24,7 @@ use Oh\GoogleMapFormTypeBundle\Validator\Constraints as OhAssert;
 /**
  * @ORM\Table(name="training")
  * @ORM\Table(indexes={@ORM\Index(name="idx_training_position", columns={"position"})})
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TrainingRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TrainingRepository") @ORM\EntityListeners({"AppBundle\EventListener\TrainingListener"})
  * @Vich\Uploadable
  */
 class Training

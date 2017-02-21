@@ -4,21 +4,12 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 
 use AppBundle\Entity\Training;
 
-class TrainingManager
+class TrainingListener
 {
-	//After any training insert i check the user to define his main sport as a trainer
-    public function postPersist(LifecycleEventArgs $args)
-    {
+    //After training creation
+	public function postPersist(Training $training, LifecycleEventArgs $args){
     	
-        $entity = $args->getEntity();
 		$em = $args->getEntityManager();
-
-        // only act on some "Training" entity
-        if (!$entity instanceof Training) {
-            return;
-        }
-		
-		$training = $entity;
 		$user = $training->getUser();
 
 		//Get distinct of sport with count
