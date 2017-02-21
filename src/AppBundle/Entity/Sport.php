@@ -250,10 +250,8 @@ class Sport implements Translatable
      *
      * @return Sport
      */
-    public function addTraining(\AppBundle\Entity\Training $training)
-    {
+    public function addTraining(\AppBundle\Entity\Training $training){
         $this->trainings[] = $training;
-
         return $this;
     }
 
@@ -262,8 +260,7 @@ class Sport implements Translatable
      *
      * @param \AppBundle\Entity\Training $training
      */
-    public function removeTraining(\AppBundle\Entity\Training $training)
-    {
+    public function removeTraining(\AppBundle\Entity\Training $training){
         $this->trainings->removeElement($training);
     }
 
@@ -272,8 +269,7 @@ class Sport implements Translatable
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getTrainings()
-    {
+    public function getTrainings(){
         return $this->trainings;
     }
 
