@@ -12,7 +12,7 @@ use JMS\Serializer\Annotation\Type;
 
 /**
  * @ORM\Table(name="ass_user_training_subscribed",uniqueConstraints={@ORM\UniqueConstraint(name="subscribed_training_id_user_id_IDX", columns={"user_id", "training_id"})})
- * @ORM\Entity
+ * @ORM\Entity @ORM\EntityListeners({"AppBundle\EventListener\SubscribedListener"})
  */
  
 class Subscribed

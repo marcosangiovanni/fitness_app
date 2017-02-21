@@ -158,6 +158,24 @@ class User extends BaseUser
 	 */
     protected $last_facebook_refresh;
 
+	/*********************************************************
+	 * FEEDBACK FIELDS (calculated from subscribed entities) *
+	 *********************************************************/
+	 
+    /**
+	 * @ORM\Column(type="string", nullable=true)
+	 * @Groups({"detail"})
+	 * @Type("string")
+	 */
+	protected $feedback_avg;
+
+    /**
+	 * @ORM\Column(type="integer", nullable=true)
+	 * @Groups({"detail"})
+	 * @Type("integer")
+	 */
+    protected $feedback_num;
+
     
 	/**********************************
 	 * FIELDS TO DEFINE RELATIONSHIPS *
@@ -306,6 +324,16 @@ class User extends BaseUser
         return $this;
     }
     
+    public function setFeedbackAvg($feedback_avg){
+        $this->feedback_avg = $feedback_avg;
+        return $this;
+    }
+    
+    public function setFeedbackNum($feedback_num){
+        $this->feedback_num = $feedback_num;
+        return $this;
+    }
+    
 	/**********************
 	 * GET METHODS        *
 	 **********************/
@@ -346,6 +374,14 @@ class User extends BaseUser
         return $this->fiscal_code;
     }
 	
+    public function getFeedbackAvg(){
+        return $this->feedback_avg;
+    }
+    
+    public function getFeedbackNum(){
+        return $this->feedback_num;
+    }
+    
 	
 	/*************************
 	 * FB FRIENDS MANAGEMENT *
