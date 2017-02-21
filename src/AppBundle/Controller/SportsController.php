@@ -49,7 +49,7 @@ class SportsController extends FOSRestController
     public function getSportsAction(){
     	try{
 			//Get sport list
-			$sports = $this->getDoctrine()->getRepository('AppBundle:Sport')->findAll();
+			$sports = $this->getDoctrine()->getRepository('AppBundle:Sport')->findBy(array(), array('position' => 'ASC'));
 			$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($sports));
 			$jsonResponse->setStatusCode(200);
 		}
