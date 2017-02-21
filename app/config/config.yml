@@ -17,22 +17,22 @@ vich_uploader:
     db_driver: orm
     mappings:
         training_image:
-            uri_prefix:         /images/training_image
+            uri_prefix:         http://%main_host_name%/images/training_image
             upload_destination: '%kernel.root_dir%/../web/images/training_image'
             namer:              vich_uploader.namer_uniqid
             directory_namer:    
                 service: vich_uploader.directory_namer_subdir
-                options: {chars_per_dir: 4, dirs: 2} # will create directory "a/b" for "abcdef.jpg"
+                options: {chars_per_dir: 4, dirs: 2} 
             inject_on_load:     true
             delete_on_update:   true
             delete_on_remove:   true
         user_image:
-            uri_prefix:         /images/user_image
+            uri_prefix:         http://%main_host_name%/images/user_image
             upload_destination: '%kernel.root_dir%/../web/images/user_image'
             namer:              vich_uploader.namer_uniqid
             directory_namer:    
                 service: vich_uploader.directory_namer_subdir
-                options: {chars_per_dir: 4, dirs: 2} # will create directory "a/b" for "abcdef.jpg"
+                options: {chars_per_dir: 4, dirs: 2}
             inject_on_load:     true
             delete_on_update:   true
             delete_on_remove:   true

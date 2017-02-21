@@ -63,7 +63,14 @@ services:
         arguments: [~, AppBundle\Entity\FacebookFriend, ~]
         tags:
             - { group: Facebook, name: sonata.admin, manager_type: orm, label: FacebookFriend }
-                        
+
+    vich.listener:
+        class: AppBundle\EventListener\ServiceListener
+        arguments:
+           - '@vich_uploader.templating.helper.uploader_helper'
+        tags:
+           - { name: doctrine.event_listener, event: postLoad }
+                                   
 #Api entrypoint                        
     api_authentication_entry_point:
          class: AppBundle\Entity\Auth\ApiAuthenticationEntryPoint

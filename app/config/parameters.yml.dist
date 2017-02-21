@@ -28,4 +28,5 @@ parameters:
     twig.form.resources: ['SonataCoreBundle:Form:datepicker.html.twig','form/google_maps.html.twig']
     
     api_host_route: fitnessapp.com
+    main_host_name: fitnessapp.com
     

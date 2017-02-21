@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\Type;
 use JMS\Serializer\Annotation\MaxDepth;
+use JMS\Serializer\Annotation\VirtualProperty;
+use JMS\Serializer\Annotation\SerializedName;
 
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -66,15 +68,11 @@ class Sport implements Translatable
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-	 * @Groups({"detail"})
-	 * @Type("string")
      */
     private $picture;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-	 * @Groups({"detail"})
-	 * @Type("string")
      */
     private $placeholder;
 
@@ -166,7 +164,42 @@ class Sport implements Translatable
         $this->position = $position;
         return $this;
     }
+
+	/*******************
+	 * VICH METHODS    *
+	 ******************/
+	 
+	private $vichService;
+
+	public function setVichService($vichService) {
+		$this->vichService = $vichService;
+		return $this;
+	}
 	
+	public function getVichService() {
+		return $this->vichService;
+	}
+	
+    /**
+	 * @Groups({"detail"})
+	 * @Type("string")
+	 * @VirtualProperty
+     * @SerializedName("picture")
+     */
+    public function getImageUrl(){
+    	return $this->getVichService()->asset($this, 'imageFile');
+    }
+	 
+    /**
+	 * @Groups({"detail"})
+	 * @Type("string")
+	 * @VirtualProperty
+     * @SerializedName("placeholder")
+     */
+    public function getPlaceholderUrl(){
+    	return $this->getVichService()->asset($this, 'placeholderFile');
+    }
+	 
 	/**********************
 	 * TRANS. METHODS     *
 	 **********************/
