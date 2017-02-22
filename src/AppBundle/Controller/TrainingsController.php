@@ -204,7 +204,41 @@ class TrainingsController extends FOSRestController
 
 	// "put_trainings"             
 	// [PUT] /trainings/{id}
-    public function putTrainingAction($id)
-    {}
+    public function putTrainingsAction($id){
+    	try{
+    		
+			//Get the training to update
+			$training = $this->getDoctrine()->getRepository('AppBundle:Training')->find($id);
+			
+			if(!$training){
+				throw $this->createNotFoundException('No training found for id : '.$id);
+			}else{
+				//Get user entity and deserialize in user object
+				$training_entity = SerializerManager::getDoctrineObjectFromJsonDataWithContext($this->getRequest()->getContent(), 'AppBundle\Entity\Training', $this->container);
+				
+				//Merging received data in entity
+				$em = $this->getDoctrine()->getManager();
+				$em->persist($training_entity);
+			    $em->flush();
+		
+				/* SERIALIZATION */
+				$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($training_entity));
+			}
+		}
+		//User and password already in use
+    	catch(NotFoundHttpException $e){
+    		$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(404);
+    	}
+		//500
+		catch(\Exception $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
+		}
+		
+		/* JSON RESPONSE */
+		return $jsonResponse;
+		
+	}
 
 }

@@ -24,6 +24,11 @@ class TrainingListener
 		$this->checkYoutubeVideoInfos($training,$args);
     }
 
+    //Before training update i check youtube video infos
+	public function preUpdate(Training $training, LifecycleEventArgs $args){
+		$this->checkYoutubeVideoInfos($training,$args);
+    }
+
     //After training creation i save trainer main sport association
 	protected function checkYoutubeVideoInfos(Training $training, LifecycleEventArgs $args){
 		try{
