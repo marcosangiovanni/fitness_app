@@ -6,9 +6,53 @@ use AppBundle\Entity\Training;
 
 class TrainingListener
 {
-    //After training creation
+
+	private $youtubeservice;
+
+	//Read argument passed in construct in file  
+	public function __construct($youtubeservice) {
+		$this->youtubeservice = $youtubeservice;
+	}
+
+    //After training creation i save trainer main sport association
 	public function postPersist(Training $training, LifecycleEventArgs $args){
-    	
+		$this->saveTrainerMainSports($training,$args);
+    }
+
+    //Before training creation i check youtube video infos
+	public function prePersist(Training $training, LifecycleEventArgs $args){
+		$this->checkYoutubeVideoInfos($training,$args);
+    }
+
+    //After training creation i save trainer main sport association
+	protected function checkYoutubeVideoInfos(Training $training, LifecycleEventArgs $args){
+		try{
+			$em = $args->getEntityManager();
+	
+			//Find ID of youtube video		
+			preg_match("#([\/|\?|&]vi?[\/|=]|youtu\.be\/|embed\/)(\w+)#", $training->getVideo(), $matches);
+			$video_id = end($matches);
+			
+			$infos = $this->youtubeservice->getStatus($video_id);
+			
+			if(!$infos || $infos['privacyStatus'] === 'private'){
+				throw new \Exception('The video is private and cannot be used',409);
+			}
+		}
+		//Google comunication problem
+		catch(\Google_Service_Exception $e){
+			$errorObj = json_decode($e->getMessage());
+			throw new \Exception('Youtube call : '.$errorObj->error->message, $errorObj->error->code);
+		}
+		//General error
+		catch(\Exception $e){
+			throw new \Exception($e->getMessage(), $e->getCode());
+		}
+		
+	}
+	
+    //After training creation i save trainer main sport association
+	protected function saveTrainerMainSports(Training $training, LifecycleEventArgs $args){
 		$em = $args->getEntityManager();
 		$user = $training->getUser();
 
@@ -30,12 +74,13 @@ class TrainingListener
 		//Remove all trained sports from association
 		$user->getSportsTrained()->clear();
 		
+		//Get all sports entities
 		foreach ($query_builder->getQuery()->getResult() as $sport_count) {
 			$sport_ids[] = $sport_count['id'];
 		}
-		
 		$sports = $em->getRepository('AppBundle:Sport')->findById($sport_ids);
 		
+		//Add all sport to trainer association
 		foreach ($sports as $sport) {
 			$user->addSportTrained($sport);
 		}
@@ -43,6 +88,6 @@ class TrainingListener
 		$em->persist($user);
 		$em->flush();
 		
-    }
+	}
 
 }
