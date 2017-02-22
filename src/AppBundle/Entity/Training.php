@@ -25,7 +25,7 @@ use Oh\GoogleMapFormTypeBundle\Validator\Constraints as OhAssert;
 /**
  * @ORM\Table(name="training")
  * @ORM\Table(indexes={@ORM\Index(name="idx_training_position", columns={"position"})})
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TrainingRepository") @ORM\EntityListeners({"AppBundle\EventListener\TrainingListener"})
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TrainingRepository")
  * @Vich\Uploadable
  */
 class Training
@@ -221,7 +221,9 @@ class Training
      * @SerializedName("picture")
      */
     public function getImageUrl(){
-    	return $this->getVichService()->asset($this, 'imageFile');
+    	if($this->getVichService()){
+	    	return $this->getVichService()->asset($this, 'imageFile');
+    	}
     }
 	 
 	/**********************

@@ -187,7 +187,9 @@ class Sport implements Translatable
      * @SerializedName("picture")
      */
     public function getImageUrl(){
-    	return $this->getVichService()->asset($this, 'imageFile');
+    	if($this->getVichService()){
+	    	return $this->getVichService()->asset($this, 'imageFile');
+    	}
     }
 	 
     /**
@@ -197,7 +199,9 @@ class Sport implements Translatable
      * @SerializedName("placeholder")
      */
     public function getPlaceholderUrl(){
-    	return $this->getVichService()->asset($this, 'placeholderFile');
+    	if($this->getVichService()){
+    		return $this->getVichService()->asset($this, 'placeholderFile');
+    	}
     }
 	 
 	/**********************

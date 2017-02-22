@@ -287,7 +287,9 @@ class User extends BaseUser
      * @SerializedName("picture")
      */
     public function getImageUrl(){
-    	return $this->getVichService()->asset($this, 'imageFile');
+    	if($this->getVichService()){
+	    	return $this->getVichService()->asset($this, 'imageFile');
+    	}
     }
 
     /**

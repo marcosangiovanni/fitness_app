@@ -70,7 +70,15 @@ services:
            - '@vich_uploader.templating.helper.uploader_helper'
         tags:
            - { name: doctrine.event_listener, event: postLoad }
-                                   
+
+    training_listener.post:
+        class: AppBundle\EventListener\TrainingListener
+        arguments:
+           - '@happyr.google.api.youtube'
+        tags:
+           - { name: doctrine.orm.entity_listener, entity: AppBundle\Entity\Training, event: postPersist }
+           - { name: doctrine.orm.entity_listener, entity: AppBundle\Entity\Training, event: prePersist }
+                                           
 #Api entrypoint                        
     api_authentication_entry_point:
          class: AppBundle\Entity\Auth\ApiAuthenticationEntryPoint

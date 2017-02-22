@@ -225,6 +225,7 @@ sonata_user:
     admin:                  # Admin Classes
         user:
             class:          AppBundle\Admin\UserAdmin
+
 # Assetic Configuration
 assetic:
     debug:          '%kernel.debug%'
@@ -233,4 +234,12 @@ assetic:
         cssrewrite: ~
     bundles:        [ 'OhGoogleMapFormTypeBundle' ]
 
-    
+# google api config
+happy_r_google_api:
+  application_name: fitnessapp-1484664591878
+  oauth2_client_id: insert_client_id_here_if_needed
+  oauth2_client_secret: insert_client_secret_here_if_needed
+  oauth2_redirect_uri: insert_redirect_uri_here_if_needed
+  developer_key: AIzaSyCkkv5TSfWpElxl75d3OFoIuMMsc7OJudk
+  site_name: %main_host_name%
+  
