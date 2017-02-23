@@ -85,7 +85,7 @@ class UserAdmin extends BaseUserAdmin
 		                    'translation_domain' => $this->getTranslationDomain(),
 		                    'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)
 		                ))
-						->add('dateOfBirth','sonata_type_date_picker', array('attr' => array('style' => Utility::FIELD_STYLE_SMALL),'format' => Utility::DATE_FORMAT_DATE))
+						->add('dateOfBirth','sonata_type_date_picker', array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_SMALL),'format' => Utility::DATE_FORMAT_DATE))
 		                ->add('phone', null, array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
 		            ->end()
 	            ->end()
@@ -115,15 +115,15 @@ class UserAdmin extends BaseUserAdmin
         $formMapper
         	->tab('Sport')
 	            ->with('Sport selected')
-					->add('sports', 'sonata_type_model', array('property' => 'title', 'label' => 'User sports', 'multiple' => true, 'by_reference' => false, 'btn_add' => false)) 
+					->add('sports', 'sonata_type_model', array('required' => false, 'property' => 'title', 'label' => 'User sports', 'multiple' => true, 'by_reference' => false, 'btn_add' => false)) 
 				->end()
 	            ->with('Sport Trained')
-					->add('sports_trained', 'sonata_type_model', array('property' => 'title', 'label' => 'Trainer sports', 'multiple' => true, 'by_reference' => false, 'btn_add' => false)) 
+					->add('sports_trained', 'sonata_type_model', array('required' => false, 'property' => 'title', 'label' => 'Trainer sports', 'multiple' => true, 'by_reference' => false, 'btn_add' => false)) 
 				->end()
 			->end()
 			->tab('Trainings')
 	            ->with('Created Trainings')
-					->add('trainings', 'sonata_type_model', array('property' => 'title', 'label' => 'Created trainings', 'multiple' => true, 'by_reference' => false, 'btn_add' => false),array( 'readonly' => true))
+					->add('trainings', 'sonata_type_model', array('required' => false, 'property' => 'title', 'label' => 'Created trainings', 'multiple' => true, 'by_reference' => false, 'btn_add' => false),array( 'readonly' => true))
 				->end()
 	            ->with('Subscribed Trainings')
 					->add('subscribed', 'sonata_type_collection', array(
@@ -132,6 +132,7 @@ class UserAdmin extends BaseUserAdmin
 		                'type_options' 			=> array('delete' => true),
 		                'cascade_validation' 	=> true,
 		                'btn_add' 				=> 'Add new User',
+		                'required' 				=> false, 
 		            ), array(
 		                'edit' 		=> 'inline',
 		                'inline' 	=> 'table',
