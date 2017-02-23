@@ -123,6 +123,65 @@ class TrainingsController extends FOSRestController
 	
     }
 
+	// [GET] /trainings
+	// Set search parameters
+    public function getTrainingsdateAction(){
+
+		try{
+			//Find USER By Token
+	    	$logged_user = $this->get('security.context')->getToken()->getUser();
+
+			//Find request parameters
+			$request = $this->getRequest();
+
+			/* POSITION */		
+			//The user starting position to search for trainings
+			$lat = $request->get('lat');
+			$lng = $request->get('lng');
+
+			//The max distance in meters of training
+			$max_distance = $request->get('distance');
+	
+			/* SPORT TYPE */
+			//The sports I intend to search within
+			$sports = $request->get('sports');
+	
+			/* TRAINING MAXPRICE */
+			$max_price = $request->get('max_price');
+			
+			/* QUERY CONSTRUCTOR */
+			//Instantiate the repositiory		
+			$repository = $this->getDoctrine()->getRepository('AppBundle:Training');
+			
+			/* ADDING PARAMETER */
+			$repository	->findByNotClosedTrainings()
+						->findBySports($sports)
+						->findByEnabled(true)
+						->findByMaxPrice($max_price)
+						->findByPublic($logged_user)
+						->findByPositionAndDistance($lat,$lng,$max_distance)
+			;
+			
+			$trainings = $repository->getQueryBuilder()
+										->select('DISTINCT(date_format(t.start,\'%Y-%m-%d\')) as training_date')
+										->getQuery()
+										->getResult();
+			
+			
+			$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($trainings));
+			$jsonResponse->setStatusCode(200);
+		
+		}
+		//500
+		catch(\Exception $e){
+			$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($e)));
+			$jsonResponse->setStatusCode(500);
+		}
+		
+		return $jsonResponse;
+	
+    }
+
 	// "post_trainings"           
 	// [POST] /trainings
     public function postTrainingsAction(){

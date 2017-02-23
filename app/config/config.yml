@@ -128,9 +128,11 @@ doctrine:
             default:
                 dql:
                   numeric_functions:
-                    st_distance:     CrEOF\Spatial\ORM\Query\AST\Functions\MySql\STDistance
-                    st_distance_sphere:     AppBundle\ORM\Query\AST\Functions\MySql\STDistanceSphere
-                    point:     CrEOF\Spatial\ORM\Query\AST\Functions\MySql\Point
+                    st_distance:          CrEOF\Spatial\ORM\Query\AST\Functions\MySql\STDistance
+                    st_distance_sphere:   AppBundle\ORM\Query\AST\Functions\MySql\STDistanceSphere
+                    point:                CrEOF\Spatial\ORM\Query\AST\Functions\MySql\Point
+                  datetime_functions:
+                    date_format:          DoctrineExtensions\Query\Mysql\DateFormat
                     
                 naming_strategy: doctrine.orm.naming_strategy.underscore
                 auto_mapping: true

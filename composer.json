@@ -44,7 +44,8 @@
         "oh/google-map-form-type-bundle": "^1.0",
         "symfony/assetic-bundle": "^2.8",
         "happyr/google-api-bundle": "^2.2",
-        "wemakecustom/stripe-bundle": "dev-master"
+        "wemakecustom/stripe-bundle": "dev-master",
+        "beberlei/DoctrineExtensions": "^1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
