@@ -26,7 +26,9 @@ class TrainingListener
 
     //Before training update i check youtube video infos
 	public function preUpdate(Training $training, LifecycleEventArgs $args){
-		$this->checkYoutubeVideoInfos($training,$args);
+		if($args->hasChangedField('video')){
+			$this->checkYoutubeVideoInfos($training,$args);
+		}
     }
 
     //After training creation i save trainer main sport association
@@ -41,7 +43,7 @@ class TrainingListener
 			$listResponse = $this->youtubeservice->videos->listVideos('status', array('id' => $video_id));
 			
 			if(count($listResponse->getItems()) === 0){
-				throw new \RuntimeException(sprintf('Could not find video with id %s', $video_id),404);
+				throw new \RuntimeException('Could not find video',404);
 			}
 			
 			if(!$infos || $infos['privacyStatus'] === 'private'){
