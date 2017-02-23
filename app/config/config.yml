@@ -242,4 +242,10 @@ happy_r_google_api:
   oauth2_redirect_uri: insert_redirect_uri_here_if_needed
   developer_key: AIzaSyCkkv5TSfWpElxl75d3OFoIuMMsc7OJudk
   site_name: %main_host_name%
-  
+
+#Stripe config
+wmc_stripe:
+    api_secret_key: %stripe_api_secret_key%
+    api_publishable_key: %stripe_api_publishable_key%
+
+

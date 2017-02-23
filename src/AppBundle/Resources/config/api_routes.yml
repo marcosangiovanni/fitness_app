@@ -33,3 +33,8 @@ subscribed:
     parent:   users
     resource: AppBundle\Controller\SubscribedController
 
+pay:
+    type:     rest
+    parent:   users
+    resource: AppBundle\Controller\PayController
+

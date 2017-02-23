@@ -157,6 +157,15 @@ class User extends BaseUser
 	 */
     protected $last_facebook_refresh;
 
+	/**********************************
+	 * FIELDS TO STORE TOKEN PAYMENTS *
+	 **********************************/
+	 
+    /**
+	 * @ORM\Column(type="string", length=30, nullable=true)
+	 */
+	 protected $stripe_token;
+	 
 	/*********************************************************
 	 * FEEDBACK FIELDS (calculated from subscribed entities) *
 	 *********************************************************/
@@ -265,6 +274,19 @@ class User extends BaseUser
         $this->trainings = new ArrayCollection();
     }
 
+	/*******************
+	 * STRIPE METHODS  *
+	 ******************/
+	 
+	public function setStripeToken($stripe_token) {
+		$this->stripe_token = $stripe_token;
+		return $this;
+	}
+	
+	public function getStripeToken() {
+		return $this->stripe_token;
+	}
+	
 	/*******************
 	 * VICH METHODS    *
 	 ******************/
