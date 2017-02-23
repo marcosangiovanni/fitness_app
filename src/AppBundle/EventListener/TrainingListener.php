@@ -45,6 +45,8 @@ class TrainingListener
 			if(count($listResponse->getItems()) === 0){
 				throw new \RuntimeException('Could not find video',404);
 			}
+
+			$infos = $listResponse['modelData']['items'][0]['status'];
 			
 			if(!$infos || $infos['privacyStatus'] === 'private'){
 				throw new \Exception('The video is private and cannot be used',409);
