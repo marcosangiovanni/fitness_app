@@ -75,6 +75,9 @@ class AppKernel extends Kernel
 			
 			//Google api bundle
 			new HappyR\Google\ApiBundle\HappyRGoogleApiBundle(),
+			
+			//Stripe integration
+			new WMC\StripeBundle\WMCStripeBundle(),
 		    
         );
 

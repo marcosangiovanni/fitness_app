@@ -49,7 +49,7 @@ class SubscribedController extends FOSRestController
 
 
 	//This metod represent user subscription to a specific training (training is passed in body via his ID)
-	public function putSubscribedAction($user_id){
+	public function putTrainingSubscribedAction($user_id,$training_id){
 		
 		try{
 			//Get the user to update
@@ -59,14 +59,10 @@ class SubscribedController extends FOSRestController
 				throw $this->createNotFoundException('No user found for id : '.$user_id);
 			}else{
 
-				//get all relation object from api call in request content
-				$put_training = SerializerManager::getObjectFromJsonDataWithContext($this->getRequest()->getContent(), 'AppBundle\Entity\Training');
-
-				//TODO : UP -> correct serializer to update without quering collection Sport 
-				$training = $this->getDoctrine()->getRepository('AppBundle:Training')->find($put_training->getId());
+				$training = $this->getDoctrine()->getRepository('AppBundle:Training')->find($training_id);
 				
 				if(!$training){
-					throw $this->createNotFoundException('No training found for id : '.$put_training->getId());
+					throw $this->createNotFoundException('No training found for id : '.$training_id);
 				}else{
 					//Create new subscription
 					$subscription = new Subscribed();

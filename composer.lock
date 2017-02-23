@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7bf40f4ecc7d471ad6cb4be4c9142b28",
+    "content-hash": "49e99cea4b15d5cfe99a9212c55e6ad2",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -4482,6 +4482,61 @@
             "time": "2016-01-26T23:58:32+00:00"
         },
         {
+            "name": "stripe/stripe-php",
+            "version": "v2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stripe/stripe-php.git",
+                "reference": "9d76444550a09a6f9c55dd98113ba0901908e60a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/9d76444550a09a6f9c55dd98113ba0901908e60a",
+                "reference": "9d76444550a09a6f9c55dd98113ba0901908e60a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0",
+                "satooshi/php-coveralls": "~0.6.1",
+                "squizlabs/php_codesniffer": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Stripe\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stripe and contributors",
+                    "homepage": "https://github.com/stripe/stripe-php/contributors"
+                }
+            ],
+            "description": "Stripe PHP Library",
+            "homepage": "https://stripe.com/",
+            "keywords": [
+                "api",
+                "payment processing",
+                "stripe"
+            ],
+            "time": "2015-07-07T01:13:32+00:00"
+        },
+        {
             "name": "swiftmailer/swiftmailer",
             "version": "v5.4.5",
             "source": {
@@ -5570,6 +5625,56 @@
             "time": "2016-12-28T10:59:05+00:00"
         },
         {
+            "name": "wemakecustom/stripe-bundle",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wemakecustom/StripeBundle.git",
+                "reference": "64952cf11c3465c6983b604c55fb9e9bed5f6ace"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wemakecustom/StripeBundle/zipball/64952cf11c3465c6983b604c55fb9e9bed5f6ace",
+                "reference": "64952cf11c3465c6983b604c55fb9e9bed5f6ace",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4",
+                "stripe/stripe-php": "^2.0",
+                "symfony/framework-bundle": "^2.3"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "WMC\\StripeBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Léo Benoist",
+                    "email": "leo@wemakecustom.com",
+                    "homepage": "http://www.wemakecustom.com"
+                },
+                {
+                    "name": "Mathieu Lemoine",
+                    "email": "mathieu@wemakecustom.com",
+                    "homepage": "http://www.wemakecustom.com"
+                }
+            ],
+            "description": "Symfony 2 StripeBundle, a wrapper for Stripe Api",
+            "homepage": "http://www.wemakecustom.com",
+            "keywords": [
+                "Symfony2",
+                "bundle",
+                "stripe"
+            ],
+            "time": "2016-11-11 23:35:36"
+        },
+        {
             "name": "willdurand/jsonp-callback-validator",
             "version": "v1.1.0",
             "source": {
@@ -5829,7 +5934,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "creof/doctrine2-spatial": 20,
-        "ddproxy/doctrine2-spatial": 20
+        "ddproxy/doctrine2-spatial": 20,
+        "wemakecustom/stripe-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

@@ -30,3 +30,7 @@ parameters:
     api_host_route: fitnessapp.com
     main_host_name: fitnessapp.com
     
+    stripe_api_secret_key: sk_live_mJi2SPraHQqLQBXDkeaxmd4u
+    stripe_api_publishable_key: pk_live_xjqqJOC6nRUdKAgaxZDmk7nS
+    
+    
