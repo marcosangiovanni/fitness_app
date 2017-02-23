@@ -27,12 +27,21 @@ class UserRepository extends EntityRepository
 		return $this;
     }
 
-	//Only user that created a training
+	//Only user that created a training and that training is active
     public function findByActiveTrainings(){
     	$now = new DateTime();
         $this->query_builder->innerJoin('u.trainings', 't', 'WITH', 't.start > :current_datetime')->setParameter('current_datetime', $now->format('Y-m-d H:i:s'));;
 		return $this;
     }
+	
+    public function findByFeedback($feedback){
+    	$this->query_builder->andWhere('u.feedback_avg BETWEEN :start_feedback AND :end_feedback')
+    								->setParameter('start_feedback', $feedback - 1)
+    								->setParameter('end_feedback', $feedback);
+		return $this;
+    }
+	
+	
 	
 	//Set order by 
     public function orderByPosition(Point $point){

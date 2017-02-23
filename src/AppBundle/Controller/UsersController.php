@@ -76,11 +76,19 @@ class UsersController extends FOSRestController
 			$lat = $request->get('lat');
 			$lng = $request->get('lng');
 			
+			/* FEEDBACK FILTER if 3 -> get from 2 to 3 */
+			$feedback = $request->get('feedback');
+			
 			/* QUERY CONSTRUCTOR */
 			//Instantiate the repositiory
 			$repository = $this->getDoctrine()->getRepository('AppBundle:User\User');
 			
 			/* ADDING PARAMETER */
+			
+			if($feedback){
+				$repository->findByFeedback($feedback);
+			}
+			
 			if($is_trainer){
 				$repository->findByCreatedTrainings();
 			}elseif($is_active_trainer){
