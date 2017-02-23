@@ -59,13 +59,16 @@ class TrainingRepository extends EntityRepository
     }
 
 	//Only if date is selected
-    public function findByDate($date){
+    public function findByDate($date,$date_operator){
     	if($date){
     		$date_start = new DateTime($date);
     		$date_end = new DateTime($date);
     		$date_end->add(new DateInterval('P1D'));
 	        $this->query_builder->andWhere('t.start > :date_start')->setParameter('date_start', $date_start);
-	        $this->query_builder->andWhere('t.start < :date_end')->setParameter('date_end', $date_end);
+			//If date operator === gt I take all training that starts from that day
+			if($date_operator === 'eq'){
+		        $this->query_builder->andWhere('t.start < :date_end')->setParameter('date_end', $date_end);
+			}
     	}
 		return $this;
     }

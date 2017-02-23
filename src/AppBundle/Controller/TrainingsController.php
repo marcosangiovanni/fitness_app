@@ -80,7 +80,8 @@ class TrainingsController extends FOSRestController
 			//1 = tomorrow
 			//etc...
 			$date = $request->get('date');
-
+			$date_operator = $request->get('date_op','eq');
+			
 			/* TRAINING MAXPRICE */
 			$max_price = $request->get('max_price');
 			
@@ -96,7 +97,7 @@ class TrainingsController extends FOSRestController
 			/* ADDING PARAMETER */
 			$repository->findByNotClosedTrainings()
 						->findBySports($sports)
-						->findByDate($date)
+						->findByDate($date,$date_operator)
 						->findByEnabled(true)
 						->findByMaxPrice($max_price)
 						->findByPublic($logged_user)
