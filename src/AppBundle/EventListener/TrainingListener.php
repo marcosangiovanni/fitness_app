@@ -38,7 +38,11 @@ class TrainingListener
 			preg_match("#([\/|\?|&]vi?[\/|=]|youtu\.be\/|embed\/)(\w+)#", $training->getVideo(), $matches);
 			$video_id = end($matches);
 			
-			$infos = $this->youtubeservice->getStatus($video_id);
+			$listResponse = $this->youtubeservice->videos->listVideos('status', array('id' => $video_id));
+			
+			if(count($listResponse->getItems()) === 0){
+				throw new \RuntimeException(sprintf('Could not find video with id %s', $video_id),404);
+			}
 			
 			if(!$infos || $infos['privacyStatus'] === 'private'){
 				throw new \Exception('The video is private and cannot be used',409);
@@ -47,13 +51,12 @@ class TrainingListener
 		//Google comunication problem
 		catch(\Google_Service_Exception $e){
 			$errorObj = json_decode($e->getMessage());
-			throw new \Exception('Youtube call : '.$errorObj->error->message, $errorObj->error->code);
+			throw new \Google_Service_Exception('Youtube call : '.$errorObj->error->message, $errorObj->error->code);
 		}
 		//General error
 		catch(\Exception $e){
-			throw new \Exception($e->getMessage(), $e->getCode());
+			throw new \Exception($e->getMessage(),$e->getCode());
 		}
-		
 	}
 	
     //After training creation i save trainer main sport association
