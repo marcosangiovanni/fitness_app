@@ -59,7 +59,7 @@ class PayController extends FOSRestController
 						  "source" 		=> $token,
 						  "description" => $user->getFullname()
 						));
-
+						
 						// Charge Payment
 						$charge = \Stripe\Charge::create(array(
 						  "amount" 		=> $training->getPrice()*100,
@@ -71,6 +71,7 @@ class PayController extends FOSRestController
 						$em = $this->getDoctrine()->getManager();
 						
 						$user->setStripeToken($stripe_customer->id);
+						$user->setLastCardDigits($stripe_customer->sources->data[0]->last4);
 						
 						$em->persist($user);
 						$em->flush();
@@ -79,9 +80,16 @@ class PayController extends FOSRestController
 						//Se ho il token aggiorno i dati del customer
 						if(isset($json_data['token'])){
 							//Get stripe user and save new data with token
-							$cu = \Stripe\Customer::retrieve($user->getStripeToken());
-							$cu->source = $json_data['token'];
-							$cu->save();
+							$stripe_customer = \Stripe\Customer::retrieve($user->getStripeToken());
+							$stripe_customer->source = $json_data['token'];
+							$stripe_customer->save();
+							
+							$user->setLastCardDigits($stripe_customer->sources->data[0]->last4);
+							
+							$em = $this->getDoctrine()->getManager();
+							$em->persist($user);
+							$em->flush();
+							
 						}
 
 						$charge = \Stripe\Charge::create(array(
@@ -91,6 +99,7 @@ class PayController extends FOSRestController
 						));
 						
 					}
+					
 					//If payment is ok forward to subsscription add to training
 					$response = $this->forward('AppBundle:Subscribed:putTrainingSubscribed', array(
 				        'user_id'  		=> $user_id,

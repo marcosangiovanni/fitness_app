@@ -166,6 +166,13 @@ class User extends BaseUser
 	 */
 	 protected $stripe_token;
 	 
+    /**
+	 * @ORM\Column(type="string", length=30, nullable=true)
+	 * @Groups({"detail"})
+	 * @Type("string")
+	 */
+	 protected $last_card_digits;
+	 
 	/*********************************************************
 	 * FEEDBACK FIELDS (calculated from subscribed entities) *
 	 *********************************************************/
@@ -285,6 +292,15 @@ class User extends BaseUser
 	
 	public function getStripeToken() {
 		return $this->stripe_token;
+	}
+	
+	public function setLastCardDigits($last_card_digits) {
+		$this->last_card_digits = $last_card_digits;
+		return $this;
+	}
+
+	public function getLastCardDigits() {
+		return $this->last_card_digits;
 	}
 	
 	/*******************
