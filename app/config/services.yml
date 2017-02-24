@@ -57,6 +57,12 @@ services:
         tags:
             - { group: Config, name: sonata.admin, manager_type: orm, label: Config }
 
+    log.config:
+        class: AppBundle\Admin\LogAdmin
+        arguments: [~, AppBundle\Entity\Log, ~]
+        tags:
+            - { group: Log, name: sonata.admin, manager_type: orm, label: Log }
+
             
     admin.facebook_friend:
         class: AppBundle\Admin\FacebookFriendAdmin
@@ -79,6 +85,11 @@ services:
            - { name: doctrine.orm.entity_listener, entity: AppBundle\Entity\Training, event: postPersist }
            - { name: doctrine.orm.entity_listener, entity: AppBundle\Entity\Training, event: prePersist }
            - { name: doctrine.orm.entity_listener, entity: AppBundle\Entity\Training, event: preUpdate }
+                                           
+    log_listener:
+        class: AppBundle\EventListener\LogListener
+        tags:
+           - { name: doctrine.orm.entity_listener, entity: AppBundle\Entity\Log, event: prePersist }
                                            
 #Api entrypoint                        
     api_authentication_entry_point:

@@ -54,10 +54,13 @@ class TrainingsController extends FOSRestController
 	// [GET] /trainings
 	// Set search parameters
     public function getTrainingsAction(){
-
+    	
 		try{
 			//Find USER By Token
 	    	$logged_user = $this->get('security.context')->getToken()->getUser();
+
+			//Log query
+			$this->getDoctrine()->getRepository('AppBundle:Log')->createNewLog($logged_user, $this->getRequest());
 
 			//Find request parameters
 			$request = $this->getRequest();
