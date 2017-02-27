@@ -78,6 +78,9 @@ class AppKernel extends Kernel
 			
 			//Stripe integration
 			new WMC\StripeBundle\WMCStripeBundle(),
+			
+			//Firebase integration
+			new RedjanYm\FCMBundle\RedjanYmFCMBundle(),
 		    
         );
 

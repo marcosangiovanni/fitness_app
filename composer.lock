@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cfcf3df5c2ec4727c26957c1ee56e377",
+    "content-hash": "8d41a815ba75685ca5ee01b5586c6e86",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -3546,6 +3546,115 @@
                 "psr-3"
             ],
             "time": "2016-10-10T12:19:37+00:00"
+        },
+        {
+            "name": "redjanym/fcm-bundle",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/redjanym/FCMBundle.git",
+                "reference": "b029227bbe8a80d251f439a2ddb543a885e92e5e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/redjanym/FCMBundle/zipball/b029227bbe8a80d251f439a2ddb543a885e92e5e",
+                "reference": "b029227bbe8a80d251f439a2ddb543a885e92e5e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3",
+                "redjanym/php-firebase-cloud-messaging": "1.*"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "RedjanYm\\FCMBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Redjan Ymeraj",
+                    "email": "ymerajr@yahoo.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A Bundle for Symfony2 projects to send notifications in mobile devices through Firebase Cloud Messaging API",
+            "homepage": "https://github.com/redjanym/FCMBundle",
+            "keywords": [
+                "FCM",
+                "android",
+                "bundle",
+                "chrome",
+                "cloud",
+                "firebase",
+                "google",
+                "ios",
+                "notifications",
+                "php",
+                "symfony"
+            ],
+            "time": "2017-02-25T17:30:40+00:00"
+        },
+        {
+            "name": "redjanym/php-firebase-cloud-messaging",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/redjanym/php-firebase-cloud-messaging.git",
+                "reference": "1e809125804beef2d94b593d55c236e2e27662d0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/redjanym/php-firebase-cloud-messaging/zipball/1e809125804beef2d94b593d55c236e2e27662d0",
+                "reference": "1e809125804beef2d94b593d55c236e2e27662d0",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "*",
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "mockery/mockery": "*",
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "sngrl\\PhpFirebaseCloudMessaging\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sngrl",
+                    "email": "i@sngrl.ru"
+                },
+                {
+                    "name": "Redjan Ymeraj",
+                    "email": "ymerajr@yahoo.com"
+                }
+            ],
+            "description": "PHP API for Firebase Cloud Messaging from Google",
+            "homepage": "https://github.com/sngrl/php-firebase-cloud-messaging",
+            "keywords": [
+                "FCM",
+                "android",
+                "chrome",
+                "cloud",
+                "firebase",
+                "google",
+                "ios",
+                "notifications",
+                "php"
+            ],
+            "time": "2017-02-25T17:10:46+00:00"
         },
         {
             "name": "sensio/distribution-bundle",
