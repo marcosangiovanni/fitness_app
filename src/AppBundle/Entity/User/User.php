@@ -51,6 +51,13 @@ class User extends BaseUser
     private $position;
 
     /**
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 * @Groups({"detail"})
+	 * @Type("string")
+	 */
+    private $push_token;
+
+    /**
 	 * @ORM\Column(type="float", nullable=true)
 	 * @Groups({"detail"})
 	 * @Type("float")
@@ -367,6 +374,11 @@ class User extends BaseUser
         return $this;
     }
 
+	public function setPushToken($push_token){
+        $this->push_token = $push_token;
+        return $this;
+    }
+
     public function setPosition($position){
         $this->position = $position;
         return $this;
@@ -433,6 +445,10 @@ class User extends BaseUser
 	 
 	public function getPicture(){
         return $this->picture;
+    }
+
+	public function getPushToken(){
+        return $this->push_token;
     }
 
     public function getPosition(){
