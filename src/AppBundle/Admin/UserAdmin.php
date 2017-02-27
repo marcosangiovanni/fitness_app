@@ -51,6 +51,12 @@ class UserAdmin extends BaseUserAdmin
 	    }
 
         $formMapper
+			->tab('Location')
+				->with('Position')	
+					->add('latlng','oh_google_maps',array('label' => 'Last position','map_width' => 500),array())
+	                ->add('distance')
+				->end()
+			->end()
             ->tab('Account')
 	            ->with('Credential')
 	                ->add('username')

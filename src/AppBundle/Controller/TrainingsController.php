@@ -61,7 +61,7 @@ class TrainingsController extends FOSRestController
 
 			//Log query
 			$this->getDoctrine()->getRepository('AppBundle:Log')->createNewLog($logged_user, $this->getRequest());
-
+			
 			//Find request parameters
 			$request = $this->getRequest();
 
@@ -72,6 +72,15 @@ class TrainingsController extends FOSRestController
 
 			//The max distance in meters of training
 			$max_distance = $request->get('distance');
+
+			//Set user position
+			if($lat && $lng && $max_distance){
+				$logged_user->setPosition(new Point($lat,$lng));
+				$logged_user->setDistance($max_distance);
+				$em = $this->getDoctrine()->getManager();
+				$em->persist($logged_user);
+			    $em->flush();
+			}
 	
 			/* SPORT TYPE */
 			//The sports I intend to search within

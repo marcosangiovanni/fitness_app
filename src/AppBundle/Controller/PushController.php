@@ -15,14 +15,6 @@ use AppBundle\Util\SerializerManager;
 //Exception
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-
-
-			use sngrl\PhpFirebaseCloudMessaging\Client;
-use sngrl\PhpFirebaseCloudMessaging\Message;
-use sngrl\PhpFirebaseCloudMessaging\Recipient\Device;
-use sngrl\PhpFirebaseCloudMessaging\Notification;
-
-
 class PushController extends FOSRestController
 {
 

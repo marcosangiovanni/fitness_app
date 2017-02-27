@@ -627,8 +627,10 @@ class Training
 	 * LATLON MANAGEMENT *
      *********************/
     public function getPositionApi(){
-        $position = $this->position;
-		return array('lat' => $position->getX(), 'lng' => $position->getY());
+    	if($this->getPosition()){
+	        $position = $this->position;
+			return array('lat' => $position->getX(), 'lng' => $position->getY());
+		}
     }
 	
     public function setPositionApi($ar_position){
