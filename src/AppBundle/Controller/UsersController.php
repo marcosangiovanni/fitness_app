@@ -320,12 +320,15 @@ class UsersController extends FOSRestController
 				$subscribed = SerializerManager::getObjectFromJsonDataWithContext($this->getRequest()->getContent(), 'AppBundle\Entity\Subscribed');
 
 				$subscription = $this->getDoctrine()->getRepository('AppBundle:Subscribed')->findOneBy(array('user_id' => $user_id, 'training_id' => $training_id));
-				$subscription->setFeedback($subscribed->getFeedback());
-
+				if($subscribed->getFeedback()){
+					$subscription->setFeedback($subscribed->getFeedback());
+				}
+				$subscription->setAskedFeedback(true);
+				
 				$em = $this->getDoctrine()->getManager();
 				$em->persist($subscription);
 			    $em->flush();
-		
+
 				/* SERIALIZATION */
 				$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($subscription));
 

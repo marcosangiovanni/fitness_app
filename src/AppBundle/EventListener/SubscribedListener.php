@@ -30,11 +30,14 @@ class SubscribedListener
 		
 		$ar_avg_vote = $query_builder->getQuery()->getResult();
 		
-		$creator->setFeedbackAvg($ar_avg_vote[0]['vote_average']);
-		$creator->setFeedbackNum($ar_avg_vote[0]['vote_number']);
-		
-		$em->persist($creator);
-		$em->flush();
+		if(isset($ar_avg_vote[0])){
+			
+			$creator->setFeedbackAvg($ar_avg_vote[0]['vote_average']);
+			$creator->setFeedbackNum($ar_avg_vote[0]['vote_number']);
+			
+			$em->persist($creator);
+			$em->flush();
+		}
 		
     }
 	
