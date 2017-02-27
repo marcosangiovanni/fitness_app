@@ -52,6 +52,8 @@ class User extends BaseUser
 
     /**
 	 * @ORM\Column(type="float", nullable=true)
+	 * @Groups({"detail"})
+	 * @Type("float")
 	 */
     private $distance;
 
