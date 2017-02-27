@@ -11,7 +11,9 @@ class LogListener
 	//Before log save set fields
 	public function prePersist(Log $log, LifecycleEventArgs $args){
         //Set position
-        $log->setPosition(new Point($log->getLat(),$log->getLng()));
+        if($log->getLat() && $log->getLng()){
+	        $log->setPosition(new Point($log->getLat(),$log->getLng()));
+        }
         //Set date obj
         $log->setDateObj(new \DateTime($log->getDate()));
 		

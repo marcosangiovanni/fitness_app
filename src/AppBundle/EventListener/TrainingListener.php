@@ -3,6 +3,7 @@ namespace AppBundle\EventListener;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 use AppBundle\Entity\Training;
+use AppBundle\Util\YoutubeManager;
 
 class TrainingListener
 {
@@ -37,8 +38,7 @@ class TrainingListener
 			$em = $args->getEntityManager();
 	
 			//Find ID of youtube video		
-			preg_match("#([\/|\?|&]vi?[\/|=]|youtu\.be\/|embed\/)(\w+)#", $training->getVideo(), $matches);
-			$video_id = end($matches);
+			$video_id = YoutubeManager::getYoutubeVideoId($training->getVideo());
 			
 			$listResponse = $this->youtubeservice->videos->listVideos('status', array('id' => $video_id));
 			

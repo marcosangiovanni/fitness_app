@@ -8,6 +8,10 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use AppBundle\Util\Utility as Utility;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use AppBundle\Util\YoutubeManager;
+
 class TrainingAdmin extends Admin
 {
 
@@ -16,6 +20,14 @@ class TrainingAdmin extends Admin
             $subscribed->setTraining($object);
         }
     }
+	
+	public function validateVideo($data, ExecutionContextInterface $context){
+		if(!YoutubeManager::getYoutubeVideoId($data)){
+		    $errorMessage = 'Incorrect youtube video.';
+			$context->buildViolation($errorMessage)->addViolation();
+	        $this->getConfigurationPool()->getContainer()->get('session')->getFlashBag()->add('sonata_flash_error', $errorMessage);
+		}
+	}
 		
     protected function configureFormFields(FormMapper $formMapper){
 
@@ -63,7 +75,7 @@ class TrainingAdmin extends Admin
 					->tab('Media')
 						->with('Media')
 							->add('imageFile', 'file', array_merge($options,array('label' => 'Image file', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM))))
-							->add('video', 'url', array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+							->add('video', 'url', array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM), 'constraints' => array(new Assert\Callback(array(array($this, 'validateVideo'))))))
 						->end()
 					->end()
 					->tab('Subscribed')

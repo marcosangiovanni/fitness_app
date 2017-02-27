@@ -70,7 +70,8 @@ class Training
 
     /**
      * @ORM\Column(type="text", nullable=true)
-	 * @Type("text")
+	 * @Type("string")
+	 * @Groups({"detail"})
 	 */
     private $description;
 

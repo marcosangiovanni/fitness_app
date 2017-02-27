@@ -4,6 +4,7 @@ namespace AppBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use AppBundle\Entity\Log;
+use Doctrine\Common\Util\Inflector as Inflector;
 
 class LogRepository extends EntityRepository
 {
@@ -29,14 +30,12 @@ class LogRepository extends EntityRepository
 		$log->setFullquery(json_encode($params));
 		
 		foreach ($params as $key => $value) {
-			$method = "set".preg_replace('/(^|_)([a-z])/e', 'strtoupper("\\2")', "_".$key);
+			$method = "set".ucfirst(Inflector::camelize($key));
 			if(method_exists($log,$method)){
 				$log->$method($value);
 			}
 		}
-		
-		//\Doctrine\Common\Util\Debug::dump($log);
-		
+
 		$em = $this->getEntityManager();
         $em->persist($log);
         $em->flush();

@@ -37,11 +37,18 @@ class Subscribed
     private $training_id;
 
 	/**
-     * @ORM\Column(type="float", nullable=true)))
+     * @ORM\Column(type="float", nullable=true)
 	 * @Groups({"detail"})
 	 * @Type("float")
 	 */ 
     private $feedback;
+
+	/**
+     * @ORM\Column(type="boolean", nullable=false, options={"default" : false})
+	 * @Groups({"detail"})
+	 * @Type("boolean")
+	 */ 
+    private $asked_feedback;
 
 	/**
      * @Gedmo\Timestampable(on="create")
@@ -89,6 +96,14 @@ class Subscribed
     }
 
     /**
+     * Get asked_feedback
+     * @return boolean
+     */
+    public function getAskedFeedback(){
+        return $this->asked_feedback;
+    }
+
+    /**
      * Get userId
      * @return integer
      */
@@ -129,6 +144,15 @@ class Subscribed
      */
     public function setId($id){
         $this->id = $id;
+        return $this;
+    }
+
+	/**
+     * @param boolean $asked_feedback
+     * @return Subscribed
+     */
+    public function setAskedFeedback($asked_feedback){
+        $this->asked_feedback = $asked_feedback;
         return $this;
     }
 
