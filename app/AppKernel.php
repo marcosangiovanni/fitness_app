@@ -81,6 +81,9 @@ class AppKernel extends Kernel
 			
 			//Firebase integration
 			new RedjanYm\FCMBundle\RedjanYmFCMBundle(),
+			
+			//Cron bundle manager
+			new Cron\CronBundle\CronCronBundle(),
 		    
         );
 

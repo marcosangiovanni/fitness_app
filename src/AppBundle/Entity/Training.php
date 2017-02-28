@@ -61,7 +61,6 @@ class Training
     private $traininglevel_id;
 
     /**
-     * @Gedmo\Translatable
      * @ORM\Column(length=256)
 	 * @Groups({"detail"})
 	 * @Type("string")
@@ -114,6 +113,11 @@ class Training
 	 * @Type("boolean")
 	 */
     private $is_cardio;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default" : NULL})
+	 */
+    private $is_notified;
 
     /**
      * @ORM\Column(type="boolean", nullable=false, options={"default" : true})
@@ -269,6 +273,13 @@ class Training
     /**
      * @return boolean 
      */
+    public function getIsNotified(){
+        return $this->is_notified;
+    }
+
+    /**
+     * @return boolean 
+     */
     public function getEnabled(){
         return $this->enabled;
     }
@@ -400,6 +411,15 @@ class Training
      */
     public function setIsCardio($isCardio){
         $this->is_cardio = $isCardio;
+        return $this;
+    }
+
+    /**
+     * @param boolean $isPublic
+     * @return Training
+     */
+    public function setIsNotified($isNotified){
+        $this->is_notified = $isNotified;
         return $this;
     }
 

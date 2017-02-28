@@ -46,7 +46,8 @@
         "happyr/google-api-bundle": "^2.2",
         "wemakecustom/stripe-bundle": "dev-master",
         "beberlei/DoctrineExtensions": "^1.0",
-        "redjanym/fcm-bundle": "^1.1"
+        "redjanym/fcm-bundle": "^1.1",
+        "cron/cron-bundle": "1.0.*"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",

@@ -43,10 +43,36 @@ class TrainingRepository extends EntityRepository
         $this->query_builder->andWhere('t.start > :current_datetime')->setParameter('current_datetime', $now->format('Y-m-d H:i:s'));
 		return $this;
     }
+	
+	//Add join with subscribed users
+    public function findWithSubscribedUsers(){
+        $this->query_builder
+					->leftJoin('t.subscribed', 's')
+					->leftJoin('s.user', 'u')
+		;
+		return $this;
+    }
 
-	//Only training with start date > now
+	//Only training that are starting
+	//A training is starting if starts before than NOW + $time_missing
+	//$time_missing is expressed in minutes
+    public function findByStartingTrainings($time_missing){
+    	$now = new DateTime();
+		$endTime = clone $now;
+		$endTime->add(new \DateInterval('PT'.$time_missing.'M'));
+        $this->query_builder->andWhere('t.start < :ref_datetime')->setParameter('ref_datetime', $endTime->format('Y-m-d H:i:s'));
+		return $this;
+    }
+
+	//Only training with enabled = true
     public function findByEnabled($is_enabled){
         $this->query_builder->andWhere('t.enabled = :is_enabled')->setParameter('is_enabled', $is_enabled);
+		return $this;
+    }
+
+	//Only training not notified
+    public function findByNotNotified(){
+        $this->query_builder->andWhere('t.is_notified IS NULL');
 		return $this;
     }
 
