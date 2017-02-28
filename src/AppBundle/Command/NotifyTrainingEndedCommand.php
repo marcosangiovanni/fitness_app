@@ -6,12 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NotifyTrainingStartingCommand extends ContainerAwareCommand
+class NotifyTrainingEndedCommand extends ContainerAwareCommand
 {
     protected function configure(){
-    	$this	->setName('notify:training-starting')
-        		->setDescription('This task notify all users whome training is starting')
-		        ->setHelp('This task notify all users whome training is starting')
+    	$this	->setName('notify:training-ended')
+        		->setDescription('This task notify all users whome training is ended to ask for feedback')
+		        ->setHelp('This task notify all users whome training is ended to ask for feedback')
     	;
     }
 
@@ -21,13 +21,13 @@ class NotifyTrainingStartingCommand extends ContainerAwareCommand
 			$output->write('Get Entity Manager');
 	    	$em = $this->getContainer()->get('doctrine')->getEntityManager();
 			
-			$minutes_before = $em->getRepository('AppBundle:Config')->findOneByCode('notify_training_minutes_before');
-	    	$output->writeln('Get config minutes before value : '.$minutes_before->getValue());
+			$minutes = $em->getRepository('AppBundle:Config')->findOneByCode('notify_training_minutes_after');
+	    	$output->writeln('Get config minutes after value : '.$minutes->getValue());
 			
-			$output->write('Get all training that are starting');
+			$output->write('Get all training that are ended');
 			$repository = $em->getRepository('AppBundle:Training')
-													->findByNotNotifiedStartSubscribedUsers()
-													->findByStartingTrainings($minutes_before->getValue())
+													->findByNotNotifiedEndSubscribedUsers()
+													->findByEndedTrainings($minutes->getValue())
 													->findByEnabled(true)
 			;
 			
@@ -44,7 +44,7 @@ class NotifyTrainingStartingCommand extends ContainerAwareCommand
 				$users_num = 0;
 				foreach ($training->getSubscribed() as $subscribed) {
 
-					if($subscribed->getIsNotifiedStart() !== true){
+					if($subscribed->getIsNotifiedEnd() !== true){
 						try{
 							$notification = $fcmClient->createDeviceNotification(
 						         'Sta iniziando l\'allenamento', 
