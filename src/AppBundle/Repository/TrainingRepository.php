@@ -44,15 +44,6 @@ class TrainingRepository extends EntityRepository
 		return $this;
     }
 	
-	//Add join with subscribed users
-    public function findWithSubscribedUsers(){
-        $this->query_builder
-					->leftJoin('t.subscribed', 's')
-					->leftJoin('s.user', 'u')
-		;
-		return $this;
-    }
-
 	//Only training that are starting
 	//A training is starting if starts before than NOW + $time_missing
 	//$time_missing is expressed in minutes
@@ -70,9 +61,19 @@ class TrainingRepository extends EntityRepository
 		return $this;
     }
 
+	//Add join with subscribed users
+    public function findWithSubscribedUsers(){
+        $this->query_builder
+					->leftJoin('t.subscribed', 's')
+					->leftJoin('s.user', 'u')
+		;
+		return $this;
+    }
+
 	//Only training not notified
-    public function findByNotNotified(){
-        $this->query_builder->andWhere('t.is_notified IS NULL');
+    public function findByNotNotifiedStartSubscribedUsers(){
+        $this->findWithSubscribedUsers();
+        $this->query_builder->andWhere('s.is_notified_start IS NULL');
 		return $this;
     }
 

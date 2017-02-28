@@ -26,10 +26,9 @@ class NotifyTrainingStartingCommand extends ContainerAwareCommand
 			
 			$output->write('Get all training that are starting');
 			$repository = $em->getRepository('AppBundle:Training')
-													->findWithSubscribedUsers()
+													->findByNotNotifiedStartSubscribedUsers()
 													->findByStartingTrainings($minutes_before->getValue())
 													->findByEnabled(true)
-													->findByNotNotified()
 			;
 			
 			$output->write('Execute query');
@@ -45,23 +44,36 @@ class NotifyTrainingStartingCommand extends ContainerAwareCommand
 				$users_num = 0;
 				foreach ($training->getSubscribed() as $subscribed) {
 
-					try{
-						$notification = $fcmClient->createDeviceNotification(
-					         'Sta iniziando l\'allenamento', 
-					         'Sta per iniziare l\'allenamento a cui ti sei iscritto', 
-					         $subscribed->getUser()->getPushToken()
-					    );
-						$response = $fcmClient->sendNotification($notification);
-						$output->writeln('Notification sent for user : '.$subscribed->getUserId());
-						$users_num++;
-					}catch(\Exception $e){
-						$output->writeln('Notification error for user : '.$subscribed->getUserId());
+					if($subscribed->getIsNotifiedStart()){
+						try{
+							$notification = $fcmClient->createDeviceNotification(
+						         'Sta iniziando l\'allenamento', 
+						         'Sta per iniziare l\'allenamento a cui ti sei iscritto', 
+						         $subscribed->getUser()->getPushToken()
+						    );
+							$response = $fcmClient->sendNotification($notification);
+							
+							$output->writeln($response->getBody()->getContents());
+							
+							$ar_response = json_encode($response->getBody()->getContents());
+	
+							if($ar_response['failure']){
+								throw new \Exception('Notification error for user : '.$subscribed->getUserId(), 1);
+							}
+	
+							$output->writeln('Notification sent for user : '.$subscribed->getUserId());
+							$subscribed->setIsNotifiedStart(true);
+							$em->persist($subscribed);
+							$users_num++;
+							
+						}catch(\Exception $e){
+							$output->writeln('Notification error for user : '.$subscribed->getUserId());
+						}
 					}
-					
+
 				}
 				$output->writeln('Training : '.$training->getId().' - notified '.$users_num.' users.');
-				$training->setIsNotified(true);
-				$em->persist($training);
+				
 			}
 	
 			$output->writeln('Notified '.$trainings_num.' trainings');

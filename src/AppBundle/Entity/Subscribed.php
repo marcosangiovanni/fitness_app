@@ -36,6 +36,16 @@ class Subscribed
      */
     private $training_id;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default" : NULL})
+	 */
+    private $is_notified_start;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default" : NULL})
+	 */
+    private $is_notified_end;
+
 	/**
      * @ORM\Column(type="float", nullable=true)
 	 * @Groups({"detail"})
@@ -96,6 +106,20 @@ class Subscribed
     }
 
     /**
+     * @return boolean 
+     */
+    public function getIsNotifiedStart(){
+        return $this->is_notified_start;
+    }
+
+    /**
+     * @return boolean 
+     */
+    public function getIsNotifiedEnd(){
+        return $this->is_notified_end;
+    }
+
+    /**
      * Get asked_feedback
      * @return boolean
      */
@@ -153,6 +177,24 @@ class Subscribed
      */
     public function setAskedFeedback($asked_feedback){
         $this->asked_feedback = $asked_feedback;
+        return $this;
+    }
+
+    /**
+     * @param boolean $isPublic
+     * @return Training
+     */
+    public function setIsNotifiedStart($isNotified){
+        $this->is_notified_start = $isNotified;
+        return $this;
+    }
+
+    /**
+     * @param boolean $isPublic
+     * @return Training
+     */
+    public function setIsNotifiedEnd($isNotified){
+        $this->is_notified_end = $isNotified;
         return $this;
     }
 

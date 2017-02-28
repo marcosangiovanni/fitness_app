@@ -115,11 +115,6 @@ class Training
     private $is_cardio;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true, options={"default" : NULL})
-	 */
-    private $is_notified;
-
-    /**
      * @ORM\Column(type="boolean", nullable=false, options={"default" : true})
 	 * @Groups({"detail"})
 	 * @Type("boolean")
@@ -273,13 +268,6 @@ class Training
     /**
      * @return boolean 
      */
-    public function getIsNotified(){
-        return $this->is_notified;
-    }
-
-    /**
-     * @return boolean 
-     */
     public function getEnabled(){
         return $this->enabled;
     }
@@ -411,15 +399,6 @@ class Training
      */
     public function setIsCardio($isCardio){
         $this->is_cardio = $isCardio;
-        return $this;
-    }
-
-    /**
-     * @param boolean $isPublic
-     * @return Training
-     */
-    public function setIsNotified($isNotified){
-        $this->is_notified = $isNotified;
         return $this;
     }
 
