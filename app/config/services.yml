@@ -57,6 +57,12 @@ services:
         tags:
             - { group: Config, name: sonata.admin, manager_type: orm, label: Config }
 
+    admin.cron:
+        class: AppBundle\Admin\CronJobAdmin
+        arguments: [~, AppBundle\Entity\CronJob, ~]
+        tags:
+            - { group: Config, name: sonata.admin, manager_type: orm, label: Cron }
+
     log.config:
         class: AppBundle\Admin\LogAdmin
         arguments: [~, AppBundle\Entity\Log, ~]
