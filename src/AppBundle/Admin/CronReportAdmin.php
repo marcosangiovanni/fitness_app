@@ -12,6 +12,13 @@ use Sonata\AdminBundle\Route\RouteCollection;
 
 class CronReportAdmin extends Admin
 {
+
+    protected $datagridValues = array(
+        '_page' => 1,
+        '_sort_order' => 'DESC',
+        '_sort_by' => 'runAt',
+    );
+
     protected function configureFormFields(FormMapper $formMapper){
         $formMapper	->add('job', 'entity', array(
 		                'class' 	=> 'AppBundle\Entity\CronJob',
@@ -28,7 +35,7 @@ class CronReportAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper){
         $datagridMapper	->add('id')
 						->add('exitCode')
-						->add('run_at', 'doctrine_orm_datetime_range', array('field_type'=>'sonata_type_datetime_range_picker'), null, array('format' => Utility::DATE_FORMAT_DATETIME))
+						->add('runAt', 'doctrine_orm_datetime_range', array('field_type'=>'sonata_type_datetime_range_picker'), null, array('format' => Utility::DATE_FORMAT_DATETIME))
 						;
     }
 
