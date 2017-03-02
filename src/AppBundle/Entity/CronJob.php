@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CronJobRepository")
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="un_name", columns={"name"})})
  */
 class CronJob extends BaseCronJob
 {
