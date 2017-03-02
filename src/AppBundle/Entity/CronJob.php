@@ -3,11 +3,7 @@ namespace AppBundle\Entity;
 use Cron\CronBundle\Entity\CronJob as BaseCronJob;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 
-/**
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CronJobRepository")
- */
 class CronJob extends BaseCronJob
 {
     /**

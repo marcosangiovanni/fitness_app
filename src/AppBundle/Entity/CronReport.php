@@ -4,9 +4,6 @@ use Cron\CronBundle\Entity\CronReport as BaseCronReport;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CronReportRepository")
- */
 class CronReport extends BaseCronReport
 {
     /**
