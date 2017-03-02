@@ -20,7 +20,7 @@ class ApiAuthenticationEntryPoint implements AuthenticationEntryPointInterface {
     }
 
     public function start(Request $request, AuthenticationException $authException = null) {
-		$jsonResponse = new Response(SerializerManager::getJsonData(ErrorManager::createErrorArrayFromException($authException)));
+		$jsonResponse = new Response(SerializerManager::getErrorJsonData(ErrorManager::createErrorArrayFromException($authException)));
 		$jsonResponse->setStatusCode(401);
 		return $jsonResponse;
     }

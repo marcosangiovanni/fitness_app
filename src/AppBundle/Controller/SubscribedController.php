@@ -68,6 +68,7 @@ class SubscribedController extends FOSRestController
 					$subscription = new Subscribed();
 					$subscription->setTraining($training);
 					$subscription->setUser($user);
+					$subscription->setAskedFeedback(false);
 					
 					//Add new subscription
 					$user->addSubscribed($subscription);

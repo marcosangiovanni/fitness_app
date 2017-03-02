@@ -4,6 +4,10 @@ imports:
     - { resource: services.yml }
     - { resource: config.xml }
 
+#Firebase integration
+redjan_ym_fcm:
+    firebase_api_key: "AAAAUgNAJ2U:APA91bEJlTz-0skNqqBXmmgPpLzHpT625xRznK20nUcvkjBcsXhaRfBv_mCi-2nxJAWBrb9QGTRcCguVusI5AAmDURhW5UazcZ3eoa2iAAlvR7leMqqfIyv_bC9k5HSqd28iUtn0528t"
+    
 #Sonata internazionalization
 sonata_intl:
     timezone:

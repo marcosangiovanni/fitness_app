@@ -7,8 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
+use CrEOF\Spatial\PHP\Types\Geometry\Point;
+use Symfony\Component\Validator\Constraints as Assert;
+use Oh\GoogleMapFormTypeBundle\Validator\Constraints as OhAssert;
+
 use JMS\Serializer\Annotation\Type;
 use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Accessor;
 use JMS\Serializer\Annotation\MaxDepth;
 use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\ReadOnly;
@@ -19,7 +24,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
- * @ORM\Table(name="fos_user_user")
+ * @ORM\Table(name="fos_user_user", indexes={@ORM\Index(name="idx_user_position", columns={"position"})})
  * @Vich\Uploadable
  */
 class User extends BaseUser
@@ -33,10 +38,31 @@ class User extends BaseUser
      */
     protected $id;
 
-
 	/*************************
 	 * NEW DEFINED FIELDS    *
 	 *************************/
+
+    /**
+	 * @ORM\Column(type="point", nullable=true)
+	 * @Groups({"detail"})
+	 * @Accessor(getter="getPositionApi", setter="setPositionApi")
+	 * @Type("array")
+	 */
+    private $position;
+
+    /**
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 * @Groups({"detail"})
+	 * @Type("string")
+	 */
+    private $push_token;
+
+    /**
+	 * @ORM\Column(type="float", nullable=true)
+	 * @Groups({"detail"})
+	 * @Type("float")
+	 */
+    private $distance;
 
 	/**
      * @Vich\UploadableField(mapping="training_image", fileNameProperty="picture")
@@ -347,7 +373,22 @@ class User extends BaseUser
         $this->picture = $picture;
         return $this;
     }
-	
+
+	public function setPushToken($push_token){
+        $this->push_token = $push_token;
+        return $this;
+    }
+
+    public function setPosition($position){
+        $this->position = $position;
+        return $this;
+    }
+
+    public function setDistance($distance){
+        $this->distance = $distance;
+        return $this;
+    }
+
     public function setVideo($video){
         $this->video = $video;
         return $this;
@@ -404,6 +445,18 @@ class User extends BaseUser
 	 
 	public function getPicture(){
         return $this->picture;
+    }
+
+	public function getPushToken(){
+        return $this->push_token;
+    }
+
+    public function getPosition(){
+        return $this->position;
+    }
+
+    public function getDistance(){
+        return $this->distance;
     }
 
     public function getVideo(){
@@ -781,6 +834,37 @@ class User extends BaseUser
     
 	public function getLastFacebookRefresh(){
         return $this->last_facebook_refresh;
+    }
+	
+
+    /*********************
+	 * LATLON MANAGEMENT *
+     *********************/
+    public function getPositionApi(){
+        $position = $this->position;
+		if($this->getPosition()){
+			return array('lat' => $position->getX(), 'lng' => $position->getY());
+		}
+    }
+	
+    public function setPositionApi($ar_position){
+    	$this->setPosition(new Point($ar_position['lat'],$ar_position['lng']));
+		return $this;
+    }
+	
+	public function setLatLng($latlng){
+        $this->setPosition(new Point($latlng['lat'], $latlng['lng']));
+        return $this;
+    }
+
+    /**
+     * @Assert\NotBlank()
+     * @OhAssert\LatLng()
+     */
+    public function getLatLng(){
+    	if($this->getPosition()){
+	        return array('lat'=>$this->getPosition()->getX(),'lng'=>$this->getPosition()->getY());
+    	}
     }
 	
 
