@@ -111,6 +111,13 @@ class SerializerBuilder extends BaseSerializerBuilder
         return $this;
     }
 
+    public function setObjectConstructor(ObjectConstructorInterface $constructor)
+    {
+        $this->objectConstructor = $constructor;
+
+        return $this;
+    }
+
     public function addDefaultSerializationVisitors()
     {
         $this->initializePropertyNamingStrategy();
