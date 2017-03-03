@@ -3,7 +3,7 @@
 namespace AppBundle\Util;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\DeserializationContext;
-use JMS\Serializer\SerializerBuilder;
+use AppBundle\Serializer\SerializerBuilder;
 
 //Object constructor
 use JMS\Serializer\Construction\DoctrineObjectConstructor;
