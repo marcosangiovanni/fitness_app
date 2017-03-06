@@ -97,7 +97,7 @@ class UsersController extends FOSRestController
 			
 			//If a starting point it's present the order is set by training position
 			if($lat && $lng){
-				$point = new Point($lat,$lng);
+				$point = new Point($lng,$lat);
 				$repository->orderByPosition($point);
 			}
 			

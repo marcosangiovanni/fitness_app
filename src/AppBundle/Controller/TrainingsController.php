@@ -75,13 +75,13 @@ class TrainingsController extends FOSRestController
 
 			//Set user position
 			if($lat && $lng && $max_distance){
-				$logged_user->setPosition(new Point($lat,$lng));
+				$logged_user->setPosition(new Point($lng,$lat));
 				$logged_user->setDistance($max_distance);
 				$em = $this->getDoctrine()->getManager();
 				$em->persist($logged_user);
 			    $em->flush();
 			}
-	
+
 			/* SPORT TYPE */
 			//The sports I intend to search within
 			$sports = $request->get('sports');
@@ -113,13 +113,12 @@ class TrainingsController extends FOSRestController
 						->findByEnabled(true)
 						->findByMaxPrice($max_price)
 						->findByPublic($logged_user)
-						->findByPositionAndDistance($lat,$lng,$max_distance)
-						->orderByPosition($lat,$lng)
+						->findByPositionAndDistance($lng,$lat,$max_distance)
+						->orderByPosition($lng,$lat)
 						->setLimitOffset($limit,$offset)
 			;
 			
 			$trainings = $repository->getQueryBuilder()->getQuery()->getResult();
-			
 			
 			$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($trainings));
 			$jsonResponse->setStatusCode(200);
@@ -171,7 +170,7 @@ class TrainingsController extends FOSRestController
 						->findByEnabled(true)
 						->findByMaxPrice($max_price)
 						->findByPublic($logged_user)
-						->findByPositionAndDistance($lat,$lng,$max_distance)
+						->findByPositionAndDistance($lng,$lat,$max_distance)
 			;
 			
 			$trainings = $repository->getQueryBuilder()

@@ -804,17 +804,17 @@ class User extends BaseUser
     public function getPositionApi(){
         $position = $this->position;
 		if($this->getPosition()){
-			return array('lat' => $position->getX(), 'lng' => $position->getY());
+			return array('lng' => $position->getX(), 'lat' => $position->getY());
 		}
     }
 	
     public function setPositionApi($ar_position){
-    	$this->setPosition(new Point($ar_position['lat'],$ar_position['lng']));
+    	$this->setPosition(new Point($ar_position['lng'],$ar_position['lat']));
 		return $this;
     }
 	
 	public function setLatLng($latlng){
-        $this->setPosition(new Point($latlng['lat'], $latlng['lng']));
+        $this->setPosition(new Point($latlng['lng'], $latlng['lat']));
         return $this;
     }
 
@@ -824,7 +824,7 @@ class User extends BaseUser
      */
     public function getLatLng(){
     	if($this->getPosition()){
-	        return array('lat'=>$this->getPosition()->getX(),'lng'=>$this->getPosition()->getY());
+	        return array('lng'=>$this->getPosition()->getX(),'lat'=>$this->getPosition()->getY());
     	}
     }
 	

@@ -134,22 +134,22 @@ class TrainingRepository extends EntityRepository
 		return $this;
     }
 
-    public function findByPositionAndDistance($lat, $lng, $max_distance){
+    public function findByPositionAndDistance($lng, $lat, $max_distance){
     	if($lat && $lng && $max_distance){
 	        $this->query_builder->andWhere("st_distance_sphere(t.position,point(:x_position,:y_position)) < :max_distance")
-	        			->setParameter('x_position', $lat)
-						->setParameter('y_position', $lng)
+	        			->setParameter('x_position', $lng)
+						->setParameter('y_position', $lat)
 						->setParameter('max_distance', $max_distance)
 			;
     	}
 		return $this;
     }
 
-    public function orderByPosition($lat, $lng){
+    public function orderByPosition($lng, $lat){
     	if($lat && $lng){
 	        $this->query_builder->orderBy("st_distance_sphere(t.position,point(:x_position,:y_position))")
-	        			->setParameter('x_position', $lat)
-						->setParameter('y_position', $lng)
+	        			->setParameter('x_position', $lng)
+						->setParameter('y_position', $lat)
 			;
 		}
 		return $this;
