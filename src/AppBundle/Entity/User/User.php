@@ -64,14 +64,10 @@ class User extends BaseUser
 	 */
     private $distance;
 
-	/**
-     * @Vich\UploadableField(mapping="training_image", fileNameProperty="picture")
-     * @var File
-     */
-    private $imageFile;
-	
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=1255, nullable=true)
+	 * @Groups({"detail"})
+	 * @Type("string")
 	 */
     private $picture;
 

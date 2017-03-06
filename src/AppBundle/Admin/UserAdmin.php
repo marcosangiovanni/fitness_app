@@ -44,10 +44,11 @@ class UserAdmin extends BaseUserAdmin
 		$options = array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM));
 		
 	    if (($subject = $this->getSubject()) && $subject->getPicture()) {
-			$container = $this->getConfigurationPool()->getContainer();
-			$helper = $container->get('vich_uploader.templating.helper.uploader_helper');
-			$path = $helper->asset($subject, 'imageFile');
-	        $options['help'] = '<img width="500px" src="' . $path . '" />';
+	        $options['help'] = '<img width="500px" src="' . $subject->getPicture() . '" />';
+	    }
+
+	    if (($subject = $this->getSubject()) && $subject->getVideo()) {
+	        $options_video['help'] = '<a href="'.$subject->getVideo().'" target="_blank">Go to video</a>';
 	    }
 
         $formMapper
@@ -103,8 +104,8 @@ class UserAdmin extends BaseUserAdmin
 	            ->end()
 				->tab('Media')
 		            ->with('Media')
-						->add('imageFile', 'file', array_merge($options,array('label' => 'Image file', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM))))
-		                ->add('video', 'url', array('label' => 'Video', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM)))
+		                ->add('picture', 'url', array_merge($options,array('label' => 'Video', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM))))
+		                ->add('video', 'url', array_merge($options_video,array('label' => 'Video', 'required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM))))
 		            ->end()
 	            ->end()
 				->tab('Social')
