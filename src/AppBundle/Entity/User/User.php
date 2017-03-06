@@ -25,6 +25,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @ORM\Table(name="fos_user_user", indexes={@ORM\Index(name="idx_user_position", columns={"position"})})
+ * @Vich\Uploadable
  */
 class User extends BaseUser
 {
