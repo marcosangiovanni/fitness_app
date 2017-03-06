@@ -86,7 +86,9 @@ class TrainingListener
 		;
 		
 		//Remove all trained sports from association
-		$user->getSportsTrained()->clear();
+		if($user->getSportsTrained()){
+			$user->getSportsTrained()->clear();
+		}
 		
 		//Get all sports entities
 		foreach ($query_builder->getQuery()->getResult() as $sport_count) {
