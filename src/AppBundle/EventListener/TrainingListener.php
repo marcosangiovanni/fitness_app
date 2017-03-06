@@ -22,12 +22,14 @@ class TrainingListener
 
     //Before training creation i check youtube video infos
 	public function prePersist(Training $training, LifecycleEventArgs $args){
-		$this->checkYoutubeVideoInfos($training,$args);
+		if(strlen($training->getVideo()) > 0){
+			$this->checkYoutubeVideoInfos($training,$args);
+		}
     }
 
     //Before training update i check youtube video infos
 	public function preUpdate(Training $training, LifecycleEventArgs $args){
-		if($args->hasChangedField('video')){
+		if($args->hasChangedField('video') && strlen($training->getVideo()) > 0){
 			$this->checkYoutubeVideoInfos($training,$args);
 		}
     }

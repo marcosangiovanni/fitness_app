@@ -22,7 +22,7 @@ class TrainingAdmin extends Admin
     }
 	
 	public function validateVideo($data, ExecutionContextInterface $context){
-		if(!YoutubeManager::getYoutubeVideoId($data)){
+		if($data !== NULL && !YoutubeManager::getYoutubeVideoId($data)){
 		    $errorMessage = 'Incorrect youtube video.';
 			$context->buildViolation($errorMessage)->addViolation();
 	        $this->getConfigurationPool()->getContainer()->get('session')->getFlashBag()->add('sonata_flash_error', $errorMessage);
