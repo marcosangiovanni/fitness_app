@@ -42,6 +42,7 @@ class UserAdmin extends BaseUserAdmin
 	
 	protected function configureFormFields(FormMapper $formMapper){
 		$options = array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM));
+		$options_video = array('required' => false, 'attr' => array('style' => Utility::FIELD_STYLE_MEDIUM));
 		
 	    if (($subject = $this->getSubject()) && $subject->getPicture()) {
 	        $options['help'] = '<img width="500px" src="' . $subject->getPicture() . '" />';
