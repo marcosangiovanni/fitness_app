@@ -25,7 +25,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @ORM\Table(name="fos_user_user", indexes={@ORM\Index(name="idx_user_position", columns={"position"})})
- * @Vich\Uploadable
  */
 class User extends BaseUser
 {
@@ -340,18 +339,6 @@ class User extends BaseUser
 		return $this->vichService;
 	}
 	
-    /**
-	 * @Groups({"detail"})
-	 * @Type("string")
-	 * @VirtualProperty
-     * @SerializedName("picture")
-     */
-    public function getImageUrl(){
-    	if($this->getVichService()){
-	    	return $this->getVichService()->asset($this, 'imageFile');
-    	}
-    }
-
     /**
      * Get id
      *
@@ -781,29 +768,6 @@ class User extends BaseUser
         return $this->trainings;
     }
 
-
-	/***************************
-	 * IMAGE UPLOAD MANAGEMENT *
-	 ***************************/
-	
-	/*
-	 *  Doctrine only upload file if any field is modified 
-	 */
-	public function setImageFile(File $image = null){
-        $this->imageFile = $image;
-        if ($image) {
-            $this->updatedAt = new \DateTimeImmutable();
-        }
-        return $this;
-    }
-
-    /**
-     * @return File|null
-     */
-    public function getImageFile(){
-        return $this->imageFile;
-    }
-	
 	/*********************
 	 * CONFIG MANAGEMENT *
 	 ********************/
