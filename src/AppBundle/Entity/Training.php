@@ -19,6 +19,7 @@ use JMS\Serializer\Annotation\VirtualProperty;
 
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Oh\GoogleMapFormTypeBundle\Validator\Constraints as OhAssert;
@@ -76,8 +77,11 @@ class Training
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+	 * @Groups({"detail"})
+	 * @Accessor(setter="setPictureFromBase64", getter="getImageUrl")
+	 * @Type("string")
 	 */
-    private $picture;
+	private $picture;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -214,12 +218,6 @@ class Training
 		return $this->vichService;
 	}
 	
-    /**
-	 * @Groups({"detail"})
-	 * @Type("string")
-	 * @VirtualProperty
-     * @SerializedName("picture")
-     */
     public function getImageUrl(){
     	if($this->getVichService()){
 	    	return $this->getVichService()->asset($this, 'imageFile');
@@ -356,6 +354,23 @@ class Training
         $this->picture = $picture;
         return $this;
     }
+	
+    public function setPictureFromBase64($data){
+    	//Get data from byte array
+		$data = base64_decode($data);
+		
+		//Random name
+		$name = rand(1000000,999999);
+
+		//Put contens from 			
+		file_put_contents("./../web/images/".$name, $data);
+
+		$file = new \Symfony\Component\HttpFoundation\File\UploadedFile('./../web/images/'.$name,null, null, null, null, true);
+		$this->setImageFile($file);
+			
+        return $this;
+    }
+	
 
     /**
      * @param string $video
