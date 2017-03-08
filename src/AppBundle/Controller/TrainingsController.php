@@ -206,12 +206,16 @@ class TrainingsController extends FOSRestController
 			
 			//Merging objects			
 			$em = $this->getDoctrine()->getManager();
-					$em->merge($obj_training);
-				    $em->flush();
+			$training = $em->merge($obj_training);
+			$em->flush();
+			$em->clear();
 			
-			/* SERIALIZATION */
-			$jsonResponse = new Response(SerializerManager::getJsonDataWithContext($obj_training));
-		
+			//If payment is ok forward to subsscription add to training
+			$response = $this->forward('AppBundle:Trainings:getTraining', array(
+		        'id'  		=> $training->getId()
+		    ));
+			return $response;
+			
 		}
 		//User and password already in use
     	catch(NotFoundHttpException $e){
