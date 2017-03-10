@@ -8,7 +8,8 @@ use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\Type;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity 
+ * @ORM\EntityListeners({"AppBundle\EventListener\FacebookFriendListener"})
  * @ORM\Table(name="facebook_friend")
  */
 class FacebookFriend
