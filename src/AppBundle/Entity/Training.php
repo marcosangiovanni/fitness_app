@@ -78,7 +78,7 @@ class Training
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
 	 * @Groups({"detail"})
-	 * @Accessor(setter="setPictureFromBase64")
+	 * @Accessor(getter="getNull", setter="setPictureFromBase64")
 	 * @SerializedName("picture_64byte")
 	 * @Type("string")
 	 */
@@ -219,7 +219,11 @@ class Training
 		return $this->vichService;
 	}
 	
-	/**
+	public function getNull() {
+		return null;
+	}
+	
+		/**
      * @VirtualProperty
      * @Type("string")
      * @SerializedName("picture")
