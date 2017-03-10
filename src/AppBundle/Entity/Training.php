@@ -78,7 +78,8 @@ class Training
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
 	 * @Groups({"detail"})
-	 * @Accessor(setter="setPictureFromBase64", getter="getImageUrl")
+	 * @Accessor(setter="setPictureFromBase64")
+	 * @SerializedName("picture_64byte")
 	 * @Type("string")
 	 */
 	private $picture;
@@ -218,6 +219,12 @@ class Training
 		return $this->vichService;
 	}
 	
+	/**
+     * @VirtualProperty
+     * @Type("string")
+     * @SerializedName("picture")
+     * @Groups({"detail"})
+     */
     public function getImageUrl(){
     	if($this->getVichService()){
 	    	return $this->getVichService()->asset($this, 'imageFile');
