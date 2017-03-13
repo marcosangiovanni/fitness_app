@@ -79,11 +79,19 @@ class UsersController extends FOSRestController
 			/* FEEDBACK FILTER if 3 -> get from 2 to 3 */
 			$feedback = $request->get('feedback');
 			
+			/* SPORT TYPE */
+			//The sports linked to the trainer
+			$sports = $request->get('sports');
+			
 			/* QUERY CONSTRUCTOR */
 			//Instantiate the repositiory
 			$repository = $this->getDoctrine()->getRepository('AppBundle:User\User');
 			
 			/* ADDING PARAMETER */
+			
+			if($sports){
+				$repository->findByLinkedSports($sports);
+			}
 			
 			if($feedback){
 				$repository->findByFeedback($feedback);

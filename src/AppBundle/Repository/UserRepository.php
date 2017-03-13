@@ -41,7 +41,13 @@ class UserRepository extends EntityRepository
 		return $this;
     }
 	
-	
+	//Only sports associated with user
+    public function findByLinkedSports($sport_ids){
+    	if($sport_ids){
+	        $this->query_builder->innerJoin('u.sports_trained', 'st')->andWhere('st.id IN (:sports)')->setParameter('sports', $sport_ids);
+    	}
+		return $this;
+    }
 	
 	//Set order by 
     public function orderByPosition(Point $point){
