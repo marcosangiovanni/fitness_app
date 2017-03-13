@@ -22,6 +22,8 @@ use JMS\Serializer\Annotation\VirtualProperty;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
+use \DateTime;
+
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @ORM\Table(name="fos_user_user", indexes={@ORM\Index(name="idx_user_position", columns={"position"})})
@@ -395,11 +397,6 @@ class User extends BaseUser
         return $this;
     }
 	
-    public function setDob($dob){
-        $this->dob = $dob;
-        return $this;
-    }
-
     public function setFiscalCity($fiscal_city){
         $this->fiscal_city = $fiscal_city;
         return $this;
@@ -467,10 +464,6 @@ class User extends BaseUser
         return $this->city;
     }
 
-    public function getDob(){
-        return $this->dob;
-    }
-	
 	public function getFiscalCity(){
         return $this->fiscal_city;
     }
@@ -499,7 +492,18 @@ class User extends BaseUser
         return $this->feedback_num;
     }
     
-	
+	/**
+     * @VirtualProperty
+     * @Type("integer")
+     * @SerializedName("age")
+     * @Groups({"detail"})
+     */
+    public function getAge(){
+    	$now = new DateTime();
+		$diff = $now->diff($this->getDateOfBirth());
+		return $diff->format('%Y');
+    }
+	 
 	/*************************
 	 * FB FRIENDS MANAGEMENT *
 	 *************************/
