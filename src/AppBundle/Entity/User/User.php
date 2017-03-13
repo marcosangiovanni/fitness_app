@@ -504,6 +504,17 @@ class User extends BaseUser
 		return $diff->format('%Y');
     }
 	 
+	/**
+     * @VirtualProperty
+     * @Type("string")
+     * @SerializedName("server_datetime")
+     * @Groups({"detail"})
+     */
+    public function getCurrentDatetime(){
+    	$now = new DateTime();
+		return $now->format('c');
+    }
+	 
 	/*************************
 	 * FB FRIENDS MANAGEMENT *
 	 *************************/
