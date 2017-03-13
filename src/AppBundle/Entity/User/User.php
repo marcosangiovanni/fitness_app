@@ -155,6 +155,13 @@ class User extends BaseUser
     protected $phone;
 
     /**
+	 * @ORM\Column(type="boolean", nullable=false, options={"default" : true})
+	 * @Groups({"detail"})
+	 * @Type("boolean")
+	 */
+    protected $show_phone;
+
+    /**
 	 * @Groups({"detail"})
 	 * @Type("string")
 	 */
@@ -368,6 +375,11 @@ class User extends BaseUser
         return $this;
     }
 
+    public function setShowPhone($show_phone){
+        $this->show_phone = $show_phone;
+        return $this;
+    }
+
     public function setDistance($distance){
         $this->distance = $distance;
         return $this;
@@ -437,6 +449,10 @@ class User extends BaseUser
 
     public function getPosition(){
         return $this->position;
+    }
+
+    public function getShowPhone(){
+		return $this->show_phone;
     }
 
     public function getDistance(){
