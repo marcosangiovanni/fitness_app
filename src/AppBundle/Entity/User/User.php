@@ -499,9 +499,11 @@ class User extends BaseUser
      * @Groups({"detail"})
      */
     public function getAge(){
-    	$now = new DateTime();
-		$diff = $now->diff($this->getDateOfBirth());
-		return $diff->format('%Y');
+    	if($this->getDateOfBirth()){
+	    	$now = new DateTime();
+			$diff = $now->diff($this->getDateOfBirth());
+			return $diff->format('%Y');
+    	}
     }
 	 
 	/**
