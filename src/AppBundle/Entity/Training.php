@@ -52,12 +52,12 @@ class Training
     private $user_id;
 
 	/**
-     * @ORM\Column(type="integer", length=100)
+     * @ORM\Column(type="integer")
      */
     private $sport_id;
 
 	/**
-     * @ORM\Column(type="integer", length=100, nullable = true, options={"default" : 1})
+     * @ORM\Column(type="integer")
      */
     private $traininglevel_id;
 
